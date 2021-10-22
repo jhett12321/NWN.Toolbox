@@ -1,31 +1,64 @@
 <Project Sdk="Microsoft.NET.Sdk">
+  <!--Build-->
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <LangVersion>9.0</LangVersion>
+    <RuntimeIdentifier>linux-x64</RuntimeIdentifier>
 
-    <PropertyGroup>
-        <TargetFramework>net5.0</TargetFramework>
-        <LangVersion>9</LangVersion>
-        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-        <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
-        <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-        <ProduceReferenceAssembly>false</ProduceReferenceAssembly>
-        <RuntimeIdentifier>linux-x64</RuntimeIdentifier>
-        <RootNamespace>Jorteck.Toolbox</RootNamespace>
-    </PropertyGroup>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
 
-    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-        <OutputPath>bin\Debug\$(AssemblyName)</OutputPath>
-        <PlatformTarget>x64</PlatformTarget>
-    </PropertyGroup>
+    <ProduceReferenceAssembly>false</ProduceReferenceAssembly>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    <EnableDynamicLoading>true</EnableDynamicLoading>
 
-    <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-        <OutputPath>bin\Release\$(AssemblyName)</OutputPath>
-        <DebugSymbols>false</DebugSymbols>
-        <DebugType>None</DebugType>
-        <PlatformTarget>x64</PlatformTarget>
-    </PropertyGroup>
+    <NoWarn>1591</NoWarn>
 
-    <ItemGroup>
-      <PackageReference Include="NWN.Anvil" Version="8193.33.1" ExcludeAssets="runtime" />
-      <PackageReference Include="NWN.Permissions" Version="8193.33.0-dev.8.623bd5f" ExcludeAssets="runtime" />
-    </ItemGroup>
+    <RootNamespace>Jorteck.Toolbox</RootNamespace>
+  </PropertyGroup>
 
+  <!--Package-->
+  <PropertyGroup>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+
+    <PackageId>$(AssemblyName)</PackageId>
+    <Authors>Jorteck</Authors>
+
+    <RepositoryUrl>https://github.com/Jorteck/NWN.Toolbox</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+
+    <Description>
+      NWN.Toolbox provides all the essentials tools needed to run Anvil-based, Neverwinter Nights persistent worlds.
+    </Description>
+
+    <PackageTags>Neverwinter Nights;NWN;</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+  </PropertyGroup>
+
+  <!--Debug/Source Link-->
+  <PropertyGroup>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <IncludeSymbols>true</IncludeSymbols>
+    <DebugSymbols>true</DebugSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <OutputPath>..\bin\Debug\$(AssemblyName)</OutputPath>
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <OutputPath>..\bin\Release\$(AssemblyName)</OutputPath>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>Portable</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="NWN.Anvil" Version="8193.33.1" ExcludeAssets="runtime" />
+    <PackageReference Include="NWN.Permissions" Version="8193.33.0-dev.8.623bd5f" ExcludeAssets="runtime" />
+  </ItemGroup>
 </Project>
