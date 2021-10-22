@@ -1,0 +1,165 @@
+name: Continuous Integration
+
+on:
+  push:
+    branches:
+      - master
+      - development
+    paths-ignore:
+      - '**.md'
+  pull_request:
+    branches:
+      - master
+      - development
+    paths-ignore:
+      - '**.md'
+
+jobs:
+  compile:
+    runs-on: ubuntu-20.04
+    if: "!contains(github.event.head_commit.message, 'skip ci')"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Check Line Endings
+        uses: erclu/check-crlf@v1
+
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 5.0.100
+
+      - name: Build
+        run: dotnet build --configuration Release /warnaserror
+
+      - name: Prepare Outputs
+        id: vars
+        run: |
+          echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
+
+      - name: Code Analysis Cache
+        uses: actions/cache@v2
+        with:
+          path: ~/.local/share/JetBrains
+          key: resharper-cache-${{ steps.vars.outputs.sha_short }}
+          restore-keys: |
+            resharper-cache-
+
+      - name: Code Analysis
+        run: dotnet tool install -g JetBrains.ReSharper.GlobalTools && jb inspectcode NWN.Toolbox.sln -o=results.xml && cat results.xml
+
+      - name: Parse Analysis Results
+        uses: glassechidna/resharper-action@master
+        with:
+          report: results.xml
+
+      - name: Analysis Result
+        run: |
+          ! grep "<Issue TypeId=" results.xml
+
+  build:
+    runs-on: ubuntu-20.04
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+    needs: compile
+    outputs:
+      version: ${{ steps.vars.outputs.version }}
+      tag: ${{ steps.vars.outputs.tag }}
+      sha_short: ${{ steps.vars.outputs.sha_short }}
+      image_repository: ${{ steps.vars.outputs.image_repository }}
+      created: ${{ steps.build.outputs.created }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 5.0.100
+
+      - name: Prepare Outputs
+        id: vars
+        run: |
+          if [[ "${{github.base_ref}}" == "master" || "${{github.ref}}" == "refs/heads/master" ]]; then
+            echo "::set-output name=tag::$(git describe --tags)"
+            echo "::set-output name=version::$(git describe --tags | sed 's/^v//')"
+          else
+            DESCRIBE=`git describe --tags --long`
+            VERSION=`echo $DESCRIBE | awk '{split($0,a,"-"); print a[1]}'`
+            META=`echo $DESCRIBE | awk '{split($0,a,"-"); print a[2]}'`
+            BUILD=`echo $DESCRIBE | awk '{split($0,a,"-"); print a[3]}'`
+            COMMIT=`echo $DESCRIBE | awk '{split($0,a,"-"); print a[4]}'`
+            echo "::set-output name=version::$(echo ${VERSION}-${META}.${BUILD}.${COMMIT:1} | sed 's/^v//')"
+          fi
+          echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
+          echo "::set-output name=image_repository::$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]')"
+
+      - name: Build Release Binaries
+        id: build
+        run: |
+          dotnet build --configuration Release -p:Version=${{ steps.vars.outputs.version }} -o output
+          echo "::set-output name=created::$(echo date -u +'%Y-%m-%dT%H:%M:%SZ')"
+
+      - name: Upload Build Artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: Binaries
+          path: |
+            output/
+            NWN.Toolbox.zip
+          if-no-files-found: error
+
+  release:
+    runs-on: ubuntu-20.04
+    if: (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/master'
+    needs: build
+    steps:
+      - name: Download Release Artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: Binaries
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          release_name: Release ${{ needs.build.outputs.version }}
+          draft: false
+          prerelease: false
+          tag_name: ${{ needs.build.outputs.tag }}
+
+      - name: Upload Release Binaries
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./NWN.Toolbox.zip
+          asset_name: NWN.Toolbox.zip
+          asset_content_type: application/zip
+
+  nuget:
+    runs-on: ubuntu-20.04
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+    needs: build
+    steps:
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 5.0.100
+
+      - name: Download Release Artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: Binaries
+
+      - name: NuGet Publish
+        run: dotnet nuget push output/*.nupkg --api-key ${{ secrets.NUGET_KEY }} --source https://api.nuget.org/v3/index.json
+        
+      - name: GitHub Publish
+        run: dotnet nuget push output/*.nupkg --api-key ${{ secrets.GITHUB_TOKEN }} --source https://nuget.pkg.github.com/nwn-dotnet/index.json
