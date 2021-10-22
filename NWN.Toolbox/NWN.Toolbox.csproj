@@ -61,4 +61,8 @@
     <PackageReference Include="NWN.Anvil" Version="8193.33.1" ExcludeAssets="runtime" />
     <PackageReference Include="NWN.Permissions" Version="8193.33.0-dev.8.623bd5f" ExcludeAssets="runtime" />
   </ItemGroup>
+
+  <Target Name="ZipOutputPath" AfterTargets="Build">
+    <ZipDirectory Overwrite="true" SourceDirectory="$(OutputPath)" DestinationFile="$(OutputPath)\..\$(MSBuildProjectName).zip"/>
+  </Target>
 </Project>
