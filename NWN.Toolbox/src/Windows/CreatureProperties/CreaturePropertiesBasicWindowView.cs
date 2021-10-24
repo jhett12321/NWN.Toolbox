@@ -31,6 +31,7 @@ namespace Jorteck.Toolbox
     public readonly NuiBind<int> CreatureGender = new NuiBind<int>("gender_val");
     public readonly NuiBind<string> CreatureDescription = new NuiBind<string>("description_val");
     public readonly NuiBind<string> CreaturePortrait = new NuiBind<string>("portrait_val");
+    public readonly NuiBind<string> CreaturePortraitPreview = new NuiBind<string>("portrait_prev");
     public readonly NuiBind<string> CreatureDialogue = new NuiBind<string>("dialog_val");
 
     // Buttons
@@ -76,6 +77,7 @@ namespace Jorteck.Toolbox
           new NuiRow
           {
             Height = 40f,
+            Enabled = CreatureNameEnabled,
             Children = new List<NuiElement>
             {
               new NuiLabel("Name")
@@ -83,15 +85,13 @@ namespace Jorteck.Toolbox
                 Width = 80f,
                 Margin = 10f,
               },
-              new NuiTextEdit(string.Empty, CreatureName, 255, false)
-              {
-                Enabled = CreatureNameEnabled,
-              },
+              new NuiTextEdit(string.Empty, CreatureName, 255, false),
             },
           },
           new NuiRow
           {
             Height = 40f,
+            Enabled = CreatureTagEnabled,
             Children = new List<NuiElement>
             {
               new NuiLabel("Tag")
@@ -99,15 +99,13 @@ namespace Jorteck.Toolbox
                 Width = 80f,
                 Margin = 10f,
               },
-              new NuiTextEdit(string.Empty, CreatureTag, 255, false)
-              {
-                Enabled = CreatureTagEnabled,
-              },
+              new NuiTextEdit(string.Empty, CreatureTag, 255, false),
             },
           },
           new NuiRow
           {
             Height = 40f,
+            Enabled = CreatureRaceEnabled,
             Children = new List<NuiElement>
             {
               new NuiLabel("Race")
@@ -115,15 +113,13 @@ namespace Jorteck.Toolbox
                 Width = 80f,
                 Margin = 10f,
               },
-              new NuiTextEdit(string.Empty, CreatureRace, 255, false)
-              {
-                Enabled = CreatureRaceEnabled,
-              },
+              new NuiTextEdit(string.Empty, CreatureRace, 255, false),
             },
           },
           new NuiRow
           {
             Height = 40f,
+            Enabled = CreatureAppearanceEnabled,
             Children = new List<NuiElement>
             {
               new NuiLabel("Appearance")
@@ -131,15 +127,13 @@ namespace Jorteck.Toolbox
                 Width = 80f,
                 Margin = 10f,
               },
-              new NuiTextEdit(string.Empty, CreatureAppearance, 255, false)
-              {
-                Enabled = CreatureAppearanceEnabled,
-              },
+              new NuiTextEdit(string.Empty, CreatureAppearance, 255, false),
             },
           },
           new NuiRow
           {
             Height = 40f,
+            Enabled = CreaturePhenotypeEnabled,
             Children = new List<NuiElement>
             {
               new NuiLabel("Phenotype")
@@ -147,15 +141,13 @@ namespace Jorteck.Toolbox
                 Width = 80f,
                 Margin = 10f,
               },
-              new NuiTextEdit(string.Empty, CreaturePhenotype, 255, false)
-              {
-                Enabled = CreaturePhenotypeEnabled,
-              },
+              new NuiTextEdit(string.Empty, CreaturePhenotype, 255, false),
             },
           },
           new NuiRow
           {
             Height = 40f,
+            Enabled = CreatureGenderEnabled,
             Children = new List<NuiElement>
             {
               new NuiLabel("Gender")
@@ -163,12 +155,13 @@ namespace Jorteck.Toolbox
                 Width = 80f,
                 Margin = 10f,
               },
-              NuiUtils.CreateComboForEnum<Gender>(CreatureGender, CreatureGenderEnabled),
+              NuiUtils.CreateComboForEnum<Gender>(CreatureGender),
             },
           },
           new NuiRow
           {
             Height = 160f,
+            Enabled = CreatureDescriptionEnabled,
             Children = new List<NuiElement>
             {
               new NuiLabel("Description")
@@ -176,16 +169,16 @@ namespace Jorteck.Toolbox
                 Width = 80f,
                 Margin = 10f,
               },
-              new NuiTextEdit(string.Empty, CreatureDescription, 255, true)
+              new NuiTextEdit(string.Empty, CreatureDescription, ushort.MaxValue, true)
               {
                 Height = 150f,
-                Enabled = CreatureDescriptionEnabled,
               },
             },
           },
           new NuiRow
           {
-            Height = 40f,
+            Height = 105f,
+            Enabled = CreaturePortraitEnabled,
             Children = new List<NuiElement>
             {
               new NuiLabel("Portrait")
@@ -193,26 +186,28 @@ namespace Jorteck.Toolbox
                 Width = 80f,
                 Margin = 10f,
               },
-              new NuiTextEdit(string.Empty, CreaturePortrait, 255, false)
+              new NuiImage(CreaturePortraitPreview)
               {
-                Enabled = CreaturePortraitEnabled,
+                Width = 64,
+                Height = 100,
+                ImageAspect = NuiAspect.Fit100,
+                Visible = CreaturePortraitEnabled,
               },
+              new NuiTextEdit(string.Empty, CreaturePortrait, 255, false),
             },
           },
           new NuiRow
           {
             Height = 40f,
+            Enabled = CreatureDialogueEnabled,
             Children = new List<NuiElement>
             {
-              new NuiLabel("Dialogue")
+              new NuiLabel("Conversation")
               {
-                Width = 80f,
+                Width = 85f,
                 Margin = 10f,
               },
-              new NuiTextEdit(string.Empty, CreatureDialogue, 255, false)
-              {
-                Enabled = CreatureDialogueEnabled,
-              },
+              new NuiTextEdit(string.Empty, CreatureDialogue, 255, false),
             },
           },
           new NuiSpacer(),
@@ -232,7 +227,7 @@ namespace Jorteck.Toolbox
 
       WindowTemplate = new NuiWindow(root, Title)
       {
-        Geometry = new NuiRect(0, 0, 500, 700),
+        Geometry = new NuiRect(0, 0, 500, 720),
       };
     }
   }

@@ -6,7 +6,7 @@ namespace Jorteck.Toolbox
 {
   public static class NuiUtils
   {
-    public static NuiCombo CreateComboForEnum<T>(NuiBind<int> selected, NuiBind<bool> enabled) where T : struct, Enum
+    public static NuiCombo CreateComboForEnum<T>(NuiBind<int> selected) where T : struct, Enum
     {
       List<NuiComboEntry> entries = new List<NuiComboEntry>();
       foreach (T value in Enum.GetValues<T>())
@@ -18,7 +18,6 @@ namespace Jorteck.Toolbox
       {
         Entries = entries,
         Selected = selected,
-        Enabled = enabled,
       };
     }
   }

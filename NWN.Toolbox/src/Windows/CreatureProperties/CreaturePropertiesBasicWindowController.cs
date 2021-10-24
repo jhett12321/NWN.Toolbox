@@ -28,6 +28,7 @@ namespace Jorteck.Toolbox
         View.SaveEnabled,
       };
 
+      SetBindWatch(View.CreaturePortrait, true);
       Update();
     }
 
@@ -41,6 +42,7 @@ namespace Jorteck.Toolbox
           HandleButtonClick(eventData);
           break;
         case NuiEventType.Watch:
+          HandleWatchUpdate(eventData);
           break;
         case NuiEventType.Open:
           Update();
@@ -79,6 +81,8 @@ namespace Jorteck.Toolbox
       SetBindValue(View.CreatureDescription, selectedCreature.Description);
       SetBindValue(View.CreatureDialogue, selectedCreature.DialogResRef);
       SetBindValue(View.CreaturePortrait, selectedCreature.PortraitResRef);
+
+      UpdatePortraitPreview();
     }
 
     private void HandleButtonClick(ModuleEvents.OnNuiEvent eventData)
@@ -95,6 +99,19 @@ namespace Jorteck.Toolbox
       {
         Update();
       }
+    }
+
+    private void HandleWatchUpdate(ModuleEvents.OnNuiEvent eventData)
+    {
+      if (eventData.ElementId == View.CreaturePortrait.Key)
+      {
+        UpdatePortraitPreview();
+      }
+    }
+
+    private void UpdatePortraitPreview()
+    {
+      SetBindValue(View.CreaturePortraitPreview, GetBindValue(View.CreaturePortrait) + "l");
     }
 
     private void SaveChanges()
