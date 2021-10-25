@@ -33,7 +33,7 @@ namespace Jorteck.Toolbox
     public readonly NuiBind<string> Description = new NuiBind<string>("description_val");
 
     // Buttons
-    public readonly NuiButton SelectCreatureButton;
+    public readonly NuiButton SelectPlayerButton;
     public readonly NuiButton SaveChangesButton;
     public readonly NuiButton DiscardChangesButton;
 
@@ -42,7 +42,7 @@ namespace Jorteck.Toolbox
 
     public PlayerVitalsWindowView()
     {
-      SelectCreatureButton = new NuiButton("Select Player")
+      SelectPlayerButton = new NuiButton("Select Player")
       {
         Id = "btn_crt_sel",
       };
@@ -199,7 +199,7 @@ namespace Jorteck.Toolbox
             Height = 40f,
             Children = new List<NuiElement>
             {
-              SelectCreatureButton,
+              SelectPlayerButton,
               new NuiSpacer(),
               SaveChangesButton,
               DiscardChangesButton,

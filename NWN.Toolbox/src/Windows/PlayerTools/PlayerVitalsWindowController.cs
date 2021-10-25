@@ -72,7 +72,7 @@ namespace Jorteck.Toolbox
 
     private void HandleButtonClick(ModuleEvents.OnNuiEvent eventData)
     {
-      if (eventData.ElementId == View.SelectCreatureButton.Id)
+      if (eventData.ElementId == View.SelectPlayerButton.Id)
       {
         CursorTargetService.EnterTargetMode(Player, OnCreatureSelected, ObjectTypes.Creature);
       }
