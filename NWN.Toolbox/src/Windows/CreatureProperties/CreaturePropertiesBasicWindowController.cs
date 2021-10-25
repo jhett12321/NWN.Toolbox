@@ -16,19 +16,19 @@ namespace Jorteck.Toolbox
     {
       widgetEnabledBinds = new[]
       {
-        View.CreatureNameEnabled,
-        View.CreatureTagEnabled,
-        View.CreatureRaceEnabled,
-        View.CreatureAppearanceEnabled,
-        View.CreaturePhenotypeEnabled,
-        View.CreatureGenderEnabled,
-        View.CreatureDescriptionEnabled,
-        View.CreaturePortraitEnabled,
-        View.CreatureDialogueEnabled,
+        View.NameEnabled,
+        View.TagEnabled,
+        View.RaceEnabled,
+        View.AppearanceEnabled,
+        View.PhenotypeEnabled,
+        View.GenderEnabled,
+        View.DescriptionEnabled,
+        View.PortraitEnabled,
+        View.DialogEnabled,
         View.SaveEnabled,
       };
 
-      SetBindWatch(View.CreaturePortrait, true);
+      SetBindWatch(View.Portrait, true);
       Update();
     }
 
@@ -36,8 +36,6 @@ namespace Jorteck.Toolbox
     {
       switch (eventData.EventType)
       {
-        case NuiEventType.Unknown:
-          break;
         case NuiEventType.Click:
           HandleButtonClick(eventData);
           break;
@@ -46,14 +44,6 @@ namespace Jorteck.Toolbox
           break;
         case NuiEventType.Open:
           Update();
-          break;
-        case NuiEventType.Focus:
-          break;
-        case NuiEventType.Blur:
-          break;
-        case NuiEventType.MouseDown:
-          break;
-        case NuiEventType.MouseUp:
           break;
       }
     }
@@ -72,15 +62,15 @@ namespace Jorteck.Toolbox
       }
 
       ApplyPermissionBindings(widgetEnabledBinds);
-      SetBindValue(View.CreatureName, selectedCreature.Name);
-      SetBindValue(View.CreatureTag, selectedCreature.Tag);
-      SetBindValue(View.CreatureRace, ((int)selectedCreature.RacialType).ToString());
-      SetBindValue(View.CreatureAppearance, ((int)selectedCreature.CreatureAppearanceType).ToString());
-      SetBindValue(View.CreaturePhenotype, ((int)selectedCreature.Phenotype).ToString());
-      SetBindValue(View.CreatureGender, (int)selectedCreature.Gender);
-      SetBindValue(View.CreatureDescription, selectedCreature.Description);
-      SetBindValue(View.CreatureDialogue, selectedCreature.DialogResRef);
-      SetBindValue(View.CreaturePortrait, selectedCreature.PortraitResRef);
+      SetBindValue(View.Name, selectedCreature.Name);
+      SetBindValue(View.Tag, selectedCreature.Tag);
+      SetBindValue(View.Race, ((int)selectedCreature.RacialType).ToString());
+      SetBindValue(View.Appearance, ((int)selectedCreature.CreatureAppearanceType).ToString());
+      SetBindValue(View.Phenotype, ((int)selectedCreature.Phenotype).ToString());
+      SetBindValue(View.Gender, (int)selectedCreature.Gender);
+      SetBindValue(View.Description, selectedCreature.Description);
+      SetBindValue(View.Dialog, selectedCreature.DialogResRef);
+      SetBindValue(View.Portrait, selectedCreature.PortraitResRef);
 
       UpdatePortraitPreview();
     }
@@ -89,7 +79,7 @@ namespace Jorteck.Toolbox
     {
       if (eventData.ElementId == View.SelectCreatureButton.Id)
       {
-        CursorTargetService.EnterTargetMode(Player, target => OnCreatureSelected(eventData.WindowToken, target), ObjectTypes.Creature);
+        CursorTargetService.EnterTargetMode(Player, OnCreatureSelected, ObjectTypes.Creature);
       }
       else if (eventData.ElementId == View.SaveChangesButton.Id)
       {
@@ -103,7 +93,7 @@ namespace Jorteck.Toolbox
 
     private void HandleWatchUpdate(ModuleEvents.OnNuiEvent eventData)
     {
-      if (eventData.ElementId == View.CreaturePortrait.Key)
+      if (eventData.ElementId == View.Portrait.Key)
       {
         UpdatePortraitPreview();
       }
@@ -111,7 +101,7 @@ namespace Jorteck.Toolbox
 
     private void UpdatePortraitPreview()
     {
-      SetBindValue(View.CreaturePortraitPreview, GetBindValue(View.CreaturePortrait) + "l");
+      SetBindValue(View.PortraitPreview, GetBindValue(View.Portrait) + "l");
     }
 
     private void SaveChanges()
@@ -121,32 +111,32 @@ namespace Jorteck.Toolbox
         return;
       }
 
-      selectedCreature.Name = GetBindValue(View.CreatureName);
-      selectedCreature.Tag = GetBindValue(View.CreatureTag);
-      if (GetBindValue(View.CreatureRace).TryParseInt(out int racialType))
+      selectedCreature.Name = GetBindValue(View.Name);
+      selectedCreature.Tag = GetBindValue(View.Tag);
+      if (GetBindValue(View.Race).TryParseInt(out int racialType))
       {
         selectedCreature.RacialType = (RacialType)racialType;
       }
 
-      if (GetBindValue(View.CreatureAppearance).TryParseInt(out int appearanceType))
+      if (GetBindValue(View.Appearance).TryParseInt(out int appearanceType))
       {
         selectedCreature.CreatureAppearanceType = (AppearanceType)appearanceType;
       }
 
-      if (GetBindValue(View.CreaturePhenotype).TryParseInt(out int phenotype))
+      if (GetBindValue(View.Phenotype).TryParseInt(out int phenotype))
       {
         selectedCreature.Phenotype = (Phenotype)phenotype;
       }
 
-      selectedCreature.Gender = (Gender)GetBindValue(View.CreatureGender);
-      selectedCreature.Description = GetBindValue(View.CreatureDescription);
-      selectedCreature.PortraitResRef = GetBindValue(View.CreaturePortrait);
-      selectedCreature.DialogResRef = GetBindValue(View.CreatureDialogue);
+      selectedCreature.Gender = (Gender)GetBindValue(View.Gender);
+      selectedCreature.Description = GetBindValue(View.Description);
+      selectedCreature.PortraitResRef = GetBindValue(View.Portrait);
+      selectedCreature.DialogResRef = GetBindValue(View.Dialog);
 
       Update();
     }
 
-    private void OnCreatureSelected(int token, ModuleEvents.OnPlayerTarget eventData)
+    private void OnCreatureSelected(ModuleEvents.OnPlayerTarget eventData)
     {
       if (eventData.TargetObject == null || eventData.TargetObject is not NwCreature creature)
       {

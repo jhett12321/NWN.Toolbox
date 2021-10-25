@@ -63,6 +63,6 @@
   </ItemGroup>
 
   <Target Name="ZipOutputPath" AfterTargets="Build">
-    <ZipDirectory Overwrite="true" SourceDirectory="$(OutputPath)" DestinationFile="$(OutputPath)\..\$(MSBuildProjectName).zip"/>
+    <ZipDirectory Overwrite="true" SourceDirectory="$(OutputPath)" DestinationFile="$(OutputPath)\..\$(MSBuildProjectName).zip" />
   </Target>
 </Project>
