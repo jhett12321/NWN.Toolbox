@@ -4,7 +4,7 @@ using Anvil.Services;
 namespace Jorteck.Toolbox
 {
   [ServiceBinding(typeof(IPermissionProvider))]
-  [ServiceBindingOptions(MissingPluginDependencies = new[] { "NWN.Permissions" })]
+  [ServiceBindingOptions(BindingPriority = BindingPriority.Lowest)]
   public sealed class FallbackPermissionProvider : IPermissionProvider
   {
     public bool HasPermission(NwPlayer player, string permissionKey)
