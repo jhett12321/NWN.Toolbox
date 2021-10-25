@@ -58,7 +58,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="NWN.Anvil" Version="8193.33.1" ExcludeAssets="runtime" />
+    <PackageReference Include="NWN.Anvil" Version="8193.33.2-dev.4.de9f6f9a" ExcludeAssets="runtime" />
     <PackageReference Include="NWN.Permissions" Version="8193.33.0-dev.8.623bd5f" ExcludeAssets="runtime" />
   </ItemGroup>
 
