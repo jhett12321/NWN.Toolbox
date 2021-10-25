@@ -192,7 +192,7 @@ namespace Jorteck.Toolbox
             Children = new List<NuiElement>
             {
               new NuiLabel(PlayerName),
-            }
+            },
           },
           new NuiRow
           {

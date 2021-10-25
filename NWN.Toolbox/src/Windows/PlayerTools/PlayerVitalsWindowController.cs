@@ -107,10 +107,11 @@ namespace Jorteck.Toolbox
 
       playerCreature.SubRace = GetBindValue(View.SubRace);
 
-      if (GetBindValue(View.Age).TryParseInt(out int age))
-      {
-        //playerCreature.Age = age;
-      }
+      // TODO: Implement when age setter is available.
+      // if (GetBindValue(View.Age).TryParseInt(out int age))
+      // {
+      //   playerCreature.Age = age;
+      // }
 
       playerCreature.Deity = GetBindValue(View.Deity);
       playerCreature.Description = GetBindValue(View.Description);

@@ -18,10 +18,10 @@ namespace Jorteck.Toolbox
     private readonly List<IWindowView> windowViews;
     private readonly Dictionary<NwPlayer, List<IWindowController>> windowControllers = new Dictionary<NwPlayer, List<IWindowController>>();
 
-    public WindowManager(InjectionService injectionService, IEnumerable<IWindowView> views)
+    public WindowManager(InjectionService injectionService, IEnumerable<IWindowView> windowViews)
     {
       this.injectionService = injectionService;
-      this.windowViews = views.OrderBy(view => view.Title).ToList();
+      this.windowViews = windowViews.OrderBy(view => view.Title).ToList();
 
       NwModule.Instance.OnNuiEvent += OnNuiEvent;
       NwModule.Instance.OnClientLeave += OnClientLeave;
