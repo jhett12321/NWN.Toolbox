@@ -22,7 +22,16 @@ namespace Jorteck.Toolbox
 
     public abstract void ProcessEvent(ModuleEvents.OnNuiEvent eventData);
 
-    public abstract void OnClose();
+    public void Close()
+    {
+      OnClose();
+      if (Player != null && Player.IsValid)
+      {
+        Player.NuiDestroy(Token);
+      }
+    }
+
+    protected abstract void OnClose();
 
     protected void ApplyPermissionBindings(params NuiBind<bool>[] binds)
     {

@@ -48,7 +48,7 @@ namespace Jorteck.Toolbox
       }
     }
 
-    public override void OnClose()
+    protected override void OnClose()
     {
       selectedCreature = null;
     }

@@ -13,6 +13,6 @@ namespace Jorteck.Toolbox
 
     public void ProcessEvent(ModuleEvents.OnNuiEvent eventData);
 
-    public void OnClose();
+    public void Close();
   }
 }

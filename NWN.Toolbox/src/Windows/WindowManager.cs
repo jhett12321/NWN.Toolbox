@@ -9,7 +9,7 @@ using NLog;
 namespace Jorteck.Toolbox
 {
   [ServiceBinding(typeof(WindowManager))]
-  public sealed class WindowManager
+  public sealed class WindowManager : IDisposable
   {
     private static readonly Logger Log = LogManager.GetCurrentClassLogger();
 
@@ -64,11 +64,24 @@ namespace Jorteck.Toolbox
       {
         foreach (IWindowController controller in playerControllers)
         {
-          controller.OnClose();
+          controller.Close();
         }
 
         windowControllers.Remove(eventData.Player);
       }
+    }
+
+    public void Dispose()
+    {
+      foreach (List<IWindowController> controllers in windowControllers.Values)
+      {
+        foreach (IWindowController controller in controllers)
+        {
+          controller.Close();
+        }
+      }
+
+      windowControllers.Clear();
     }
   }
 }
