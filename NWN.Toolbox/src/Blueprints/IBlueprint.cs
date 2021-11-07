@@ -4,6 +4,8 @@ namespace Jorteck.Toolbox
 {
   public interface IBlueprint
   {
+    public string FullName => Category + "/" + Name;
+
     public string Name { get; }
 
     public string Category { get; }

@@ -9,6 +9,8 @@ namespace Jorteck.Toolbox
   {
     public string Title { get; }
 
+    public bool ListInToolbox { get; }
+
     internal IWindowController CreateController(NwPlayer player);
   }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Anvil.Services;
@@ -34,7 +35,8 @@ namespace Jorteck.Toolbox
 
     public IEnumerable<IBlueprint> GetBlueprints(BlueprintObjectType blueprintType, int start, string search, int count)
     {
-      return blueprints.Where(blueprint => blueprint.Name.Contains(search)).Skip(start).Take(count);
+      return blueprints.Where(blueprint => blueprint.ObjectType == blueprintType && blueprint.Name.Contains(search, StringComparison.OrdinalIgnoreCase))
+        .OrderBy(blueprint => blueprint.FullName).Skip(start).Take(count);
     }
   }
 }

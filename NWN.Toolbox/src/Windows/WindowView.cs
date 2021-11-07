@@ -14,6 +14,8 @@ namespace Jorteck.Toolbox
 
     public abstract NuiWindow WindowTemplate { get; }
 
+    public virtual bool ListInToolbox => true;
+
     IWindowController IWindowView.CreateController(NwPlayer player)
     {
       return new TController
