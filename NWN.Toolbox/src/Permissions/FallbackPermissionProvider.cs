@@ -5,7 +5,7 @@ namespace Jorteck.Toolbox
 {
   [ServiceBinding(typeof(IPermissionProvider))]
   [ServiceBindingOptions(BindingPriority = BindingPriority.Lowest)]
-  public sealed class FallbackPermissionProvider : IPermissionProvider
+  internal sealed class FallbackPermissionProvider : IPermissionProvider
   {
     public bool HasPermission(NwPlayer player, string permissionKey)
     {

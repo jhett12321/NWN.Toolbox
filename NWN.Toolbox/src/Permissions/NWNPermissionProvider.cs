@@ -1,23 +1,19 @@
 using Anvil.API;
 using Anvil.Services;
-using Jorteck.Permissions;
 
 namespace Jorteck.Toolbox
 {
   [ServiceBinding(typeof(IPermissionProvider))]
   [ServiceBindingOptions(PluginDependencies = new[] { "NWN.Permissions" })]
-  public sealed class NWNPermissionProvider : IPermissionProvider
+  internal sealed class NWNPermissionProvider : IPermissionProvider
   {
-    private readonly PermissionsService permissionsService;
-
-    public NWNPermissionProvider(PermissionsService permissionsService)
-    {
-      this.permissionsService = permissionsService;
-    }
+    // We have to use injection here as EF.Core scans constructors and will throw a missing assembly error if the plugin is not installed.
+    [Inject]
+    public Permissions.PermissionsService PermissionsService { private get; init; }
 
     public bool HasPermission(NwPlayer player, string permissionKey)
     {
-      return permissionsService.HasPermission(player, permissionKey);
+      return PermissionsService != null && PermissionsService.HasPermission(player, permissionKey);
     }
   }
 }
