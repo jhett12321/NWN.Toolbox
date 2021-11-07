@@ -80,8 +80,8 @@ namespace Jorteck.Toolbox
                   {
                     Height = 15f,
                     HorizontalAlign = NuiHAlign.Center,
-                  }
-                }
+                  },
+                },
               },
               new NuiColumn
               {
@@ -142,9 +142,9 @@ namespace Jorteck.Toolbox
                       },
                     },
                   },
-                }
+                },
               },
-            }
+            },
           },
           new NuiRow
           {

@@ -19,7 +19,7 @@ namespace Jorteck.Toolbox
         BlueprintObjectType.Placeable => NwPlaceable.Create(ResRef, location),
         BlueprintObjectType.Store => NwStore.Create(ResRef, location),
         BlueprintObjectType.Waypoint => NwWaypoint.Create(ResRef, location),
-        _ => throw new NotImplementedException($"{ObjectType} blueprints are not supported.")
+        _ => throw new NotImplementedException($"{ObjectType} blueprints are not supported."),
       };
     }
   }

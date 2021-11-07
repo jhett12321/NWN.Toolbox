@@ -6,20 +6,11 @@ namespace Jorteck.Toolbox
   {
     private readonly BlueprintModel dbModel;
 
-    public string Name
-    {
-      get => dbModel.Name;
-    }
+    public string Name => dbModel.Name;
 
-    public string Category
-    {
-      get => dbModel.Category;
-    }
+    public string Category => dbModel.Category;
 
-    public BlueprintObjectType ObjectType
-    {
-      get => dbModel.Type;
-    }
+    public BlueprintObjectType ObjectType => dbModel.Type;
 
     public DatabaseBlueprint(BlueprintModel dbModel)
     {

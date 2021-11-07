@@ -19,6 +19,7 @@ namespace Jorteck.Toolbox
 
     public bool Active { get; set; }
 
+    // ReSharper disable once CollectionNeverUpdated.Global
     public List<EncounterSpawn> Creatures { get; set; }
 
     public sealed class EncounterSpawn
