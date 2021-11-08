@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Numerics;
 using Anvil.API;
 using Anvil.API.Events;
 using Anvil.Services;
@@ -11,6 +12,9 @@ namespace Jorteck.Toolbox
 
     [Inject]
     public BlueprintManager BlueprintManager { private get; init; }
+
+    [Inject]
+    public CursorTargetService CursorTargetService { private get; init; }
 
     private readonly Dictionary<string, IBlueprint> idToBlueprintMap = new Dictionary<string, IBlueprint>();
     private IBlueprint selectedBlueprint;
@@ -56,8 +60,36 @@ namespace Jorteck.Toolbox
     {
       if (selectedBlueprint == null)
       {
+        Player.FloatingTextString("Select a blueprint first.", false);
         return;
       }
+
+      CursorTargetService.EnterTargetMode(Player, CreateBlueprintInstance);
+    }
+
+    private void CreateBlueprintInstance(ModuleEvents.OnPlayerTarget onPlayerTarget)
+    {
+      if (selectedBlueprint == null)
+      {
+        return;
+      }
+
+      Location location;
+      if (onPlayerTarget.TargetObject is NwArea area)
+      {
+        location = Location.Create(area, onPlayerTarget.TargetPosition, 0f);
+      }
+      else if (onPlayerTarget.TargetObject is NwGameObject gameObject)
+      {
+        location = gameObject.Location;
+      }
+      else
+      {
+        return;
+      }
+
+      NwObject nwObject = selectedBlueprint.Create(location);
+      Player.SendServerMessage($"\"{nwObject.Name}\" Created.");
     }
 
     private void RefreshCreatorList()
