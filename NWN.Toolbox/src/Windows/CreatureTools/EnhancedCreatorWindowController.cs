@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Numerics;
 using Anvil.API;
 using Anvil.API.Events;
 using Anvil.Services;
@@ -111,7 +110,7 @@ namespace Jorteck.Toolbox
         subViewRoot.Children.Add(CreateBlueprintElement(blueprint, i));
       }
 
-      Player.NuiSetGroupLayout(Token, View.CreatorListContainer.Id, subViewRoot);
+      SetGroupLayout(View.CreatorListContainer, subViewRoot);
     }
 
     private NuiElement CreateCategoryElement(string categoryName)

@@ -55,5 +55,10 @@ namespace Jorteck.Toolbox
     {
       bind.SetBindWatch(Player, Token, watch);
     }
+
+    protected void SetGroupLayout(NuiGroup group, NuiLayout newLayout)
+    {
+      group.SetLayout(Player, Token, newLayout);
+    }
   }
 }

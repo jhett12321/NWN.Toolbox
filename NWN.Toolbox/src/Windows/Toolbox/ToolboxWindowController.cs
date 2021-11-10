@@ -62,7 +62,7 @@ namespace Jorteck.Toolbox
         subViewRoot.Children.Add(CreateWindowButton(windows[i], i));
       }
 
-      Player.NuiSetGroupLayout(Token, View.CreatorListContainer.Id, subViewRoot);
+      SetGroupLayout(View.ToolboxListContainer, subViewRoot);
     }
 
     private NuiElement CreateWindowButton(IWindowView window, int index)

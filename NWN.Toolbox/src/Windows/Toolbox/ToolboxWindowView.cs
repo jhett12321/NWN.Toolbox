@@ -13,9 +13,9 @@ namespace Jorteck.Toolbox
     public override NuiWindow WindowTemplate { get; }
 
     // Sub-views
-    public readonly NuiGroup CreatorListContainer = new NuiGroup
+    public readonly NuiGroup ToolboxListContainer = new NuiGroup
     {
-      Id = "creator_list",
+      Id = "toolbox_list",
     };
 
     // Value Binds
@@ -45,7 +45,7 @@ namespace Jorteck.Toolbox
               SearchButton,
             },
           },
-          CreatorListContainer,
+          ToolboxListContainer,
         },
       };
 
