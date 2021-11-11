@@ -7,7 +7,7 @@ namespace Jorteck.Toolbox
 {
   public sealed class EnhancedCreatorWindowController : WindowController<EnhancedCreatorWindowController, EnhancedCreatorWindowView>
   {
-    private const int MaxItems = 100;
+    private const int MaxItems = 200;
 
     [Inject]
     public BlueprintManager BlueprintManager { private get; init; }
@@ -51,6 +51,7 @@ namespace Jorteck.Toolbox
       }
       else if (idToBlueprintMap.TryGetValue(eventData.ElementId, out IBlueprint blueprint))
       {
+        SetBindValue(View.SelectedBlueprint, $"{blueprint.ObjectType}: {blueprint.FullName}");
         selectedBlueprint = blueprint;
       }
     }

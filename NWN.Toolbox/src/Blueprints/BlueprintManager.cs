@@ -30,7 +30,7 @@ namespace Jorteck.Toolbox
       {
         foreach (IBlueprintSource blueprintSource in blueprintSources)
         {
-          results.AddRange(blueprintSource.GetBlueprints(objectType, each, search, results.Count - max));
+          results.AddRange(blueprintSource.GetBlueprints(objectType, each, search, max - results.Count));
         }
       }
 

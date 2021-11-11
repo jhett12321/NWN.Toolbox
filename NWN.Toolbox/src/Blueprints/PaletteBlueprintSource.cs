@@ -35,7 +35,7 @@ namespace Jorteck.Toolbox
 
     public IEnumerable<IBlueprint> GetBlueprints(BlueprintObjectType blueprintType, int start, string search, int count)
     {
-      return blueprints.Where(blueprint => blueprint.ObjectType == blueprintType && blueprint.Name.Contains(search, StringComparison.OrdinalIgnoreCase))
+      return blueprints.Where(blueprint => blueprint.ObjectType == blueprintType && blueprint.FullName.Contains(search, StringComparison.OrdinalIgnoreCase))
         .OrderBy(blueprint => blueprint.FullName).Skip(start).Take(count);
     }
   }

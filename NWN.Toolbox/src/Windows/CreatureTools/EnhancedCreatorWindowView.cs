@@ -19,6 +19,7 @@ namespace Jorteck.Toolbox
     // Value Binds
     public readonly NuiBind<string> Search = new NuiBind<string>("search_val");
     public readonly NuiBind<int> BlueprintType = new NuiBind<int>("type_val");
+    public readonly NuiBind<string> SelectedBlueprint = new NuiBind<string>("selected_blue");
 
     // Buttons
     public readonly NuiButtonImage SearchButton;
@@ -52,6 +53,10 @@ namespace Jorteck.Toolbox
               SearchButton,
             },
           },
+          new NuiLabel(SelectedBlueprint)
+          {
+            Height = 20f,
+          },
           CreatorListContainer,
           new NuiRow
           {
@@ -61,8 +66,8 @@ namespace Jorteck.Toolbox
               new NuiSpacer(),
               CreateButton,
               new NuiSpacer(),
-            }
-          }
+            },
+          },
         },
       };
 

@@ -6,6 +6,7 @@ namespace Jorteck.Toolbox
   internal sealed class PaletteBlueprint : IBlueprint
   {
     public string ResRef { get; init; }
+    public string FullName { get; init; }
     public string Name { get; init; }
     public string Category { get; init; }
     public BlueprintObjectType ObjectType { get; init; }

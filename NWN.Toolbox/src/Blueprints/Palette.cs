@@ -92,6 +92,7 @@ namespace Jorteck.Toolbox
           ResRef = resRef,
           Name = name,
           Category = path,
+          FullName = path + "/" + name,
           ObjectType = paletteType,
         });
       }

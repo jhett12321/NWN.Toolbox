@@ -10,6 +10,8 @@ namespace Jorteck.Toolbox
 
     public string Category => dbModel.Category;
 
+    public string FullName => Category + "/" + Name;
+
     public BlueprintObjectType ObjectType => dbModel.Type;
 
     public DatabaseBlueprint(BlueprintModel dbModel)
