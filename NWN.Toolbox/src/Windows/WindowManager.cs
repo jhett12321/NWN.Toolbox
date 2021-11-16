@@ -44,7 +44,7 @@ namespace Jorteck.Toolbox
 
     public void OpenWindow(NwPlayer player, IWindowView view)
     {
-      IWindowController controller = injectionService.Inject(view.CreateController(player));
+      IWindowController controller = injectionService.Inject(view.CreateDefaultController(player));
       controller.Init();
       windowControllers.AddElement(player, controller);
     }

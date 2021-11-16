@@ -3,14 +3,17 @@ using Anvil.API;
 
 namespace Jorteck.Toolbox
 {
-  public sealed class ToolboxWindowButtonView : WindowView<ToolboxWindowButtonView, ToolboxWindowButtonController>
+  public sealed class ToolboxWindowButtonView : WindowView<ToolboxWindowButtonView>
   {
     public override string Id => "toolbox";
     public override string Title => "Toolbox";
-
+    public override NuiWindow WindowTemplate { get; }
     public override bool ListInToolbox => false;
 
-    public override NuiWindow WindowTemplate { get; }
+    public override IWindowController CreateDefaultController(NwPlayer player)
+    {
+      return CreateController<ToolboxWindowButtonController>(player);
+    }
 
     // Buttons
     public readonly NuiButton Button;

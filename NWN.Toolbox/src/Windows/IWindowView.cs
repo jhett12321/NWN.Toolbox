@@ -3,7 +3,7 @@ using Anvil.API;
 namespace Jorteck.Toolbox
 {
   /// <summary>
-  /// Internal interface - implement <see cref="WindowView{TView,TController}"/> instead.
+  /// Internal interface - implement <see cref="WindowView{TView}"/> instead.
   /// </summary>
   public interface IWindowView
   {
@@ -11,6 +11,6 @@ namespace Jorteck.Toolbox
 
     public bool ListInToolbox { get; }
 
-    internal IWindowController CreateController(NwPlayer player);
+    public IWindowController CreateDefaultController(NwPlayer player);
   }
 }

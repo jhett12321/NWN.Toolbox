@@ -4,7 +4,7 @@ using Anvil.Services;
 
 namespace Jorteck.Toolbox
 {
-  public sealed class CreaturePropertiesBasicWindowController : WindowController<CreaturePropertiesBasicWindowController, CreaturePropertiesBasicWindowView>
+  public sealed class CreaturePropertiesBasicWindowController : WindowController<CreaturePropertiesBasicWindowView>
   {
     [Inject]
     public CursorTargetService CursorTargetService { private get; init; }

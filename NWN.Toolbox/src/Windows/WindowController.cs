@@ -4,9 +4,7 @@ using Anvil.Services;
 
 namespace Jorteck.Toolbox
 {
-  public abstract class WindowController<TController, TView> : IWindowController
-    where TController : WindowController<TController, TView>, new()
-    where TView : WindowView<TView, TController>, new()
+  public abstract class WindowController<TView> : IWindowController where TView : WindowView<TView>, new()
   {
     [Inject]
     public IPermissionProvider PermissionProvider { private get; init; }

@@ -3,12 +3,16 @@ using Anvil.API;
 
 namespace Jorteck.Toolbox
 {
-  public sealed class EnhancedCreatorWindowView : WindowView<EnhancedCreatorWindowView, EnhancedCreatorWindowController>
+  public sealed class EnhancedCreatorWindowView : WindowView<EnhancedCreatorWindowView>
   {
     public override string Id => "creator.enhanced";
     public override string Title => "Creator: Enhanced";
-
     public override NuiWindow WindowTemplate { get; }
+
+    public override IWindowController CreateDefaultController(NwPlayer player)
+    {
+      return CreateController<EnhancedCreatorWindowController>(player);
+    }
 
     // Sub-views
     public readonly NuiGroup CreatorListContainer = new NuiGroup

@@ -3,12 +3,16 @@ using Anvil.API;
 
 namespace Jorteck.Toolbox
 {
-  public sealed class PlayerVitalsWindowView : WindowView<PlayerVitalsWindowView, PlayerVitalsWindowController>
+  public sealed class PlayerVitalsWindowView : WindowView<PlayerVitalsWindowView>
   {
     public override string Id => "player.vital";
     public override string Title => "Player Properties: Vitals";
-
     public override NuiWindow WindowTemplate { get; }
+
+    public override IWindowController CreateDefaultController(NwPlayer player)
+    {
+      return CreateController<PlayerVitalsWindowController>(player);
+    }
 
     // Permission Binds
     public readonly NuiBind<bool> FirstNameEnabled = new NuiBind<bool>("first_name");

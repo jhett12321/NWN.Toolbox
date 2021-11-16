@@ -3,7 +3,10 @@ using Anvil.API.Events;
 
 namespace Jorteck.Toolbox
 {
-  internal interface IWindowController
+  /// <summary>
+  /// Internal interface - implement <see cref="WindowController{TView}"/> instead.
+  /// </summary>
+  public interface IWindowController
   {
     public NwPlayer Player { get; }
 

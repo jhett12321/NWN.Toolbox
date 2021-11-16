@@ -3,12 +3,16 @@ using Anvil.API;
 
 namespace Jorteck.Toolbox
 {
-  public sealed class PlayerAppearanceWindowView : WindowView<PlayerAppearanceWindowView, PlayerAppearanceWindowController>
+  public sealed class PlayerAppearanceWindowView : WindowView<PlayerAppearanceWindowView>
   {
     public override string Id => "player.appearance";
     public override string Title => "Player Properties: Appearance";
-
     public override NuiWindow WindowTemplate { get; }
+
+    public override IWindowController CreateDefaultController(NwPlayer player)
+    {
+      return CreateController<PlayerAppearanceWindowController>(player);
+    }
 
     // Permission Binds
     public readonly NuiBind<bool> PortraitEnabled = new NuiBind<bool>("portrait");

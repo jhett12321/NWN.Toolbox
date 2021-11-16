@@ -7,7 +7,7 @@ using Anvil.Services;
 
 namespace Jorteck.Toolbox
 {
-  public sealed class ToolboxWindowController : WindowController<ToolboxWindowController, ToolboxWindowView>
+  public sealed class ToolboxWindowController : WindowController<ToolboxWindowView>
   {
     [Inject]
     public Lazy<IEnumerable<IWindowView>> AvailableWindows { private get; init; }

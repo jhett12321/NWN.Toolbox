@@ -5,7 +5,7 @@ using Anvil.Services;
 
 namespace Jorteck.Toolbox
 {
-  public sealed class ToolboxWindowButtonController : WindowController<ToolboxWindowButtonController, ToolboxWindowButtonView>
+  public sealed class ToolboxWindowButtonController : WindowController<ToolboxWindowButtonView>
   {
     [Inject]
     public Lazy<WindowManager> WindowManager { private get; init; }

@@ -3,12 +3,16 @@ using Anvil.API;
 
 namespace Jorteck.Toolbox
 {
-  public sealed class CreaturePropertiesBasicWindowView : WindowView<CreaturePropertiesBasicWindowView, CreaturePropertiesBasicWindowController>
+  public sealed class CreaturePropertiesBasicWindowView : WindowView<CreaturePropertiesBasicWindowView>
   {
     public override string Id => "creature.basic";
     public override string Title => "Creature Properties: Basic";
-
     public override NuiWindow WindowTemplate { get; }
+
+    public override IWindowController CreateDefaultController(NwPlayer player)
+    {
+      return CreateController<CreaturePropertiesBasicWindowController>(player);
+    }
 
     // Permission Binds
     public readonly NuiBind<bool> NameEnabled = new NuiBind<bool>("name");

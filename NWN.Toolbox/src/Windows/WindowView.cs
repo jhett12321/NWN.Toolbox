@@ -4,9 +4,8 @@ using Anvil.Services;
 namespace Jorteck.Toolbox
 {
   [ServiceBinding(typeof(IWindowView))]
-  public abstract class WindowView<TView, TController> : IWindowView
-    where TView : WindowView<TView, TController>, new()
-    where TController : WindowController<TController, TView>, new()
+  public abstract class WindowView<TView> : IWindowView
+    where TView : WindowView<TView>, new()
   {
     public abstract string Id { get; }
 
@@ -16,9 +15,11 @@ namespace Jorteck.Toolbox
 
     public virtual bool ListInToolbox => true;
 
-    IWindowController IWindowView.CreateController(NwPlayer player)
+    public abstract IWindowController CreateDefaultController(NwPlayer player);
+
+    protected T CreateController<T>(NwPlayer player) where T : WindowController<TView>, new()
     {
-      return new TController
+      return new T
       {
         View = (TView)this,
         Player = player,

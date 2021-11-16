@@ -5,7 +5,7 @@ using Anvil.Services;
 
 namespace Jorteck.Toolbox
 {
-  public sealed class EnhancedCreatorWindowController : WindowController<EnhancedCreatorWindowController, EnhancedCreatorWindowView>
+  public sealed class EnhancedCreatorWindowController : WindowController<EnhancedCreatorWindowView>
   {
     private const int MaxItems = 200;
 

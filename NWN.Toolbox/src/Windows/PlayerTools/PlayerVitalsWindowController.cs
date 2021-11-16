@@ -4,7 +4,7 @@ using Anvil.Services;
 
 namespace Jorteck.Toolbox
 {
-  public sealed class PlayerVitalsWindowController : WindowController<PlayerVitalsWindowController, PlayerVitalsWindowView>
+  public sealed class PlayerVitalsWindowController : WindowController<PlayerVitalsWindowView>
   {
     [Inject]
     public CursorTargetService CursorTargetService { private get; init; }
