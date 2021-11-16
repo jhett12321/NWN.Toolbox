@@ -27,24 +27,68 @@ namespace Jorteck.Toolbox
       NwModule.Instance.OnClientLeave += OnClientLeave;
     }
 
-    public void OpenWindow<T>(NwPlayer player) where T : IWindowView
+    public TController OpenWindow<TView, TController>(NwPlayer player)
+      where TView : WindowView<TView>, new()
+      where TController : WindowController<TView>, new()
     {
-      Type windowType = typeof(T);
+      TView view = (TView)GetWindowFromType(typeof(TView));
+      if (view != null)
+      {
+        TController controller = injectionService.Inject(new TController
+        {
+          View = view,
+          Player = player,
+          Token = player.CreateNuiWindow(view.WindowTemplate),
+        });
+
+        InitController(controller, player);
+        return controller;
+      }
+
+      return null;
+    }
+
+    /// <summary>
+    /// Opens a window view using the view's default controller.
+    /// </summary>
+    /// <param name="player">The player opening the window.</param>
+    /// <typeparam name="T">The type of view to open.</typeparam>
+    public void OpenWindow<T>(NwPlayer player) where T : WindowView<T>, new()
+    {
+      IWindowView view = GetWindowFromType(typeof(T));
+      if (view != null)
+      {
+        OpenWindow(player, view);
+      }
+    }
+
+    /// <summary>
+    /// Opens a window view using the view's default controller.
+    /// </summary>
+    /// <param name="player">The player opening the window.</param>
+    /// <param name="view">The view to open.</param>
+    public void OpenWindow(NwPlayer player, IWindowView view)
+    {
+      IWindowController controller = injectionService.Inject(view.CreateDefaultController(player));
+      InitController(controller, player);
+    }
+
+    private IWindowView GetWindowFromType(Type windowType)
+    {
       foreach (IWindowView view in windowViews)
       {
         if (view.GetType() == windowType)
         {
-          OpenWindow(player, view);
-          return;
+          return view;
         }
       }
 
-      Log.Error("Failed to create window of type {Type}", windowType.FullName);
+      Log.Error("Failed to find window of type {Type}", windowType.FullName);
+      return null;
     }
 
-    public void OpenWindow(NwPlayer player, IWindowView view)
+    private void InitController(IWindowController controller, NwPlayer player)
     {
-      IWindowController controller = injectionService.Inject(view.CreateDefaultController(player));
       controller.Init();
       windowControllers.AddElement(player, controller);
     }
