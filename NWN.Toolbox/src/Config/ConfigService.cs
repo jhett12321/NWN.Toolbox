@@ -18,6 +18,7 @@ namespace Jorteck.Toolbox
       .WithNamingConvention(UnderscoredNamingConvention.Instance)
       .Build();
 
+    // ReSharper disable once NotAccessedField.Global
     internal readonly Config Config;
 
     public ConfigService(PluginStorageService pluginStorageService)
