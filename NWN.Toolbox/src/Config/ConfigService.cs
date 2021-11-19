@@ -8,7 +8,7 @@ namespace Jorteck.Toolbox
   [ServiceBinding(typeof(ConfigService))]
   internal sealed class ConfigService
   {
-    private readonly string pluginPath = Path.GetDirectoryName(typeof(ConfigService).Assembly.Location);
+    private readonly string pluginStoragePath;
 
     private readonly IDeserializer deserializer = new DeserializerBuilder()
       .WithNamingConvention(UnderscoredNamingConvention.Instance)
@@ -20,8 +20,9 @@ namespace Jorteck.Toolbox
 
     internal readonly Config Config;
 
-    public ConfigService()
+    public ConfigService(PluginStorageService pluginStorageService)
     {
+      pluginStoragePath = pluginStorageService.GetPluginStoragePath(typeof(ConfigService).Assembly);
       Config = LoadConfig<Config>(Config.ConfigName);
     }
 
@@ -51,7 +52,7 @@ namespace Jorteck.Toolbox
 
     private string GetConfigPath(string fileName)
     {
-      return Path.Combine(pluginPath, fileName);
+      return Path.Combine(pluginStoragePath, fileName);
     }
   }
 }

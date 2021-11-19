@@ -7,7 +7,6 @@ namespace Jorteck.Toolbox
   {
     public const string ConfigName = "config.yml";
 
-    public string StoragePath { get; set; } = "./data/data.db";
     public int Version { get; set; } = 1;
   }
 }
