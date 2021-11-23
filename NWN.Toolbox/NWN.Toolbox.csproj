@@ -58,8 +58,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="NWN.Anvil" Version="8193.33.3-dev.10.bbe55671" PrivateAssets="All" ExcludeAssets="runtime" />
-    <PackageReference Include="NWN.Permissions" Version="8193.33.0-dev.13.e69ed07" PrivateAssets="All" ExcludeAssets="runtime" />
+    <PackageReference Include="NWN.Anvil" Version="8193.33.4" PrivateAssets="All" ExcludeAssets="runtime" />
+    <PackageReference Include="NWN.Permissions" Version="8193.33.0-dev.14.05c262f" PrivateAssets="All" ExcludeAssets="runtime" />
     <PackageReference Include="YamlDotNet" Version="11.2.1" PrivateAssets="compile" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.11" PrivateAssets="compile" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.11" PrivateAssets="compile" />
