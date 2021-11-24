@@ -19,12 +19,17 @@ namespace Jorteck.Toolbox
 
     protected T CreateController<T>(NwPlayer player) where T : WindowController<TView>, new()
     {
-      return new T
+      if (WindowTemplate.TryCreateWindow(player, out int token))
       {
-        View = (TView)this,
-        Player = player,
-        Token = player.CreateNuiWindow(WindowTemplate),
-      };
+        return new T
+        {
+          View = (TView)this,
+          Player = player,
+          Token = token,
+        };
+      }
+
+      return null;
     }
   }
 }

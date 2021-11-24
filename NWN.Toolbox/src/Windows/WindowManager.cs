@@ -32,13 +32,13 @@ namespace Jorteck.Toolbox
       where TController : WindowController<TView>, new()
     {
       TView view = (TView)GetWindowFromType(typeof(TView));
-      if (view != null)
+      if (view != null && view.WindowTemplate.TryCreateWindow(player, out int token))
       {
         TController controller = injectionService.Inject(new TController
         {
           View = view,
           Player = player,
-          Token = player.CreateNuiWindow(view.WindowTemplate),
+          Token = token,
         });
 
         InitController(controller, player);
@@ -69,7 +69,13 @@ namespace Jorteck.Toolbox
     /// <param name="view">The view to open.</param>
     public void OpenWindow(NwPlayer player, IWindowView view)
     {
-      IWindowController controller = injectionService.Inject(view.CreateDefaultController(player));
+      IWindowController controller = view.CreateDefaultController(player);
+      if (controller == null)
+      {
+        return;
+      }
+
+      injectionService.Inject(controller);
       InitController(controller, player);
     }
 

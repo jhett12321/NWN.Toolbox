@@ -20,5 +20,11 @@ namespace Jorteck.Toolbox
         Selected = selected,
       };
     }
+
+    public static bool TryCreateWindow(this NuiWindow template, NwPlayer player, out int token)
+    {
+      token = player.CreateNuiWindow(template);
+      return token != 0;
+    }
   }
 }
