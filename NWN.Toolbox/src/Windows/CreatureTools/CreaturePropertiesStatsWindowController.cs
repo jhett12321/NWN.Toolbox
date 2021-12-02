@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Anvil.API;
 using Anvil.API.Events;
@@ -53,6 +52,7 @@ namespace Jorteck.Toolbox.src.Windows.CreatureTools
     {
       selectedCreature = null;
     }
+
     private void Update()
     {
       if (selectedCreature == null)
@@ -194,7 +194,7 @@ namespace Jorteck.Toolbox.src.Windows.CreatureTools
 
     private void RefreshAbilityScoreContainer()
     {
-      var col = new NuiColumn() { Height = 500f };
+      NuiColumn col = new NuiColumn() { Height = 500f };
 
       col.Children.Add(new NuiRow
       {
@@ -309,7 +309,7 @@ namespace Jorteck.Toolbox.src.Windows.CreatureTools
 
     private void RefreshSavesContainer()
     {
-      var col = new NuiColumn();
+      NuiColumn col = new NuiColumn();
 
       col.Children.Add(new NuiRow
       {
@@ -378,7 +378,7 @@ namespace Jorteck.Toolbox.src.Windows.CreatureTools
 
     private void RefreshACContainer()
     {
-      var col = new NuiColumn();
+      NuiColumn col = new NuiColumn();
 
       col.Children.Add(new NuiRow
       {
@@ -431,7 +431,7 @@ namespace Jorteck.Toolbox.src.Windows.CreatureTools
 
     private void RefreshHitPointsContainer()
     {
-      var col = new NuiColumn();
+      NuiColumn col = new NuiColumn();
 
       col.Children.Add(new NuiRow
       {
@@ -439,7 +439,7 @@ namespace Jorteck.Toolbox.src.Windows.CreatureTools
         {
           new NuiLabel("Base Hit Points") { Height = 20f, VerticalAlign = NuiVAlign.Middle },
           new NuiTextEdit(string.Empty, View.BaseHitPoints, 4, false) { Width = 50f, Enabled = false },
-        }
+        },
       });
 
       col.Children.Add(new NuiRow
@@ -448,7 +448,7 @@ namespace Jorteck.Toolbox.src.Windows.CreatureTools
         {
           new NuiLabel("Hit Point Bonuses") { Height = 20f, VerticalAlign = NuiVAlign.Middle },
           new NuiTextEdit(string.Empty, View.BonusHitPoints, 4, false) { Width = 50f, Enabled = false },
-        }
+        },
       });
 
       col.Children.Add(new NuiRow
@@ -457,7 +457,7 @@ namespace Jorteck.Toolbox.src.Windows.CreatureTools
         {
           new NuiLabel("Total Hit Points") { Height = 20f, VerticalAlign = NuiVAlign.Middle },
           new NuiTextEdit(string.Empty, View.TotalHitPoints, 4, false) { Width = 50f, Enabled = false },
-        }
+        },
       });
 
       SetGroupLayout(View.HitPointsListContainer, col);
@@ -465,7 +465,7 @@ namespace Jorteck.Toolbox.src.Windows.CreatureTools
 
     private void RefreshSpeedContainer()
     {
-      var col = new NuiColumn();
+      NuiColumn col = new NuiColumn();
 
       col.Children.Add(new NuiRow
       {
@@ -473,7 +473,7 @@ namespace Jorteck.Toolbox.src.Windows.CreatureTools
         {
           new NuiLabel("Movement Rate") { Height = 20f, Width = 110f, VerticalAlign = NuiVAlign.Middle },
           NuiUtils.CreateComboForEnum<MovementRate>(View.MovementRate),
-        }
+        },
       });
 
       SetGroupLayout(View.SpeedContainer, col);
