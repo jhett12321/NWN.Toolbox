@@ -3,7 +3,7 @@ using Anvil.API;
 using Anvil.API.Events;
 using Anvil.Services;
 
-namespace Jorteck.Toolbox.src.Windows.CreatureTools
+namespace Jorteck.Toolbox
 {
   public sealed class CreaturePropertiesStatsWindowController : WindowController<CreaturePropertiesStatsWindowView>
   {

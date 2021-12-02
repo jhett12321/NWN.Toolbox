@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Anvil.API;
 
-namespace Jorteck.Toolbox.src.Windows.CreatureTools
+namespace Jorteck.Toolbox
 {
   public sealed class CreaturePropertiesStatsWindowView : WindowView<CreaturePropertiesStatsWindowView>
   {
