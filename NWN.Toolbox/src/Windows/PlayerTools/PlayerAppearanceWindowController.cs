@@ -1,14 +1,10 @@
 using Anvil.API;
 using Anvil.API.Events;
-using Anvil.Services;
 
 namespace Jorteck.Toolbox
 {
   public sealed class PlayerAppearanceWindowController : WindowController<PlayerAppearanceWindowView>
   {
-    [Inject]
-    public CursorTargetService CursorTargetService { private get; init; }
-
     private NuiBind<bool>[] widgetEnabledBinds;
     private NwPlayer selectedPlayer;
 
@@ -71,7 +67,7 @@ namespace Jorteck.Toolbox
     {
       if (eventData.ElementId == View.SelectPlayerButton.Id)
       {
-        CursorTargetService.EnterTargetMode(Player, OnCreatureSelected, ObjectTypes.Creature);
+        Player.TryEnterTargetMode(OnCreatureSelected, ObjectTypes.Creature);
       }
       else if (eventData.ElementId == View.SaveChangesButton.Id)
       {

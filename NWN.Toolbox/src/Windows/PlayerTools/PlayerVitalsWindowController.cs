@@ -1,14 +1,10 @@
 using Anvil.API;
 using Anvil.API.Events;
-using Anvil.Services;
 
 namespace Jorteck.Toolbox
 {
   public sealed class PlayerVitalsWindowController : WindowController<PlayerVitalsWindowView>
   {
-    [Inject]
-    public CursorTargetService CursorTargetService { private get; init; }
-
     private NuiBind<bool>[] widgetEnabledBinds;
     private NwPlayer selectedPlayer;
 
@@ -63,7 +59,7 @@ namespace Jorteck.Toolbox
       SetBindValue(View.FirstName, playerCreature.OriginalFirstName);
       SetBindValue(View.LastName, playerCreature.OriginalLastName);
       SetBindValue(View.Gender, (int)playerCreature.Gender);
-      SetBindValue(View.Race, ((int)playerCreature.RacialType).ToString());
+      SetBindValue(View.Race, ((int)playerCreature.Race.RacialType).ToString());
       SetBindValue(View.SubRace, playerCreature.SubRace);
       SetBindValue(View.Age, playerCreature.Age.ToString());
       SetBindValue(View.Deity, playerCreature.Deity);
@@ -74,7 +70,7 @@ namespace Jorteck.Toolbox
     {
       if (eventData.ElementId == View.SelectPlayerButton.Id)
       {
-        CursorTargetService.EnterTargetMode(Player, OnCreatureSelected, ObjectTypes.Creature);
+        Player.TryEnterTargetMode(OnCreatureSelected, ObjectTypes.Creature);
       }
       else if (eventData.ElementId == View.SaveChangesButton.Id)
       {
@@ -102,7 +98,7 @@ namespace Jorteck.Toolbox
 
       if (GetBindValue(View.Race).TryParseInt(out int racialType))
       {
-        playerCreature.RacialType = (RacialType)racialType;
+        playerCreature.Race = NwRace.FromRacialType((RacialType)racialType);
       }
 
       playerCreature.SubRace = GetBindValue(View.SubRace);
