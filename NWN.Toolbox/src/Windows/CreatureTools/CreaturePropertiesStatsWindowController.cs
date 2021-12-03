@@ -110,15 +110,17 @@ namespace Jorteck.Toolbox
       //SetBindValue(View.WillBonus, (selectedCreature.GetSavingThrow(SavingThrow.Will) - selectedCreature.GetBaseSavingThrow(SavingThrow.Will)).ToString());
       SetBindValue(View.WillTotal, selectedCreature.GetSavingThrow(SavingThrow.Will).ToString());
 
-      //SetBindValue(View.NaturalAC, selectedCreature.AC.ToString());
-      //SetBindValue(View.DexterityAC, selectedCreature.GetSavingThrow(SavingThrow.Will).ToString());
-      //SetBindValue(View.SizeModifierAC, selectedCreature.GetSavingThrow(SavingThrow.Will).ToString());
+      SetBindValue(View.NaturalAC, selectedCreature.BaseAC.ToString());
+      SetBindValue(View.DexterityAC, selectedCreature.GetAbilityModifier(Ability.Dexterity).ToString());
+      SetBindValue(View.SizeModifierAC, selectedCreature.Size.ACModifier().ToString());
       SetBindValue(View.TotalAC, selectedCreature.AC.ToString());
 
       SetBindValue(View.MovementRate, (int)selectedCreature.MovementRate);
 
-      //SetBindValue(View.BaseHitPoints, );
-      //SetBindValue(View.BonusHitPoints, );
+      int bonusHitPoints = selectedCreature.GetAbilityModifier(Ability.Constitution) * selectedCreature.Level;
+
+      SetBindValue(View.BaseHitPoints, (selectedCreature.MaxHP - bonusHitPoints).ToString());
+      SetBindValue(View.BonusHitPoints, bonusHitPoints.ToString());
       SetBindValue(View.TotalHitPoints, selectedCreature.MaxHP.ToString());
 
       RefreshAbilityScoreContainer();
@@ -438,7 +440,7 @@ namespace Jorteck.Toolbox
         Children = new List<NuiElement>
         {
           new NuiLabel("Base Hit Points") { Height = 20f, VerticalAlign = NuiVAlign.Middle },
-          new NuiTextEdit(string.Empty, View.BaseHitPoints, 4, false) { Width = 50f, Enabled = false },
+          new NuiTextEdit(string.Empty, View.BaseHitPoints, 4, false) { Width = 50f, Enabled = View.BaseHitPointsEnabled },
         },
       });
 
