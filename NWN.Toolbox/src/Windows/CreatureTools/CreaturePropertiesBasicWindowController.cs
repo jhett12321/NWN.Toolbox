@@ -1,14 +1,10 @@
 using Anvil.API;
 using Anvil.API.Events;
-using Anvil.Services;
 
 namespace Jorteck.Toolbox
 {
   public sealed class CreaturePropertiesBasicWindowController : WindowController<CreaturePropertiesBasicWindowView>
   {
-    [Inject]
-    public CursorTargetService CursorTargetService { private get; init; }
-
     private NuiBind<bool>[] widgetEnabledBinds;
     private NwCreature selectedCreature;
 
@@ -64,7 +60,7 @@ namespace Jorteck.Toolbox
       ApplyPermissionBindings(widgetEnabledBinds);
       SetBindValue(View.Name, selectedCreature.Name);
       SetBindValue(View.Tag, selectedCreature.Tag);
-      SetBindValue(View.Race, ((int)selectedCreature.RacialType).ToString());
+      SetBindValue(View.Race, ((int)selectedCreature.Race.RacialType).ToString());
       SetBindValue(View.Appearance, ((int)selectedCreature.CreatureAppearanceType).ToString());
       SetBindValue(View.Phenotype, ((int)selectedCreature.Phenotype).ToString());
       SetBindValue(View.Gender, (int)selectedCreature.Gender);
@@ -79,7 +75,7 @@ namespace Jorteck.Toolbox
     {
       if (eventData.ElementId == View.SelectCreatureButton.Id)
       {
-        CursorTargetService.EnterTargetMode(Player, OnCreatureSelected, ObjectTypes.Creature);
+        Player.TryEnterTargetMode(OnCreatureSelected, ObjectTypes.Creature);
       }
       else if (eventData.ElementId == View.SaveChangesButton.Id)
       {
@@ -115,7 +111,7 @@ namespace Jorteck.Toolbox
       selectedCreature.Tag = GetBindValue(View.Tag);
       if (GetBindValue(View.Race).TryParseInt(out int racialType))
       {
-        selectedCreature.RacialType = (RacialType)racialType;
+        selectedCreature.Race = NwRace.FromRacialType((RacialType)racialType);
       }
 
       if (GetBindValue(View.Appearance).TryParseInt(out int appearanceType))

@@ -12,9 +12,6 @@ namespace Jorteck.Toolbox
     [Inject]
     public BlueprintManager BlueprintManager { private get; init; }
 
-    [Inject]
-    public CursorTargetService CursorTargetService { private get; init; }
-
     private readonly Dictionary<string, IBlueprint> idToBlueprintMap = new Dictionary<string, IBlueprint>();
     private IBlueprint selectedBlueprint;
 
@@ -64,7 +61,7 @@ namespace Jorteck.Toolbox
         return;
       }
 
-      CursorTargetService.EnterTargetMode(Player, CreateBlueprintInstance);
+      Player.TryEnterTargetMode(CreateBlueprintInstance);
     }
 
     private void CreateBlueprintInstance(ModuleEvents.OnPlayerTarget onPlayerTarget)
