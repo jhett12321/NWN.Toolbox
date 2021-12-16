@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Anvil.API;
 using Anvil.API.Events;
 using Anvil.Services;
@@ -44,9 +45,19 @@ namespace Jorteck.Toolbox
       return bind.GetBindValue(Player, Token);
     }
 
+    protected List<T> GetBindValues<T>(NuiBind<T> bind)
+    {
+      return bind.GetBindValues(Player, Token);
+    }
+
     protected void SetBindValue<T>(NuiBind<T> bind, T value)
     {
       bind.SetBindValue(Player, Token, value);
+    }
+
+    protected void SetBindValues<T>(NuiBind<T> bind, IEnumerable<T> values)
+    {
+      bind.SetBindValues(Player, Token, values);
     }
 
     protected void SetBindWatch<T>(NuiBind<T> bind, bool watch)

@@ -16,7 +16,7 @@ namespace Jorteck.Toolbox
     public Lazy<WindowManager> WindowManager { private get; init; }
 
     private List<IWindowView> allWindows;
-    private readonly Dictionary<string, IWindowView> idToWindowMap = new Dictionary<string, IWindowView>();
+    private List<IWindowView> visibleWindows;
 
     public override void Init()
     {
@@ -36,7 +36,7 @@ namespace Jorteck.Toolbox
 
     protected override void OnClose()
     {
-      idToWindowMap.Clear();
+      visibleWindows = null;
     }
 
     private void HandleButtonClick(ModuleEvents.OnNuiEvent eventData)
@@ -45,8 +45,9 @@ namespace Jorteck.Toolbox
       {
         RefreshWindowList();
       }
-      else if (idToWindowMap.TryGetValue(eventData.ElementId, out IWindowView windowView))
+      else if (eventData.ElementId == View.OpenWindowButton.Id && visibleWindows != null && eventData.ArrayIndex >= 0 && eventData.ArrayIndex < visibleWindows.Count)
       {
+        IWindowView windowView = visibleWindows[eventData.ArrayIndex];
         WindowManager.Value.OpenWindow(Player, windowView);
       }
     }
@@ -54,28 +55,11 @@ namespace Jorteck.Toolbox
     private void RefreshWindowList()
     {
       string search = GetBindValue(View.Search);
-      List<IWindowView> windows = allWindows.Where(view => view.ListInToolbox && view.Title.Contains(search, StringComparison.OrdinalIgnoreCase)).ToList();
+      visibleWindows = allWindows.Where(view => view.ListInToolbox && view.Title.Contains(search, StringComparison.OrdinalIgnoreCase)).ToList();
 
-      NuiColumn subViewRoot = new NuiColumn();
-      for (int i = 0; i < windows.Count; i++)
-      {
-        subViewRoot.Children.Add(CreateWindowButton(windows[i], i));
-      }
-
-      SetGroupLayout(View.ToolboxListContainer, subViewRoot);
-    }
-
-    private NuiElement CreateWindowButton(IWindowView window, int index)
-    {
-      string buttonId = $"btn_{index}";
-      idToWindowMap[buttonId] = window;
-
-      return new NuiButton(window.Title)
-      {
-        Id = buttonId,
-        Height = 30f,
-        Width = window.Title.Length * 8f,
-      };
+      List<string> windowNames = visibleWindows.Select(view => view.Title).ToList();
+      SetBindValues(View.WindowNames, windowNames);
+      SetBindValue(View.WindowCount, visibleWindows.Count);
     }
   }
 }

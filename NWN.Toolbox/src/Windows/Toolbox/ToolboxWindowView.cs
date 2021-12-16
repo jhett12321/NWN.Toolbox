@@ -15,17 +15,14 @@ namespace Jorteck.Toolbox
       return CreateController<ToolboxWindowController>(player);
     }
 
-    // Sub-views
-    public readonly NuiGroup ToolboxListContainer = new NuiGroup
-    {
-      Id = "toolbox_list",
-    };
-
     // Value Binds
     public readonly NuiBind<string> Search = new NuiBind<string>("search_val");
+    public readonly NuiBind<string> WindowNames = new NuiBind<string>("win_names");
+    public readonly NuiBind<int> WindowCount = new NuiBind<int>("window_count");
 
     // Buttons
     public readonly NuiButtonImage SearchButton;
+    public readonly NuiButtonImage OpenWindowButton;
 
     public ToolboxWindowView()
     {
@@ -33,6 +30,26 @@ namespace Jorteck.Toolbox
       {
         Id = "btn_search",
         Aspect = 1f,
+      };
+
+      OpenWindowButton = new NuiButtonImage("dm_goto")
+      {
+        Id = "btn_openwin",
+        Aspect = 1f,
+        Tooltip = "Open Window",
+      };
+
+      List<NuiListTemplateCell> rowTemplate = new List<NuiListTemplateCell>
+      {
+        new NuiListTemplateCell(OpenWindowButton)
+        {
+          VariableSize = false,
+          Width = 35f,
+        },
+        new NuiListTemplateCell(new NuiLabel(WindowNames)
+        {
+          VerticalAlign = NuiVAlign.Middle,
+        }),
       };
 
       NuiColumn root = new NuiColumn
@@ -48,7 +65,10 @@ namespace Jorteck.Toolbox
               SearchButton,
             },
           },
-          ToolboxListContainer,
+          new NuiList(rowTemplate, WindowCount)
+          {
+            RowHeight = 35f,
+          },
         },
       };
 
