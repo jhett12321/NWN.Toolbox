@@ -8,5 +8,7 @@ namespace Jorteck.Toolbox
     public const string ConfigName = "config.yml";
 
     public int Version { get; set; } = 1;
+
+    public WindowConfig ToolboxWindows { get; set; } = new WindowConfig();
   }
 }

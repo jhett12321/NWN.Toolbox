@@ -7,6 +7,8 @@ namespace Jorteck.Toolbox
   /// </summary>
   public interface IWindowView
   {
+    public string Id { get; }
+
     public string Title { get; }
 
     public bool ListInToolbox { get; }

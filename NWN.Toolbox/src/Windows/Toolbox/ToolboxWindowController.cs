@@ -15,12 +15,31 @@ namespace Jorteck.Toolbox
     [Inject]
     public Lazy<WindowManager> WindowManager { private get; init; }
 
+    [Inject]
+    public ConfigService ConfigService { private get; init; }
+
     private List<IWindowView> allWindows;
     private List<IWindowView> visibleWindows;
 
     public override void Init()
     {
-      allWindows = AvailableWindows.Value.OrderBy(view => view.Title).ToList();
+      WindowConfig filterConfig = ConfigService.Config?.ToolboxWindows;
+      IEnumerable<IWindowView> toolboxWindows;
+
+      if (filterConfig?.ListMode == ListMode.Whitelist)
+      {
+        toolboxWindows = AvailableWindows.Value.Where(view => view.ListInToolbox && filterConfig.Windows?.Contains(view.Id) == true);
+      }
+      else if (filterConfig?.ListMode == ListMode.Blacklist && filterConfig.Windows != null && filterConfig.Windows.Count > 0)
+      {
+        toolboxWindows = AvailableWindows.Value.Where(view => view.ListInToolbox && filterConfig.Windows?.Contains(view.Id) == false);
+      }
+      else
+      {
+        toolboxWindows = AvailableWindows.Value;
+      }
+
+      allWindows = toolboxWindows.OrderBy(view => view.Title).ToList();
       RefreshWindowList();
     }
 
@@ -55,7 +74,7 @@ namespace Jorteck.Toolbox
     private void RefreshWindowList()
     {
       string search = GetBindValue(View.Search);
-      visibleWindows = allWindows.Where(view => view.ListInToolbox && view.Title.Contains(search, StringComparison.OrdinalIgnoreCase)).ToList();
+      visibleWindows = allWindows.Where(view => view.Title.Contains(search, StringComparison.OrdinalIgnoreCase)).ToList();
 
       List<string> windowNames = visibleWindows.Select(view => view.Title).ToList();
       SetBindValues(View.WindowNames, windowNames);

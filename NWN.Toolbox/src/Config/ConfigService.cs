@@ -6,7 +6,7 @@ using YamlDotNet.Serialization.NamingConventions;
 namespace Jorteck.Toolbox
 {
   [ServiceBinding(typeof(ConfigService))]
-  internal sealed class ConfigService
+  public sealed class ConfigService
   {
     private readonly string pluginStoragePath;
 
@@ -15,10 +15,11 @@ namespace Jorteck.Toolbox
       .Build();
 
     private readonly ISerializer serializer = new SerializerBuilder()
+      .WithTypeInspector(inner => new CommentGatheringTypeInspector(inner))
+      .WithEmissionPhaseObjectGraphVisitor(args => new CommentsObjectGraphVisitor(args.InnerVisitor))
       .WithNamingConvention(UnderscoredNamingConvention.Instance)
       .Build();
 
-    // ReSharper disable once NotAccessedField.Global
     internal readonly Config Config;
 
     public ConfigService(PluginStorageService pluginStorageService)
@@ -40,6 +41,8 @@ namespace Jorteck.Toolbox
       else
       {
         retVal = deserializer.Deserialize<T>(File.ReadAllText(configPath));
+        // Save any new settings
+        SaveConfig(fileName, retVal);
       }
 
       return retVal;
