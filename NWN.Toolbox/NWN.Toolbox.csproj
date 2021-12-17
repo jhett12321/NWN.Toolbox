@@ -58,6 +58,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Cronos" Version="0.7.1" PrivateAssets="compile" />
     <PackageReference Include="NWN.Anvil" Version="8193.34.0-dev.5.02f651a6" ExcludeAssets="runtime" PrivateAssets="all" />
     <PackageReference Include="NWN.Permissions" Version="8193.34.0-dev.1.a5266e6" ExcludeAssets="runtime" PrivateAssets="all" />
     <PackageReference Include="YamlDotNet" Version="11.2.1" PrivateAssets="compile" />
