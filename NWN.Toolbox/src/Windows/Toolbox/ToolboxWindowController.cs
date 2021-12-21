@@ -10,13 +10,13 @@ namespace Jorteck.Toolbox
   public sealed class ToolboxWindowController : WindowController<ToolboxWindowView>
   {
     [Inject]
-    public Lazy<IEnumerable<IWindowView>> AvailableWindows { private get; init; }
+    private Lazy<IEnumerable<IWindowView>> AvailableWindows { get; init; }
 
     [Inject]
-    public Lazy<WindowManager> WindowManager { private get; init; }
+    private Lazy<WindowManager> WindowManager { get; init; }
 
     [Inject]
-    public ConfigService ConfigService { private get; init; }
+    private ConfigService ConfigService { get; init; }
 
     private List<IWindowView> allWindows;
     private List<IWindowView> visibleWindows;
@@ -36,7 +36,7 @@ namespace Jorteck.Toolbox
       }
       else
       {
-        toolboxWindows = AvailableWindows.Value;
+        toolboxWindows = AvailableWindows.Value.Where(view => view.ListInToolbox);
       }
 
       allWindows = toolboxWindows.OrderBy(view => view.Title).ToList();

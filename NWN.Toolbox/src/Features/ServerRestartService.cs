@@ -8,26 +8,28 @@ using NLog;
 namespace Jorteck.Toolbox
 {
   [ServiceBinding(typeof(ServerRestartService))]
-  public sealed class ServerRestartService
+  public sealed class ServerRestartService : IInitializable
   {
     private static readonly Logger Log = LogManager.GetCurrentClassLogger();
 
-    private readonly SchedulerService schedulerService;
-    private readonly ServerRestartConfig config;
+    [Inject]
+    private ConfigService ConfigService { get; init; }
 
+    [Inject]
+    private SchedulerService SchedulerService { get; init; }
+
+    private ServerRestartConfig config;
     private ScheduledTask restartSchedule;
 
-    public ServerRestartService(ConfigService configService, SchedulerService schedulerService)
+    void IInitializable.Init()
     {
-      this.schedulerService = schedulerService;
-      config = configService.Config?.ServerRestart;
-
+      config = ConfigService.Config?.ServerRestart;
       if (config?.Enabled == true)
       {
-        restartSchedule = schedulerService.Schedule(ShutdownServer, GetDelayForRestart());
+        restartSchedule = SchedulerService.Schedule(ShutdownServer, GetDelayForRestart());
         if (config.RestartWarningSecs != null && config.RestartWarningSecs.Count > 0)
         {
-          schedulerService.ScheduleRepeating(CheckForWarning, TimeSpan.FromSeconds(1));
+          SchedulerService.ScheduleRepeating(CheckForWarning, TimeSpan.FromSeconds(1));
         }
       }
     }
@@ -46,7 +48,7 @@ namespace Jorteck.Toolbox
       {
         AssertEnabled();
         restartSchedule.Cancel();
-        restartSchedule = schedulerService.Schedule(ShutdownServer, value);
+        restartSchedule = SchedulerService.Schedule(ShutdownServer, value);
       }
     }
 

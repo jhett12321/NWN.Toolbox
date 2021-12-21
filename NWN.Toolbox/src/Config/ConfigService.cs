@@ -6,7 +6,7 @@ using YamlDotNet.Serialization.NamingConventions;
 namespace Jorteck.Toolbox
 {
   [ServiceBinding(typeof(ConfigService))]
-  public sealed class ConfigService
+  internal sealed class ConfigService
   {
     private readonly string pluginStoragePath;
 
