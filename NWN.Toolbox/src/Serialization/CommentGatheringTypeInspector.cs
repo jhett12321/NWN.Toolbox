@@ -8,7 +8,7 @@ using YamlDotNet.Serialization.TypeInspectors;
 
 namespace Jorteck.Toolbox
 {
-  internal class CommentGatheringTypeInspector : TypeInspectorSkeleton
+  internal sealed class CommentGatheringTypeInspector : TypeInspectorSkeleton
   {
     private readonly ITypeInspector innerTypeDescriptor;
 
@@ -34,9 +34,10 @@ namespace Jorteck.Toolbox
         Name = baseDescriptor.Name;
       }
 
+      // ReSharper disable once AutoPropertyCanBeMadeGetOnly.Local
       public string Name { get; set; }
 
-      public Type Type { get => baseDescriptor.Type; }
+      public Type Type => baseDescriptor.Type;
 
       public Type TypeOverride
       {
@@ -52,7 +53,7 @@ namespace Jorteck.Toolbox
         set => baseDescriptor.ScalarStyle = value;
       }
 
-      public bool CanWrite { get => baseDescriptor.CanWrite; }
+      public bool CanWrite => baseDescriptor.CanWrite;
 
       public void Write(object target, object value)
       {
@@ -66,10 +67,10 @@ namespace Jorteck.Toolbox
 
       public IObjectDescriptor Read(object target)
       {
-        DescriptionAttribute description = baseDescriptor.GetCustomAttribute<DescriptionAttribute>();
+        DescriptionAttribute description = baseDescriptor?.GetCustomAttribute<DescriptionAttribute>();
         return description != null
           ? new CommentsObjectDescriptor(baseDescriptor.Read(target), description.Description)
-          : baseDescriptor.Read(target);
+          : baseDescriptor?.Read(target);
       }
     }
   }

@@ -5,7 +5,7 @@ using YamlDotNet.Serialization.ObjectGraphVisitors;
 
 namespace Jorteck.Toolbox
 {
-  internal class CommentsObjectGraphVisitor : ChainedObjectGraphVisitor
+  internal sealed class CommentsObjectGraphVisitor : ChainedObjectGraphVisitor
   {
     public CommentsObjectGraphVisitor(IObjectGraphVisitor<IEmitter> nextVisitor) : base(nextVisitor) {}
 
