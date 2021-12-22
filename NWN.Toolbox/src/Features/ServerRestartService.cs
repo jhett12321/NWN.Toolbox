@@ -55,10 +55,7 @@ namespace Jorteck.Toolbox
     /// <summary>
     /// Gets if automatic server restart is configured.
     /// </summary>
-    public bool IsEnabled
-    {
-      get => config?.Enabled == true;
-    }
+    public bool IsEnabled => config?.Enabled == true;
 
     private void AssertEnabled()
     {
