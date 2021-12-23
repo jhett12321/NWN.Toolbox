@@ -57,6 +57,31 @@ namespace Jorteck.Toolbox
     /// </summary>
     public bool IsEnabled => config?.Enabled == true;
 
+    /// <summary>
+    /// Broadcasts the restart timer warning message to all players on the server.
+    /// </summary>
+    public void SendRestartTimeMessageToAllPlayers()
+    {
+      string message = GetWarningMessage();
+      foreach (NwPlayer player in NwModule.Instance.Players)
+      {
+        if (player.ControlledCreature != null)
+        {
+          player.SendServerMessage(message);
+        }
+      }
+    }
+
+    /// <summary>
+    /// Sends the restart timer warning message to a specific player on the server.
+    /// </summary>
+    /// <param name="player">The player to send the message to.</param>
+    public void SendRestartTimeMessageToPlayer(NwPlayer player)
+    {
+      string message = GetWarningMessage();
+      player.SendServerMessage(message);
+    }
+
     private void AssertEnabled()
     {
       if (!IsEnabled)
@@ -108,30 +133,18 @@ namespace Jorteck.Toolbox
       double remainingSecs = TimeUntilRestart.TotalSeconds;
       if (remainingSecs >= 0 && config.RestartWarningSecs.Contains((uint)remainingSecs))
       {
-        BroadcastWarning(TimeUntilRestart);
+        SendRestartTimeMessageToAllPlayers();
       }
     }
 
-    private void BroadcastWarning(TimeSpan timeUntilRestart)
+    private string GetWarningMessage()
     {
-      string message = GetWarningMessage(timeUntilRestart);
-      foreach (NwPlayer player in NwModule.Instance.Players)
-      {
-        if (player.ControlledCreature != null)
-        {
-          player.SendServerMessage(message);
-        }
-      }
-    }
-
-    private string GetWarningMessage(TimeSpan timeUntilRestart)
-    {
-      if (timeUntilRestart.TotalSeconds < 1)
+      if (TimeUntilRestart.TotalSeconds < 1)
       {
         return config.WarnMessageNow;
       }
 
-      return config.WarnMessage.Replace("<time>", GetFormattedTime(timeUntilRestart));
+      return config.WarnMessage.Replace("<time>", GetFormattedTime(TimeUntilRestart));
     }
 
     private string GetFormattedTime(TimeSpan timeSpan)
