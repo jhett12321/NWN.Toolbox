@@ -17,7 +17,7 @@ namespace Jorteck.Toolbox
 
     public override void Init()
     {
-      SetBindValue(View.BlueprintType, (int)BlueprintObjectType.Creature);
+      Token.SetBindValue(View.BlueprintType, (int)BlueprintObjectType.Creature);
       RefreshCreatorList();
     }
 
@@ -48,7 +48,8 @@ namespace Jorteck.Toolbox
       }
       else if (idToBlueprintMap.TryGetValue(eventData.ElementId, out IBlueprint blueprint))
       {
-        SetBindValue(View.SelectedBlueprint, $"{blueprint.ObjectType}: {blueprint.FullName}");
+        string value = $"{blueprint.ObjectType}: {blueprint.FullName}";
+        Token.SetBindValue(View.SelectedBlueprint, value);
         selectedBlueprint = blueprint;
       }
     }
@@ -57,11 +58,11 @@ namespace Jorteck.Toolbox
     {
       if (selectedBlueprint == null)
       {
-        Player.FloatingTextString("Select a blueprint first.", false);
+        Token.Player.FloatingTextString("Select a blueprint first.", false);
         return;
       }
 
-      Player.TryEnterTargetMode(CreateBlueprintInstance);
+      Token.Player.TryEnterTargetMode(CreateBlueprintInstance);
     }
 
     private void CreateBlueprintInstance(ModuleEvents.OnPlayerTarget onPlayerTarget)
@@ -86,12 +87,12 @@ namespace Jorteck.Toolbox
       }
 
       NwObject nwObject = selectedBlueprint.Create(location);
-      Player.SendServerMessage($"\"{nwObject.Name}\" Created.");
+      Token.Player.SendServerMessage($"\"{nwObject.Name}\" Created.");
     }
 
     private void RefreshCreatorList()
     {
-      List<IBlueprint> blueprints = BlueprintManager.GetMatchingBlueprints((BlueprintObjectType)GetBindValue(View.BlueprintType), GetBindValue(View.Search), MaxItems);
+      List<IBlueprint> blueprints = BlueprintManager.GetMatchingBlueprints((BlueprintObjectType)Token.GetBindValue(View.BlueprintType), Token.GetBindValue(View.Search), MaxItems);
 
       string currentCategory = null;
       NuiColumn subViewRoot = new NuiColumn();
@@ -108,7 +109,7 @@ namespace Jorteck.Toolbox
         subViewRoot.Children.Add(CreateBlueprintElement(blueprint, i));
       }
 
-      SetGroupLayout(View.CreatorListContainer, subViewRoot);
+      Token.SetGroupLayout(View.CreatorListContainer, subViewRoot);
     }
 
     private NuiElement CreateCategoryElement(string categoryName)

@@ -37,7 +37,7 @@ namespace Jorteck.Toolbox
 
       WindowTemplate = new NuiWindow(root, null)
       {
-        Geometry = new NuiRect(0f, 38f, 160f, 50f),
+        Geometry = new NuiRect(725f, 0f, 160f, 60f),
         Border = false,
         Closable = false,
         Transparent = true,

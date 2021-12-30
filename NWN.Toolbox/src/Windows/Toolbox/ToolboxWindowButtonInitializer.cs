@@ -1,5 +1,4 @@
 using Anvil.API;
-using Anvil.API.Events;
 using Anvil.Services;
 
 namespace Jorteck.Toolbox
@@ -15,14 +14,21 @@ namespace Jorteck.Toolbox
       this.permissionProvider = permissionProvider;
       this.windowManager = windowManager;
 
-      NwModule.Instance.OnClientEnter += OnClientEnter;
+      NwModule.Instance.OnClientEnter += eventData => TryOpenWindow(eventData.Player);
+      foreach (NwPlayer player in NwModule.Instance.Players)
+      {
+        if (player.LoginCreature != null)
+        {
+          TryOpenWindow(player);
+        }
+      }
     }
 
-    private void OnClientEnter(ModuleEvents.OnClientEnter onClientEnter)
+    private void TryOpenWindow(NwPlayer player)
     {
-      if (permissionProvider.HasPermission(onClientEnter.Player, PermissionKeys.OpenToolbox))
+      if (permissionProvider.HasPermission(player, PermissionKeys.OpenToolbox))
       {
-        windowManager.OpenWindow<ToolboxWindowButtonView>(onClientEnter.Player);
+        windowManager.OpenWindow<ToolboxWindowButtonView>(player);
       }
     }
   }

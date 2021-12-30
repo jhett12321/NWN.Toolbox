@@ -24,7 +24,7 @@ namespace Jorteck.Toolbox
         View.SaveEnabled,
       };
 
-      SetBindWatch(View.Portrait, true);
+      Token.SetBindWatch(View.Portrait, true);
       Update();
     }
 
@@ -58,15 +58,19 @@ namespace Jorteck.Toolbox
       }
 
       ApplyPermissionBindings(widgetEnabledBinds);
-      SetBindValue(View.Name, selectedCreature.Name);
-      SetBindValue(View.Tag, selectedCreature.Tag);
-      SetBindValue(View.Race, ((int)selectedCreature.Race.RacialType).ToString());
-      SetBindValue(View.Appearance, ((int)selectedCreature.CreatureAppearanceType).ToString());
-      SetBindValue(View.Phenotype, ((int)selectedCreature.Phenotype).ToString());
-      SetBindValue(View.Gender, (int)selectedCreature.Gender);
-      SetBindValue(View.Description, selectedCreature.Description);
-      SetBindValue(View.Dialog, selectedCreature.DialogResRef);
-      SetBindValue(View.Portrait, selectedCreature.PortraitResRef);
+      Token.SetBindValue(View.Name, selectedCreature.Name);
+      Token.SetBindValue(View.Tag, selectedCreature.Tag);
+      string value = ((int)selectedCreature.Race.RacialType).ToString();
+      Token.SetBindValue(View.Race, value);
+      string value1 = ((int)selectedCreature.CreatureAppearanceType).ToString();
+      Token.SetBindValue(View.Appearance, value1);
+      string value2 = ((int)selectedCreature.Phenotype).ToString();
+      Token.SetBindValue(View.Phenotype, value2);
+      int value3 = (int)selectedCreature.Gender;
+      Token.SetBindValue(View.Gender, value3);
+      Token.SetBindValue(View.Description, selectedCreature.Description);
+      Token.SetBindValue(View.Dialog, selectedCreature.DialogResRef);
+      Token.SetBindValue(View.Portrait, selectedCreature.PortraitResRef);
 
       UpdatePortraitPreview();
     }
@@ -75,7 +79,7 @@ namespace Jorteck.Toolbox
     {
       if (eventData.ElementId == View.SelectCreatureButton.Id)
       {
-        Player.TryEnterTargetMode(OnCreatureSelected, ObjectTypes.Creature);
+        Token.Player.TryEnterTargetMode(OnCreatureSelected, ObjectTypes.Creature);
       }
       else if (eventData.ElementId == View.SaveChangesButton.Id)
       {
@@ -97,7 +101,8 @@ namespace Jorteck.Toolbox
 
     private void UpdatePortraitPreview()
     {
-      SetBindValue(View.PortraitPreview, GetBindValue(View.Portrait) + "l");
+      string value = Token.GetBindValue(View.Portrait) + "l";
+      Token.SetBindValue(View.PortraitPreview, value);
     }
 
     private void SaveChanges()
@@ -107,27 +112,27 @@ namespace Jorteck.Toolbox
         return;
       }
 
-      selectedCreature.Name = GetBindValue(View.Name);
-      selectedCreature.Tag = GetBindValue(View.Tag);
-      if (GetBindValue(View.Race).TryParseInt(out int racialType))
+      selectedCreature.Name = Token.GetBindValue(View.Name);
+      selectedCreature.Tag = Token.GetBindValue(View.Tag);
+      if (Token.GetBindValue(View.Race).TryParseInt(out int racialType))
       {
         selectedCreature.Race = NwRace.FromRacialType((RacialType)racialType);
       }
 
-      if (GetBindValue(View.Appearance).TryParseInt(out int appearanceType))
+      if (Token.GetBindValue(View.Appearance).TryParseInt(out int appearanceType))
       {
         selectedCreature.CreatureAppearanceType = (AppearanceType)appearanceType;
       }
 
-      if (GetBindValue(View.Phenotype).TryParseInt(out int phenotype))
+      if (Token.GetBindValue(View.Phenotype).TryParseInt(out int phenotype))
       {
         selectedCreature.Phenotype = (Phenotype)phenotype;
       }
 
-      selectedCreature.Gender = (Gender)GetBindValue(View.Gender);
-      selectedCreature.Description = GetBindValue(View.Description);
-      selectedCreature.PortraitResRef = GetBindValue(View.Portrait);
-      selectedCreature.DialogResRef = GetBindValue(View.Dialog);
+      selectedCreature.Gender = (Gender)Token.GetBindValue(View.Gender);
+      selectedCreature.Description = Token.GetBindValue(View.Description);
+      selectedCreature.PortraitResRef = Token.GetBindValue(View.Portrait);
+      selectedCreature.DialogResRef = Token.GetBindValue(View.Dialog);
 
       Update();
     }
@@ -153,7 +158,7 @@ namespace Jorteck.Toolbox
     {
       foreach (NuiBind<bool> bind in widgetEnabledBinds)
       {
-        SetBindValue(bind, enabled);
+        Token.SetBindValue(bind, enabled);
       }
     }
   }

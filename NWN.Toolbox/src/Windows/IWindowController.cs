@@ -8,9 +8,7 @@ namespace Jorteck.Toolbox
   /// </summary>
   public interface IWindowController
   {
-    public NwPlayer Player { get; }
-
-    public int Token { get; }
+    public WindowToken Token { get; init; }
 
     public void Init();
 

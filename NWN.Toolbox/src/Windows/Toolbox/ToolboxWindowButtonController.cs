@@ -28,7 +28,7 @@ namespace Jorteck.Toolbox
     {
       if (eventData.ElementId == View.Button.Id)
       {
-        WindowManager.Value.OpenWindow<ToolboxWindowView>(Player);
+        WindowManager.Value.OpenWindow<ToolboxWindowView>(Token.Player);
       }
     }
   }

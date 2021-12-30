@@ -27,6 +27,13 @@ namespace Jorteck.Toolbox
       NwModule.Instance.OnClientLeave += OnClientLeave;
     }
 
+    /// <summary>
+    /// Opens a window view using the specified controller.
+    /// </summary>
+    /// <param name="player">The player to show the window.</param>
+    /// <typeparam name="TView">The type of view to open.</typeparam>
+    /// <typeparam name="TController">The type of controller for the view.</typeparam>
+    /// <returns>The created controller. Null if the client cannot render windows.</returns>
     public TController OpenWindow<TView, TController>(NwPlayer player)
       where TView : WindowView<TView>, new()
       where TController : WindowController<TView>, new()
@@ -37,8 +44,7 @@ namespace Jorteck.Toolbox
         TController controller = injectionService.Inject(new TController
         {
           View = view,
-          Player = player,
-          Token = token,
+          Token = new WindowToken(player, token),
         });
 
         InitController(controller, player);
@@ -103,7 +109,7 @@ namespace Jorteck.Toolbox
     {
       if (windowControllers.TryGetValue(eventData.Player, out List<IWindowController> playerControllers))
       {
-        IWindowController controller = playerControllers.FirstOrDefault(windowController => windowController.Token == eventData.WindowToken);
+        IWindowController controller = playerControllers.FirstOrDefault(windowController => windowController.Token.WindowId == eventData.WindowToken);
         controller?.ProcessEvent(eventData);
       }
     }
@@ -121,7 +127,7 @@ namespace Jorteck.Toolbox
       }
     }
 
-    public void Dispose()
+    void IDisposable.Dispose()
     {
       foreach (List<IWindowController> controllers in windowControllers.Values)
       {

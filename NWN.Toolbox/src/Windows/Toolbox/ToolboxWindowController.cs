@@ -67,18 +67,18 @@ namespace Jorteck.Toolbox
       else if (eventData.ElementId == View.OpenWindowButton.Id && visibleWindows != null && eventData.ArrayIndex >= 0 && eventData.ArrayIndex < visibleWindows.Count)
       {
         IWindowView windowView = visibleWindows[eventData.ArrayIndex];
-        WindowManager.Value.OpenWindow(Player, windowView);
+        WindowManager.Value.OpenWindow(Token.Player, windowView);
       }
     }
 
     private void RefreshWindowList()
     {
-      string search = GetBindValue(View.Search);
+      string search = Token.GetBindValue(View.Search);
       visibleWindows = allWindows.Where(view => view.Title.Contains(search, StringComparison.OrdinalIgnoreCase)).ToList();
 
       List<string> windowNames = visibleWindows.Select(view => view.Title).ToList();
-      SetBindValues(View.WindowNames, windowNames);
-      SetBindValue(View.WindowCount, visibleWindows.Count);
+      Token.SetBindValues(View.WindowNames, windowNames);
+      Token.SetBindValue(View.WindowCount, visibleWindows.Count);
     }
   }
 }

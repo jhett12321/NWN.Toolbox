@@ -1,13 +1,18 @@
 using System;
 using System.IO;
+using System.Linq;
+using Anvil.Internal;
 using Anvil.Services;
 using Microsoft.EntityFrameworkCore;
+using NLog;
 
 namespace Jorteck.Toolbox
 {
   [ServiceBinding(typeof(DatabaseManager))]
   internal sealed class DatabaseManager : IDisposable
   {
+    private static readonly Logger Log = LogManager.GetCurrentClassLogger();
+
     public readonly Database Database;
 
     public DatabaseManager(PluginStorageService pluginStorageService)
@@ -17,7 +22,14 @@ namespace Jorteck.Toolbox
       string connectString = $"Data Source={storagePath}";
 
       Database = new Database(connectString);
-      Database.Database.Migrate();
+      if (!EnvironmentConfig.ReloadEnabled)
+      {
+        Database.Database.Migrate();
+      }
+      else
+      {
+        Log.Warn("Cannot create/update database as hot reload is enabled");
+      }
     }
 
     public void Dispose()

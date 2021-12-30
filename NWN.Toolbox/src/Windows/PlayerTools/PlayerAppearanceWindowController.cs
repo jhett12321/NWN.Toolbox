@@ -18,7 +18,7 @@ namespace Jorteck.Toolbox
         View.SaveEnabled,
       };
 
-      SetBindWatch(View.Portrait, true);
+      Token.SetBindWatch(View.Portrait, true);
       Update();
     }
 
@@ -54,11 +54,14 @@ namespace Jorteck.Toolbox
       NwCreature playerCreature = selectedPlayer.LoginCreature;
 
       ApplyPermissionBindings(widgetEnabledBinds);
-      SetBindValue(View.PlayerName, $"Player: {selectedPlayer.PlayerName}");
-      SetBindValue(View.CreatureName, $"{playerCreature.OriginalFirstName} {playerCreature.OriginalLastName}");
-      SetBindValue(View.Portrait, playerCreature.PortraitResRef);
-      SetBindValue(View.SoundSet, playerCreature.SoundSet.ToString());
-      SetBindValue(View.Appearance, ((int)playerCreature.CreatureAppearanceType).ToString());
+      string value = $"Player: {selectedPlayer.PlayerName}";
+      Token.SetBindValue(View.PlayerName, value);
+      string value1 = $"{playerCreature.OriginalFirstName} {playerCreature.OriginalLastName}";
+      Token.SetBindValue(View.CreatureName, value1);
+      Token.SetBindValue(View.Portrait, playerCreature.PortraitResRef);
+      Token.SetBindValue(View.SoundSet, playerCreature.SoundSet.ToString());
+      string value2 = ((int)playerCreature.CreatureAppearanceType).ToString();
+      Token.SetBindValue(View.Appearance, value2);
 
       UpdatePortraitPreview();
     }
@@ -67,7 +70,7 @@ namespace Jorteck.Toolbox
     {
       if (eventData.ElementId == View.SelectPlayerButton.Id)
       {
-        Player.TryEnterTargetMode(OnCreatureSelected, ObjectTypes.Creature);
+        Token.Player.TryEnterTargetMode(OnCreatureSelected, ObjectTypes.Creature);
       }
       else if (eventData.ElementId == View.SaveChangesButton.Id)
       {
@@ -89,7 +92,8 @@ namespace Jorteck.Toolbox
 
     private void UpdatePortraitPreview()
     {
-      SetBindValue(View.PortraitPreview, GetBindValue(View.Portrait) + "l");
+      string value = Token.GetBindValue(View.Portrait) + "l";
+      Token.SetBindValue(View.PortraitPreview, value);
     }
 
     private void SaveChanges()
@@ -100,14 +104,14 @@ namespace Jorteck.Toolbox
       }
 
       NwCreature playerCreature = selectedPlayer.LoginCreature;
-      playerCreature.PortraitResRef = GetBindValue(View.Portrait);
+      playerCreature.PortraitResRef = Token.GetBindValue(View.Portrait);
 
-      if (GetBindValue(View.Appearance).TryParseInt(out int appearanceType))
+      if (Token.GetBindValue(View.Appearance).TryParseInt(out int appearanceType))
       {
         playerCreature.CreatureAppearanceType = (AppearanceType)appearanceType;
       }
 
-      if (ushort.TryParse(GetBindValue(View.SoundSet), out ushort soundSet))
+      if (ushort.TryParse(Token.GetBindValue(View.SoundSet), out ushort soundSet))
       {
         playerCreature.SoundSet = soundSet;
       }
@@ -136,7 +140,7 @@ namespace Jorteck.Toolbox
     {
       foreach (NuiBind<bool> bind in widgetEnabledBinds)
       {
-        SetBindValue(bind, enabled);
+        Token.SetBindValue(bind, enabled);
       }
     }
   }

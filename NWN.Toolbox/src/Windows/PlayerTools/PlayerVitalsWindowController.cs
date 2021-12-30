@@ -55,22 +55,25 @@ namespace Jorteck.Toolbox
       NwCreature playerCreature = selectedPlayer.LoginCreature;
 
       ApplyPermissionBindings(widgetEnabledBinds);
-      SetBindValue(View.PlayerName, $"Player: {selectedPlayer.PlayerName}");
-      SetBindValue(View.FirstName, playerCreature.OriginalFirstName);
-      SetBindValue(View.LastName, playerCreature.OriginalLastName);
-      SetBindValue(View.Gender, (int)playerCreature.Gender);
-      SetBindValue(View.Race, ((int)playerCreature.Race.RacialType).ToString());
-      SetBindValue(View.SubRace, playerCreature.SubRace);
-      SetBindValue(View.Age, playerCreature.Age.ToString());
-      SetBindValue(View.Deity, playerCreature.Deity);
-      SetBindValue(View.Description, playerCreature.Description);
+      string value = $"Player: {selectedPlayer.PlayerName}";
+      Token.SetBindValue(View.PlayerName, value);
+      Token.SetBindValue(View.FirstName, playerCreature.OriginalFirstName);
+      Token.SetBindValue(View.LastName, playerCreature.OriginalLastName);
+      int value1 = (int)playerCreature.Gender;
+      Token.SetBindValue(View.Gender, value1);
+      string value2 = ((int)playerCreature.Race.RacialType).ToString();
+      Token.SetBindValue(View.Race, value2);
+      Token.SetBindValue(View.SubRace, playerCreature.SubRace);
+      Token.SetBindValue(View.Age, playerCreature.Age.ToString());
+      Token.SetBindValue(View.Deity, playerCreature.Deity);
+      Token.SetBindValue(View.Description, playerCreature.Description);
     }
 
     private void HandleButtonClick(ModuleEvents.OnNuiEvent eventData)
     {
       if (eventData.ElementId == View.SelectPlayerButton.Id)
       {
-        Player.TryEnterTargetMode(OnCreatureSelected, ObjectTypes.Creature);
+        Token.Player.TryEnterTargetMode(OnCreatureSelected, ObjectTypes.Creature);
       }
       else if (eventData.ElementId == View.SaveChangesButton.Id)
       {
@@ -90,26 +93,26 @@ namespace Jorteck.Toolbox
       }
 
       NwCreature playerCreature = selectedPlayer.LoginCreature;
-      playerCreature.OriginalFirstName = GetBindValue(View.FirstName);
-      playerCreature.OriginalLastName = GetBindValue(View.LastName);
+      playerCreature.OriginalFirstName = Token.GetBindValue(View.FirstName);
+      playerCreature.OriginalLastName = Token.GetBindValue(View.LastName);
 
       playerCreature.Name = playerCreature.OriginalFirstName + " " + playerCreature.OriginalLastName;
-      playerCreature.Gender = (Gender)GetBindValue(View.Gender);
+      playerCreature.Gender = (Gender)Token.GetBindValue(View.Gender);
 
-      if (GetBindValue(View.Race).TryParseInt(out int racialType))
+      if (Token.GetBindValue(View.Race).TryParseInt(out int racialType))
       {
         playerCreature.Race = NwRace.FromRacialType((RacialType)racialType);
       }
 
-      playerCreature.SubRace = GetBindValue(View.SubRace);
+      playerCreature.SubRace = Token.GetBindValue(View.SubRace);
 
-      if (GetBindValue(View.Age).TryParseInt(out int age))
+      if (Token.GetBindValue(View.Age).TryParseInt(out int age))
       {
         playerCreature.Age = age;
       }
 
-      playerCreature.Deity = GetBindValue(View.Deity);
-      playerCreature.Description = GetBindValue(View.Description);
+      playerCreature.Deity = Token.GetBindValue(View.Deity);
+      playerCreature.Description = Token.GetBindValue(View.Description);
 
       Update();
     }
@@ -135,7 +138,7 @@ namespace Jorteck.Toolbox
     {
       foreach (NuiBind<bool> bind in widgetEnabledBinds)
       {
-        SetBindValue(bind, enabled);
+        Token.SetBindValue(bind, enabled);
       }
     }
   }

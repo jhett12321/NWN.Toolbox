@@ -24,8 +24,7 @@ namespace Jorteck.Toolbox
         return new T
         {
           View = (TView)this,
-          Player = player,
-          Token = token,
+          Token = new WindowToken(player, token),
         };
       }
 
