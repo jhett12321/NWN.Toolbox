@@ -64,92 +64,27 @@ namespace Jorteck.Toolbox
       }
 
       ApplyPermissionBindings(widgetEnabledBinds);
-      string value = selectedCreature.GetRawAbilityScore(Ability.Strength).ToString();
-      Token.SetBindValue(View.StrengthScoreRaw, value);
-      string value1 = selectedCreature.Race.GetAbilityAdjustment(Ability.Strength).ToString();
-      Token.SetBindValue(View.StrengthScoreRacial, value1);
-      string value2 = selectedCreature.GetAbilityScore(Ability.Strength).ToString();
-      Token.SetBindValue(View.StrengthScoreTotal, value2);
-      string value3 = selectedCreature.GetAbilityModifier(Ability.Strength).ToString();
-      Token.SetBindValue(View.StrengthScoreMod, value3);
 
-      string value4 = selectedCreature.GetRawAbilityScore(Ability.Dexterity).ToString();
-      Token.SetBindValue(View.DexterityScoreRaw, value4);
-      string value5 = selectedCreature.Race.GetAbilityAdjustment(Ability.Dexterity).ToString();
-      Token.SetBindValue(View.DexterityScoreRacial, value5);
-      string value6 = selectedCreature.GetAbilityScore(Ability.Dexterity).ToString();
-      Token.SetBindValue(View.DexterityScoreTotal, value6);
-      string value7 = selectedCreature.GetAbilityModifier(Ability.Dexterity).ToString();
-      Token.SetBindValue(View.DexterityScoreMod, value7);
+      BindAbilityScores(Ability.Strength, View.StrengthScoreRaw, View.StrengthScoreRacial, View.StrengthScoreTotal, View.StrengthScoreMod);
+      BindAbilityScores(Ability.Dexterity, View.DexterityScoreRaw, View.DexterityScoreRacial, View.DexterityScoreTotal, View.DexterityScoreMod);
+      BindAbilityScores(Ability.Constitution, View.ConstitutionScoreRaw, View.ConstitutionScoreRacial, View.ConstitutionScoreTotal, View.ConstitutionScoreMod);
+      BindAbilityScores(Ability.Intelligence, View.IntelligenceScoreRaw, View.IntelligenceScoreRacial, View.IntelligenceScoreTotal, View.IntelligenceScoreMod);
+      BindAbilityScores(Ability.Wisdom, View.WisdomScoreRaw, View.WisdomScoreRacial, View.WisdomScoreTotal, View.WisdomScoreMod);
+      BindAbilityScores(Ability.Charisma, View.CharismaScoreRaw, View.CharismaScoreRacial, View.CharismaScoreTotal, View.CharismaScoreMod);
 
-      string value8 = selectedCreature.GetRawAbilityScore(Ability.Constitution).ToString();
-      Token.SetBindValue(View.ConstitutionScoreRaw, value8);
-      string value9 = selectedCreature.Race.GetAbilityAdjustment(Ability.Constitution).ToString();
-      Token.SetBindValue(View.ConstitutionScoreRacial, value9);
-      string value10 = selectedCreature.GetAbilityScore(Ability.Constitution).ToString();
-      Token.SetBindValue(View.ConstitutionScoreTotal, value10);
-      string value11 = selectedCreature.GetAbilityModifier(Ability.Constitution).ToString();
-      Token.SetBindValue(View.ConstitutionScoreMod, value11);
-
-      string value12 = selectedCreature.GetRawAbilityScore(Ability.Intelligence).ToString();
-      Token.SetBindValue(View.IntelligenceScoreRaw, value12);
-      string value13 = selectedCreature.Race.GetAbilityAdjustment(Ability.Intelligence).ToString();
-      Token.SetBindValue(View.IntelligenceScoreRacial, value13);
-      string value14 = selectedCreature.GetAbilityScore(Ability.Intelligence).ToString();
-      Token.SetBindValue(View.IntelligenceScoreTotal, value14);
-      string value15 = selectedCreature.GetAbilityModifier(Ability.Intelligence).ToString();
-      Token.SetBindValue(View.IntelligenceScoreMod, value15);
-
-      string value16 = selectedCreature.GetRawAbilityScore(Ability.Wisdom).ToString();
-      Token.SetBindValue(View.WisdomScoreRaw, value16);
-      string value17 = selectedCreature.Race.GetAbilityAdjustment(Ability.Wisdom).ToString();
-      Token.SetBindValue(View.WisdomScoreRacial, value17);
-      string value18 = selectedCreature.GetAbilityScore(Ability.Wisdom).ToString();
-      Token.SetBindValue(View.WisdomScoreTotal, value18);
-      string value19 = selectedCreature.GetAbilityModifier(Ability.Wisdom).ToString();
-      Token.SetBindValue(View.WisdomScoreMod, value19);
-
-      string value20 = selectedCreature.GetRawAbilityScore(Ability.Charisma).ToString();
-      Token.SetBindValue(View.CharismaScoreRaw, value20);
-      string value21 = selectedCreature.Race.GetAbilityAdjustment(Ability.Charisma).ToString();
-      Token.SetBindValue(View.CharismaScoreRacial, value21);
-      string value22 = selectedCreature.GetAbilityScore(Ability.Charisma).ToString();
-      Token.SetBindValue(View.CharismaScoreTotal, value22);
-      string value23 = selectedCreature.GetAbilityModifier(Ability.Charisma).ToString();
-      Token.SetBindValue(View.CharismaScoreMod, value23);
-
-      string value24 = selectedCreature.GetBaseSavingThrow(SavingThrow.Fortitude).ToString();
-      Token.SetBindValue(View.FortitudeBase, value24);
-      //SetBindValue(View.FortitudeBonus, (selectedCreature.GetSavingThrow(SavingThrow.Fortitude) - selectedCreature.GetBaseSavingThrow(SavingThrow.Fortitude)).ToString());
-      string value25 = selectedCreature.GetSavingThrow(SavingThrow.Fortitude).ToString();
-      Token.SetBindValue(View.FortitudeTotal, value25);
-
-      string value26 = selectedCreature.GetBaseSavingThrow(SavingThrow.Reflex).ToString();
-      Token.SetBindValue(View.ReflexBase, value26);
-      //SetBindValue(View.ReflexBonus, (selectedCreature.GetSavingThrow(SavingThrow.Reflex) - selectedCreature.GetBaseSavingThrow(SavingThrow.Reflex)).ToString());
-      string value27 = selectedCreature.GetSavingThrow(SavingThrow.Reflex).ToString();
-      Token.SetBindValue(View.ReflexTotal, value27);
-
-      string value28 = selectedCreature.GetBaseSavingThrow(SavingThrow.Will).ToString();
-      Token.SetBindValue(View.WillBase, value28);
-      //SetBindValue(View.WillBonus, (selectedCreature.GetSavingThrow(SavingThrow.Will) - selectedCreature.GetBaseSavingThrow(SavingThrow.Will)).ToString());
-      string value29 = selectedCreature.GetSavingThrow(SavingThrow.Will).ToString();
-      Token.SetBindValue(View.WillTotal, value29);
+      BindSavingThrow(SavingThrow.Fortitude, View.FortitudeBase, View.FortitudeBonus, View.FortitudeTotal);
+      BindSavingThrow(SavingThrow.Reflex, View.ReflexBase, View.ReflexBonus, View.ReflexTotal);
+      BindSavingThrow(SavingThrow.Will, View.WillBase, View.WillBonus, View.WillTotal);
 
       Token.SetBindValue(View.NaturalAC, selectedCreature.BaseAC.ToString());
-      string value30 = selectedCreature.GetAbilityModifier(Ability.Dexterity).ToString();
-      Token.SetBindValue(View.DexterityAC, value30);
-      string value31 = selectedCreature.Size.ACModifier().ToString();
-      Token.SetBindValue(View.SizeModifierAC, value31);
+      Token.SetBindValue(View.DexterityAC, selectedCreature.GetAbilityModifier(Ability.Dexterity).ToString());
+      Token.SetBindValue(View.SizeModifierAC, selectedCreature.Size.ACModifier().ToString());
       Token.SetBindValue(View.TotalAC, selectedCreature.AC.ToString());
-
-      int value32 = (int)selectedCreature.MovementRate;
-      Token.SetBindValue(View.MovementRate, value32);
+      Token.SetBindValue(View.MovementRate, (int)selectedCreature.MovementRate);
 
       int bonusHitPoints = selectedCreature.GetAbilityModifier(Ability.Constitution) * selectedCreature.Level;
 
-      string value33 = (selectedCreature.MaxHP - bonusHitPoints).ToString();
-      Token.SetBindValue(View.BaseHitPoints, value33);
+      Token.SetBindValue(View.BaseHitPoints, (selectedCreature.MaxHP - bonusHitPoints).ToString());
       Token.SetBindValue(View.BonusHitPoints, bonusHitPoints.ToString());
       Token.SetBindValue(View.TotalHitPoints, selectedCreature.MaxHP.ToString());
 
@@ -158,6 +93,21 @@ namespace Jorteck.Toolbox
       RefreshACContainer();
       RefreshHitPointsContainer();
       RefreshSpeedContainer();
+    }
+
+    private void BindAbilityScores(Ability ability, NuiBind<string> scoreRaw, NuiBind<string> scoreRacial, NuiBind<string> scoreTotal, NuiBind<string> scoreMod)
+    {
+      Token.SetBindValue(scoreRaw, selectedCreature.GetRawAbilityScore(ability).ToString());
+      Token.SetBindValue(scoreRacial, selectedCreature.Race.GetAbilityAdjustment(ability).ToString());
+      Token.SetBindValue(scoreTotal, selectedCreature.GetAbilityScore(ability).ToString());
+      Token.SetBindValue(scoreMod, selectedCreature.GetAbilityModifier(ability).ToString());
+    }
+
+    private void BindSavingThrow(SavingThrow savingThrow, NuiBind<string> throwBase, NuiBind<string> throwBonus, NuiBind<string> throwTotal)
+    {
+      Token.SetBindValue(throwBase, selectedCreature.GetBaseSavingThrow(savingThrow).ToString());
+      Token.SetBindValue(throwBonus, string.Empty); // TODO
+      Token.SetBindValue(throwTotal, selectedCreature.GetSavingThrow(savingThrow).ToString());
     }
 
     private void HandleButtonClick(ModuleEvents.OnNuiEvent eventData)
