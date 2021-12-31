@@ -14,7 +14,7 @@ namespace Jorteck.Toolbox
 
     public static void SafeRemove<T>(this DbContext context, T entity)
     {
-      if (entity != null)
+      if (entity is {})
       {
         context.Remove(entity);
       }
