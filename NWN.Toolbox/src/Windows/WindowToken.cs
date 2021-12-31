@@ -45,6 +45,11 @@ namespace Jorteck.Toolbox
       group.SetLayout(Player, WindowId, newLayout);
     }
 
+    public void Close()
+    {
+      Dispose();
+    }
+
     public void Dispose()
     {
       if (Player != null && Player.IsValid)

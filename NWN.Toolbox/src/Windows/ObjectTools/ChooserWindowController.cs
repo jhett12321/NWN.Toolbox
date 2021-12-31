@@ -126,7 +126,7 @@ namespace Jorteck.Toolbox
       }
       else if (elementId == View.ToggleAIButton.Id)
       {
-        ToggleAI(player, gameObject);
+        ToggleAI(player);
       }
       else if (elementId == View.HealButton.Id)
       {
@@ -178,7 +178,7 @@ namespace Jorteck.Toolbox
       player.SendServerMessage($"{objectName}: Destroyed");
       if (isStatic)
       {
-        player.SendServerMessage($"NOTE! Players need to re-enter the area to see the updated change.");
+        player.SendServerMessage("NOTE! Players need to re-enter the area to see the updated change.");
       }
     }
 
@@ -187,7 +187,7 @@ namespace Jorteck.Toolbox
       gameObject.Location = player.ControlledCreature.Location;
     }
 
-    private void ToggleAI(NwPlayer player, NwGameObject gameObject)
+    private void ToggleAI(NwPlayer player)
     {
       // TODO implement.
       player.SendErrorMessage("Not implemented.");
@@ -213,7 +213,7 @@ namespace Jorteck.Toolbox
     {
       if (gameObject is NwCreature creature && player.IsDM && creature.Master == null)
       {
-        player.DMPossessCreature(creature, false);
+        player.DMPossessCreature(creature);
       }
     }
 

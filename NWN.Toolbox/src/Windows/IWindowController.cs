@@ -1,4 +1,3 @@
-using Anvil.API;
 using Anvil.API.Events;
 
 namespace Jorteck.Toolbox
