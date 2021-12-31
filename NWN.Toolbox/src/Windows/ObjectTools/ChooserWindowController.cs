@@ -2,8 +2,6 @@ using System.Linq;
 using Anvil.API;
 using Anvil.API.Events;
 using Anvil.Services;
-using NWN.Native.API;
-using AssociateType = NWN.Native.API.AssociateType;
 
 namespace Jorteck.Toolbox
 {
