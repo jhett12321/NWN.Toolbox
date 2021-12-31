@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using System.Numerics;
 using Anvil.API;
 using Anvil.API.Events;
+using Action = System.Action;
 
 namespace Jorteck.Toolbox
 {
@@ -18,12 +18,14 @@ namespace Jorteck.Toolbox
     private List<NwGameObject> objectList;
     private NuiColor[] rowColors;
 
-    private NwObject selectedObject;
+    public NwObject SelectedObject { get; private set; }
     private NwArea selectedArea;
 
     private readonly ObjectSelectionListView view;
     private readonly WindowToken windowToken;
     private TimeSpan lastSelectionClick;
+
+    public event Action OnObjectSelectChange;
 
     public ObjectSelectionListController(ObjectSelectionListView view, WindowToken windowToken)
     {
@@ -90,39 +92,53 @@ namespace Jorteck.Toolbox
       ObjectSelectionTypes searchTypes = (ObjectSelectionTypes)windowToken.GetBindValue(view.SearchObjectType);
 
       List<NwGameObject> results = new List<NwGameObject>();
+
+      NwCreature playerCreature = windowToken.Player.ControlledCreature;
+      NwArea playerArea = playerCreature.Area;
+      Vector3 playerPos = playerCreature.Position;
+
+      float distance = windowToken.GetBindValue(view.SearchDistance).ParseFloat(0f);
+      float? distanceSqr = distance == 0 ? null : distance * distance;
+
       if (searchTypes.HasFlag(ObjectSelectionTypes.Player))
       {
         foreach (NwPlayer player in NwModule.Instance.Players)
         {
           NwCreature controlledCreature = player.ControlledCreature;
-          if (controlledCreature != null && player.ControlledCreature.Area == selectedArea)
+          if (ShouldListObject(controlledCreature, playerArea, playerPos, search, searchTypes | ObjectSelectionTypes.Creature, distanceSqr))
           {
             results.Add(player.ControlledCreature);
           }
         }
       }
 
-      float distance = windowToken.GetBindValue(view.SearchDistance).ParseFloat(-1f);
-      if (distance <= 0f)
+      foreach (NwGameObject gameObject in selectedArea.Objects)
       {
-        results.AddRange(selectedArea.Objects.Where(gameObject => searchTypes.HasFlag(gameObject.GetSelectionType())
-          && gameObject.Name.Contains(search, StringComparison.OrdinalIgnoreCase)));
-      }
-      else
-      {
-        NwCreature playerCreature = windowToken.Player.ControlledCreature;
-        if (selectedArea == playerCreature.Area)
+        if (ShouldListObject(gameObject, playerArea, playerPos, search, searchTypes, distanceSqr))
         {
-          Vector3 playerPos = playerCreature.Position;
-          float distanceSqr = distance * distance;
-
-          results.AddRange(selectedArea.Objects.Where(gameObject => searchTypes.HasFlag(gameObject.GetSelectionType())
-            && gameObject.Name.Contains(search, StringComparison.OrdinalIgnoreCase)
-            && Vector3.DistanceSquared(playerPos, gameObject.Position) < distanceSqr));
+          results.Add(gameObject);
         }
       }
 
       return results;
+    }
+
+    private bool ShouldListObject(NwGameObject gameObject, NwArea playerArea, Vector3 playerPos, string search, ObjectSelectionTypes selectionTypes, float? distanceSqr = null)
+    {
+      if (gameObject == null || !gameObject.IsValid)
+      {
+        return false;
+      }
+
+      ObjectSelectionTypes selectionType = gameObject.GetSelectionType();
+      bool hasFlag = selectionTypes.HasFlag(selectionType);
+      if (string.IsNullOrEmpty(search) && distanceSqr == null && hasFlag)
+      {
+        return true;
+      }
+
+      return hasFlag && gameObject.Name.Contains(search ?? string.Empty, StringComparison.OrdinalIgnoreCase)
+        && (distanceSqr == null || playerArea == gameObject.Area && Vector3.DistanceSquared(playerPos, gameObject.Position) < distanceSqr);
     }
 
     private void UpdateListViewBinds(List<NwGameObject> gameObjects)
@@ -139,7 +155,7 @@ namespace Jorteck.Toolbox
       for (int i = 0; i < gameObjects.Count; i++)
       {
         NwGameObject gameObject = gameObjects[i];
-        rowColors[i] = gameObject != selectedObject ? defaultColor : selectedColor;
+        rowColors[i] = gameObject != SelectedObject ? defaultColor : selectedColor;
         objectTypes[i] = gameObject.GetTypeName();
         objectNames[i] = gameObject.Name;
         objectResRefs[i] = gameObject.ResRef;
@@ -163,7 +179,7 @@ namespace Jorteck.Toolbox
       if (index >= 0 && index < objectList.Count)
       {
         NwGameObject newSelection = objectList[index];
-        if (newSelection != selectedObject)
+        if (newSelection != SelectedObject)
         {
           UpdateObjectSelection(index);
         }
@@ -176,14 +192,14 @@ namespace Jorteck.Toolbox
       }
     }
 
-    private void JumpToObject(NwGameObject gameObject)
+    public void JumpToObject(NwGameObject gameObject)
     {
       windowToken.Player.ControlledCreature.JumpToObject(gameObject);
     }
 
     private void UpdateObjectSelection(int index)
     {
-      if (selectedObject != null && selectedObject is NwGameObject gameObject)
+      if (SelectedObject != null && SelectedObject is NwGameObject gameObject)
       {
         int existingSelection = objectList.IndexOf(gameObject);
         if (existingSelection >= 0)
@@ -192,9 +208,10 @@ namespace Jorteck.Toolbox
         }
       }
 
-      selectedObject = objectList[index];
+      SelectedObject = objectList[index];
       rowColors[index] = selectedColor;
       windowToken.SetBindValues(view.RowColors, rowColors);
+      OnObjectSelectChange?.Invoke();
     }
 
     private void UpdateAreaSelection(NwArea area)
