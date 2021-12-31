@@ -65,12 +65,12 @@ namespace Jorteck.Toolbox
 
       ApplyPermissionBindings(widgetEnabledBinds);
 
-      BindAbilityScores(Ability.Strength, View.StrengthScoreRaw, View.StrengthScoreRacial, View.StrengthScoreTotal, View.StrengthScoreMod);
-      BindAbilityScores(Ability.Dexterity, View.DexterityScoreRaw, View.DexterityScoreRacial, View.DexterityScoreTotal, View.DexterityScoreMod);
-      BindAbilityScores(Ability.Constitution, View.ConstitutionScoreRaw, View.ConstitutionScoreRacial, View.ConstitutionScoreTotal, View.ConstitutionScoreMod);
-      BindAbilityScores(Ability.Intelligence, View.IntelligenceScoreRaw, View.IntelligenceScoreRacial, View.IntelligenceScoreTotal, View.IntelligenceScoreMod);
-      BindAbilityScores(Ability.Wisdom, View.WisdomScoreRaw, View.WisdomScoreRacial, View.WisdomScoreTotal, View.WisdomScoreMod);
-      BindAbilityScores(Ability.Charisma, View.CharismaScoreRaw, View.CharismaScoreRacial, View.CharismaScoreTotal, View.CharismaScoreMod);
+      BindAbilityScore(Ability.Strength, View.StrengthScoreRaw, View.StrengthScoreRacial, View.StrengthScoreTotal, View.StrengthScoreMod);
+      BindAbilityScore(Ability.Dexterity, View.DexterityScoreRaw, View.DexterityScoreRacial, View.DexterityScoreTotal, View.DexterityScoreMod);
+      BindAbilityScore(Ability.Constitution, View.ConstitutionScoreRaw, View.ConstitutionScoreRacial, View.ConstitutionScoreTotal, View.ConstitutionScoreMod);
+      BindAbilityScore(Ability.Intelligence, View.IntelligenceScoreRaw, View.IntelligenceScoreRacial, View.IntelligenceScoreTotal, View.IntelligenceScoreMod);
+      BindAbilityScore(Ability.Wisdom, View.WisdomScoreRaw, View.WisdomScoreRacial, View.WisdomScoreTotal, View.WisdomScoreMod);
+      BindAbilityScore(Ability.Charisma, View.CharismaScoreRaw, View.CharismaScoreRacial, View.CharismaScoreTotal, View.CharismaScoreMod);
 
       BindSavingThrow(SavingThrow.Fortitude, View.FortitudeBase, View.FortitudeBonus, View.FortitudeTotal);
       BindSavingThrow(SavingThrow.Reflex, View.ReflexBase, View.ReflexBonus, View.ReflexTotal);
@@ -95,7 +95,7 @@ namespace Jorteck.Toolbox
       RefreshSpeedContainer();
     }
 
-    private void BindAbilityScores(Ability ability, NuiBind<string> scoreRaw, NuiBind<string> scoreRacial, NuiBind<string> scoreTotal, NuiBind<string> scoreMod)
+    private void BindAbilityScore(Ability ability, NuiBind<string> scoreRaw, NuiBind<string> scoreRacial, NuiBind<string> scoreTotal, NuiBind<string> scoreMod)
     {
       Token.SetBindValue(scoreRaw, selectedCreature.GetRawAbilityScore(ability).ToString());
       Token.SetBindValue(scoreRacial, selectedCreature.Race.GetAbilityAdjustment(ability).ToString());
