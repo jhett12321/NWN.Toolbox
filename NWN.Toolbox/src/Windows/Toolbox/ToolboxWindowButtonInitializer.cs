@@ -4,15 +4,23 @@ using Anvil.Services;
 namespace Jorteck.Toolbox
 {
   [ServiceBinding(typeof(ToolboxWindowButtonInitializer))]
-  public sealed class ToolboxWindowButtonInitializer
+  public sealed class ToolboxWindowButtonInitializer : IInitializable
   {
-    private readonly IPermissionProvider permissionProvider;
-    private readonly WindowManager windowManager;
+    [Inject]
+    private IPermissionProvider PermissionProvider { get; init; }
 
-    public ToolboxWindowButtonInitializer(IPermissionProvider permissionProvider, WindowManager windowManager)
+    [Inject]
+    private WindowManager WindowManager { get; init; }
+
+    [Inject]
+    private ConfigService ConfigService { get; init; }
+
+    public void Init()
     {
-      this.permissionProvider = permissionProvider;
-      this.windowManager = windowManager;
+      if (ConfigService?.Config?.ToolboxWindows?.ShowToolboxButton != true)
+      {
+        return;
+      }
 
       NwModule.Instance.OnClientEnter += eventData => TryOpenWindow(eventData.Player);
       foreach (NwPlayer player in NwModule.Instance.Players)
@@ -26,9 +34,9 @@ namespace Jorteck.Toolbox
 
     private void TryOpenWindow(NwPlayer player)
     {
-      if (permissionProvider.HasPermission(player, PermissionKeys.OpenToolbox))
+      if (PermissionProvider.HasPermission(player, PermissionKeys.OpenToolbox))
       {
-        windowManager.OpenWindow<ToolboxWindowButtonView>(player);
+        WindowManager.OpenWindow<ToolboxWindowButtonView>(player);
       }
     }
   }

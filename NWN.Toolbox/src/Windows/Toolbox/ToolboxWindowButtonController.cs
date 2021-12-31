@@ -1,4 +1,5 @@
 using System;
+using System.Numerics;
 using Anvil.API;
 using Anvil.API.Events;
 using Anvil.Services;
@@ -10,7 +11,14 @@ namespace Jorteck.Toolbox
     [Inject]
     public Lazy<WindowManager> WindowManager { private get; init; }
 
-    public override void Init() {}
+    [Inject]
+    private ConfigService ConfigService { get; init; }
+
+    public override void Init()
+    {
+      Vector2 windowPos = ConfigService?.Config?.ToolboxWindows?.ToolboxButtonPosition ?? new Vector2(725f, 0f);
+      Token.SetBindValue(View.ButtonGeometry, new NuiRect(windowPos.X, windowPos.Y, 160f, 60f));
+    }
 
     public override void ProcessEvent(ModuleEvents.OnNuiEvent eventData)
     {

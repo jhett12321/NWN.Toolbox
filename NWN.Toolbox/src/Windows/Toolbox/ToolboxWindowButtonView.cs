@@ -18,6 +18,9 @@ namespace Jorteck.Toolbox
     // Buttons
     public readonly NuiButton Button;
 
+    // Button/Window Geometry
+    public readonly NuiBind<NuiRect> ButtonGeometry = new NuiBind<NuiRect>("btn_geo");
+
     public ToolboxWindowButtonView()
     {
       Button = new NuiButton("Toolbox")
@@ -37,7 +40,7 @@ namespace Jorteck.Toolbox
 
       WindowTemplate = new NuiWindow(root, null)
       {
-        Geometry = new NuiRect(725f, 0f, 160f, 60f),
+        Geometry = ButtonGeometry,
         Border = false,
         Closable = false,
         Transparent = true,
