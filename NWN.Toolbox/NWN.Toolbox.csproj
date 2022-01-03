@@ -59,8 +59,8 @@
 
   <ItemGroup>
     <PackageReference Include="Cronos" Version="0.7.1" PrivateAssets="compile" />
-    <PackageReference Include="NWN.Anvil" Version="8193.34.1-dev.13.e8971af1" ExcludeAssets="runtime" PrivateAssets="all" />
-    <PackageReference Include="NWN.Permissions" Version="8193.34.0-dev.12.53e2e0a" ExcludeAssets="runtime" PrivateAssets="all" />
+    <PackageReference Include="NWN.Anvil" Version="8193.34.1-dev.25.r802e8f03" ExcludeAssets="runtime" PrivateAssets="all" />
+    <PackageReference Include="NWN.Permissions" Version="8193.34.0-dev.15.ea5c089" ExcludeAssets="runtime" PrivateAssets="all" />
     <PackageReference Include="YamlDotNet" Version="11.2.1" PrivateAssets="compile" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.11" PrivateAssets="compile" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.11" PrivateAssets="compile" />
