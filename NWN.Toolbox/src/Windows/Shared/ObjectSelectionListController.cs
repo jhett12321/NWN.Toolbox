@@ -110,6 +110,11 @@ namespace Jorteck.Toolbox
         foreach (NwPlayer player in NwModule.Instance.Players)
         {
           NwCreature controlledCreature = player.ControlledCreature;
+          if (controlledCreature?.Area != playerArea)
+          {
+            continue;
+          }
+
           if (ShouldListObject(controlledCreature, playerArea, playerPos, search, searchTypes | ObjectSelectionTypes.Creature, distanceSqr))
           {
             results.Add(player.ControlledCreature);
