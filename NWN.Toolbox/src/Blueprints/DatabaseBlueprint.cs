@@ -44,5 +44,33 @@ namespace Jorteck.Toolbox
 
       return gameObject;
     }
+
+    public NwItem Create(NwGameObject owner)
+    {
+      if (ObjectType is not BlueprintObjectType.Item || owner == null)
+      {
+        return null;
+      }
+
+      NwItem item = null;
+      if (owner is NwCreature creature)
+      {
+        item = NwItem.Deserialize(dbModel.BlueprintData);
+        if (item != null)
+        {
+          creature.AcquireItem(item);
+        }
+      }
+      else if (owner is NwPlaceable placeable && placeable.HasInventory)
+      {
+        item = NwItem.Deserialize(dbModel.BlueprintData);
+        if (item != null)
+        {
+          placeable.AcquireItem(item);
+        }
+      }
+
+      return item;
+    }
   }
 }

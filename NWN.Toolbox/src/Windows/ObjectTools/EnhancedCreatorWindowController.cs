@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using Anvil.API;
 using Anvil.API.Events;
 using Anvil.Services;
@@ -121,29 +120,47 @@ namespace Jorteck.Toolbox
       Token.Player.TryEnterTargetMode(CreateBlueprintInstance);
     }
 
-    private void CreateBlueprintInstance(ModuleEvents.OnPlayerTarget onPlayerTarget)
+    private void CreateBlueprintInstance(ModuleEvents.OnPlayerTarget eventData)
     {
       if (selectedBlueprint == null)
       {
         return;
       }
 
+      NwObject nwObject;
       Location location;
-      if (onPlayerTarget.TargetObject is NwArea area)
+
+      if (eventData.TargetObject is NwArea area)
       {
-        location = Location.Create(area, onPlayerTarget.TargetPosition, 0f);
+        location = Location.Create(area, eventData.TargetPosition, 0f);
+        nwObject = selectedBlueprint.Create(location);
       }
-      else if (onPlayerTarget.TargetObject is NwGameObject gameObject)
+      else if (selectedBlueprint.ObjectType == BlueprintObjectType.Item && eventData.TargetObject is NwCreature creature)
+      {
+        nwObject = selectedBlueprint.Create(creature);
+      }
+      else if (selectedBlueprint.ObjectType == BlueprintObjectType.Item && eventData.TargetObject is NwPlaceable placeable)
+      {
+        nwObject = selectedBlueprint.Create(placeable);
+      }
+      else if (eventData.TargetObject is NwGameObject gameObject)
       {
         location = gameObject.Location;
+        nwObject = selectedBlueprint.Create(location);
       }
       else
       {
         return;
       }
 
-      NwObject nwObject = selectedBlueprint.Create(location);
-      Token.Player.SendServerMessage($"\"{nwObject.Name}\" Created.");
+      if (nwObject != null)
+      {
+        Token.Player.SendServerMessage($"\"{nwObject.Name}\" Created.");
+      }
+      else
+      {
+        Token.Player.SendErrorMessage($"Failed to create object {selectedBlueprint.FullName}");
+      }
     }
 
     private void RefreshCreatorList()
@@ -177,13 +194,11 @@ namespace Jorteck.Toolbox
         blueprintFactions.Add(blueprint.Faction);
       }
 
-      Stopwatch stopwatch = Stopwatch.StartNew();
       Token.SetBindValues(View.RowColors, rowColors);
       Token.SetBindValues(View.BlueprintNamesAndCategories, blueprintNamesAndCategories);
       Token.SetBindValues(View.BlueprintCRs, blueprintCRs);
       Token.SetBindValues(View.BlueprintFactions, blueprintFactions);
       Token.SetBindValue(View.BlueprintCount, blueprintRowMapping.Count);
-      Console.WriteLine($"Result writing took {stopwatch.Elapsed.TotalSeconds}s to complete.");
     }
 
     private List<IBlueprint> LoadSearchResults()

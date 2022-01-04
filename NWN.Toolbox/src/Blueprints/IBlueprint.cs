@@ -17,5 +17,7 @@ namespace Jorteck.Toolbox
     public BlueprintObjectType ObjectType { get; }
 
     public NwObject Create(Location location);
+
+    public NwItem Create(NwGameObject owner);
   }
 }

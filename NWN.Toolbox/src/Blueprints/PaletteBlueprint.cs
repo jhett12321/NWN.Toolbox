@@ -25,5 +25,33 @@ namespace Jorteck.Toolbox
         _ => throw new NotImplementedException($"{ObjectType} blueprints are not supported."),
       };
     }
+
+    public NwItem Create(NwGameObject owner)
+    {
+      if (ObjectType is not BlueprintObjectType.Item || owner == null)
+      {
+        return null;
+      }
+
+      NwItem item = null;
+      if (owner is NwCreature creature)
+      {
+        item = NwItem.Create(ResRef, owner.Location);
+        if (item != null)
+        {
+          creature.AcquireItem(item);
+        }
+      }
+      else if (owner is NwPlaceable placeable && placeable.HasInventory)
+      {
+        item = NwItem.Create(ResRef, owner.Location);
+        if (item != null)
+        {
+          placeable.AcquireItem(item);
+        }
+      }
+
+      return item;
+    }
   }
 }
