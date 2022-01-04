@@ -53,6 +53,16 @@ namespace Jorteck.Toolbox
       }
     }
 
+    public void Refresh()
+    {
+      if (SelectedObject != null && !SelectedObject.IsValid)
+      {
+        ClearObjectSelection();
+      }
+
+      RefreshObjectList();
+    }
+
     private bool HandleMouseDown(ModuleEvents.OnNuiEvent eventData)
     {
       if (eventData.ElementId == view.ObjectRowId)
@@ -199,6 +209,24 @@ namespace Jorteck.Toolbox
 
     private void UpdateObjectSelection(int index)
     {
+      ResetExistingSelection();
+
+      rowColors[index] = selectedColor;
+      windowToken.SetBindValues(view.RowColors, rowColors);
+
+      SelectedObject = objectList[index];
+      OnObjectSelectChange?.Invoke();
+    }
+
+    private void ClearObjectSelection()
+    {
+      ResetExistingSelection();
+      SelectedObject = null;
+      OnObjectSelectChange?.Invoke();
+    }
+
+    private void ResetExistingSelection()
+    {
       if (SelectedObject != null && SelectedObject is NwGameObject gameObject)
       {
         int existingSelection = objectList.IndexOf(gameObject);
@@ -207,11 +235,6 @@ namespace Jorteck.Toolbox
           rowColors[existingSelection] = defaultColor;
         }
       }
-
-      SelectedObject = objectList[index];
-      rowColors[index] = selectedColor;
-      windowToken.SetBindValues(view.RowColors, rowColors);
-      OnObjectSelectChange?.Invoke();
     }
 
     private void UpdateAreaSelection(NwArea area)

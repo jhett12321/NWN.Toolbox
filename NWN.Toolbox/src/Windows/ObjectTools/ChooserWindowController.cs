@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Anvil.API;
 using Anvil.API.Events;
@@ -9,6 +10,9 @@ namespace Jorteck.Toolbox
   {
     [Inject]
     private InjectionService InjectionService { get; init; }
+
+    [Inject]
+    private SchedulerService SchedulerService { get; init; }
 
     private ObjectSelectionListController objectSelectionListController;
 
@@ -180,6 +184,8 @@ namespace Jorteck.Toolbox
       {
         player.SendServerMessage("NOTE! Players need to re-enter the area to see the updated change.");
       }
+
+      SchedulerService.Schedule(objectSelectionListController.Refresh, TimeSpan.Zero);
     }
 
     private void JumpToDM(NwPlayer player, NwGameObject gameObject)
