@@ -21,6 +21,10 @@ namespace Jorteck.Toolbox
     public bool Active { get; set; }
 
     public byte[] BlueprintData { get; set; }
+
+    public float? CR { get; set; }
+
+    public string Faction { get; set; }
   }
 
   internal sealed class BlueprintModelConfiguration : IEntityTypeConfiguration<BlueprintModel>

@@ -5,6 +5,8 @@ namespace Jorteck.Toolbox
 {
   public sealed class EnhancedCreatorWindowView : WindowView<EnhancedCreatorWindowView>
   {
+    public readonly string BlueprintRowId = "rows";
+
     public override string Id => "creator.enhanced";
     public override string Title => "Creator: Enhanced";
     public override NuiWindow WindowTemplate { get; }
@@ -14,20 +16,28 @@ namespace Jorteck.Toolbox
       return CreateController<EnhancedCreatorWindowController>(player);
     }
 
-    // Sub-views
-    public readonly NuiGroup CreatorListContainer = new NuiGroup
-    {
-      Id = "creator_list",
-    };
-
     // Value Binds
     public readonly NuiBind<string> Search = new NuiBind<string>("search_val");
     public readonly NuiBind<int> BlueprintType = new NuiBind<int>("type_val");
-    public readonly NuiBind<string> SelectedBlueprint = new NuiBind<string>("selected_blue");
+    public readonly NuiBind<NuiColor> RowColors = new NuiBind<NuiColor>("row_colors");
+    public readonly NuiBind<string> BlueprintNamesAndCategories = new NuiBind<string>("names_val");
+    public readonly NuiBind<string> BlueprintCRs = new NuiBind<string>("crs_val");
+    public readonly NuiBind<string> BlueprintFactions = new NuiBind<string>("factions_val");
+    public readonly NuiBind<int> BlueprintCount = new NuiBind<int>("count");
+
+    // Object List Elements
+    public readonly NuiLabel BlueprintNamesAndCategoriesTexts;
+    public readonly NuiLabel BlueprintCRsTexts;
+    public readonly NuiLabel BlueprintFactionsTexts;
+
+    //public readonly NuiBind<string> SelectedBlueprint = new NuiBind<string>("selected_blue");
 
     // Buttons
     public readonly NuiButtonImage SearchButton;
     public readonly NuiButton CreateButton;
+
+    // Button States
+    public readonly NuiBind<bool> CreateButtonEnabled = new NuiBind<bool>("create");
 
     public EnhancedCreatorWindowView()
     {
@@ -41,6 +51,41 @@ namespace Jorteck.Toolbox
       {
         Id = "btn_create",
         Width = 300f,
+        Enabled = CreateButtonEnabled,
+      };
+
+      BlueprintNamesAndCategoriesTexts = new NuiLabel(BlueprintNamesAndCategories)
+      {
+        Id = BlueprintRowId,
+        Tooltip = BlueprintNamesAndCategories,
+        ForegroundColor = RowColors,
+      };
+
+      BlueprintCRsTexts = new NuiLabel(BlueprintCRs)
+      {
+        Id = BlueprintRowId,
+        Tooltip = BlueprintNamesAndCategories,
+        ForegroundColor = RowColors,
+      };
+
+      BlueprintFactionsTexts = new NuiLabel(BlueprintFactions)
+      {
+        Id = BlueprintRowId,
+        Tooltip = BlueprintNamesAndCategories,
+        ForegroundColor = RowColors,
+      };
+
+      List<NuiListTemplateCell> rowTemplate = new List<NuiListTemplateCell>
+      {
+        new NuiListTemplateCell(BlueprintNamesAndCategoriesTexts),
+        new NuiListTemplateCell(BlueprintCRsTexts)
+        {
+          Width = 40f,
+        },
+        new NuiListTemplateCell(BlueprintFactionsTexts)
+        {
+          Width = 90f,
+        },
       };
 
       NuiColumn root = new NuiColumn
@@ -57,11 +102,23 @@ namespace Jorteck.Toolbox
               SearchButton,
             },
           },
-          new NuiLabel(SelectedBlueprint)
+          new NuiRow
           {
+            Children = new List<NuiElement>
+            {
+              new NuiLabel("Name/Category"),
+              new NuiLabel("CR")
+              {
+                Width = 40f,
+              },
+              new NuiLabel("Faction")
+              {
+                Width = 120f,
+              },
+            },
             Height = 20f,
           },
-          CreatorListContainer,
+          new NuiList(rowTemplate, BlueprintCount),
           new NuiRow
           {
             Height = 40f,

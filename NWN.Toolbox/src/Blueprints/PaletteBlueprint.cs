@@ -9,6 +9,8 @@ namespace Jorteck.Toolbox
     public string FullName { get; init; }
     public string Name { get; init; }
     public string Category { get; init; }
+    public float? CR { get; init; }
+    public string Faction { get; init; }
     public BlueprintObjectType ObjectType { get; init; }
 
     public NwObject Create(Location location)

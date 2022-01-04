@@ -10,11 +10,6 @@ namespace Jorteck.Toolbox
 {
   public sealed class ObjectSelectionListController
   {
-    private static readonly TimeSpan DoubleClickThreshold = TimeSpan.FromMilliseconds(500);
-
-    private readonly NuiColor defaultColor = new NuiColor(255, 255, 255);
-    private readonly NuiColor selectedColor = new NuiColor(255, 255, 0);
-
     private List<NwGameObject> objectList;
     private NuiColor[] rowColors;
 
@@ -165,7 +160,7 @@ namespace Jorteck.Toolbox
       for (int i = 0; i < gameObjects.Count; i++)
       {
         NwGameObject gameObject = gameObjects[i];
-        rowColors[i] = gameObject != SelectedObject ? defaultColor : selectedColor;
+        rowColors[i] = gameObject != SelectedObject ? UXConstants.DefaultColor : UXConstants.SelectedColor;
         objectTypes[i] = gameObject.GetTypeName();
         objectNames[i] = gameObject.Name;
         objectResRefs[i] = gameObject.ResRef;
@@ -191,9 +186,9 @@ namespace Jorteck.Toolbox
         NwGameObject newSelection = objectList[index];
         if (newSelection != SelectedObject)
         {
-          UpdateObjectSelection(index);
+          UpdateSelection(index);
         }
-        else if (Time.TimeSinceStartup - lastSelectionClick < DoubleClickThreshold)
+        else if (Time.TimeSinceStartup - lastSelectionClick < UXConstants.DoubleClickThreshold)
         {
           JumpToObject(newSelection);
         }
@@ -207,11 +202,11 @@ namespace Jorteck.Toolbox
       windowToken.Player.ControlledCreature.JumpToObject(gameObject);
     }
 
-    private void UpdateObjectSelection(int index)
+    private void UpdateSelection(int index)
     {
       ResetExistingSelection();
 
-      rowColors[index] = selectedColor;
+      rowColors[index] = UXConstants.SelectedColor;
       windowToken.SetBindValues(view.RowColors, rowColors);
 
       SelectedObject = objectList[index];
@@ -232,7 +227,7 @@ namespace Jorteck.Toolbox
         int existingSelection = objectList.IndexOf(gameObject);
         if (existingSelection >= 0)
         {
-          rowColors[existingSelection] = defaultColor;
+          rowColors[existingSelection] = UXConstants.DefaultColor;
         }
       }
     }

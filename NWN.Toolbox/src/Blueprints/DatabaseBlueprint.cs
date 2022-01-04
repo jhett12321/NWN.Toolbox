@@ -9,6 +9,8 @@ namespace Jorteck.Toolbox
     public string Name => dbModel.Name;
 
     public string Category => dbModel.Category;
+    public float? CR => dbModel.CR;
+    public string Faction => dbModel.Faction;
 
     public string FullName => Category + "/" + Name;
 

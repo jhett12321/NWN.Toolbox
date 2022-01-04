@@ -74,7 +74,10 @@ namespace Jorteck.Toolbox
     {
       if (field.TryGetValue("RESREF", out GffResourceField resRefField))
       {
+        string resRef = resRefField.Value<string>();
         string name = "Unknown";
+        float? cr = null;
+        string faction = null;
 
         if (field.TryGetValue("NAME", out GffResourceField creatureNameField))
         {
@@ -85,13 +88,23 @@ namespace Jorteck.Toolbox
           name = TlkTable.GetSimpleString(creatureNameStrRefField.Value<uint>());
         }
 
-        string resRef = resRefField.Value<string>();
+        if (field.TryGetValue("CR", out GffResourceField creatureChallengeRatingField))
+        {
+          cr = creatureChallengeRatingField.Value<float>();
+        }
+
+        if (field.TryGetValue("FACTION", out GffResourceField creatureFactionField))
+        {
+          faction = creatureFactionField.Value<string>();
+        }
 
         blueprints.Add(new PaletteBlueprint
         {
           ResRef = resRef,
           Name = name,
           Category = path,
+          CR = cr,
+          Faction = faction,
           FullName = path + "/" + name,
           ObjectType = paletteType,
         });

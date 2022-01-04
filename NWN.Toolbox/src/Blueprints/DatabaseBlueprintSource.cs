@@ -1,10 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
-using Anvil.Services;
 
 namespace Jorteck.Toolbox
 {
-  [ServiceBinding(typeof(IBlueprintSource))]
+  //[ServiceBinding(typeof(IBlueprintSource))] // Disabled for now...
   internal sealed class DatabaseBlueprintSource : IBlueprintSource
   {
     private readonly DatabaseManager databaseManager;
