@@ -16,7 +16,6 @@ namespace Jorteck.Toolbox
     private List<IBlueprint> blueprintRowMapping;
     private List<NuiColor> rowColors;
 
-    //private readonly Dictionary<string, IBlueprint> idToBlueprintMap = new Dictionary<string, IBlueprint>();
     private IBlueprint selectedBlueprint;
 
     private TimeSpan lastSelectionClick;
