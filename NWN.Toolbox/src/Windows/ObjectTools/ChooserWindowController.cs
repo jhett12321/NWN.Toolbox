@@ -109,7 +109,7 @@ namespace Jorteck.Toolbox
     private void HandleButtonClick(ModuleEvents.OnNuiEvent eventData)
     {
       NwObject targetObject = objectSelectionListController.SelectedObject;
-      if (targetObject is not NwGameObject gameObject)
+      if (targetObject is not NwGameObject gameObject || !gameObject.IsValid)
       {
         return;
       }
