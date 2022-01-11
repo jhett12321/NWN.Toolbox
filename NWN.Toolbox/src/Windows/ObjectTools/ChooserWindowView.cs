@@ -150,7 +150,7 @@ namespace Jorteck.Toolbox
       CloneButton = new NuiButtonImage("dm_encounter")
       {
         Id = "btn_clone",
-        Tooltip = "Clones the selected object",
+        Tooltip = "Clone Object",
         Enabled = CloneButtonEnabled,
         Width = 40f,
         Aspect = 1f,
