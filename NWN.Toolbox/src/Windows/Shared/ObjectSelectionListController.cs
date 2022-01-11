@@ -77,6 +77,17 @@ namespace Jorteck.Toolbox
         return true;
       }
 
+      if (eventData.ElementId == view.ObjectPickerButton.Id)
+      {
+        windowToken.Player.EnterTargetMode(eventData =>
+        {
+          if (eventData.TargetObject is NwGameObject gameObject)
+          {
+            UpdateSelection(gameObject);
+          }
+        });
+      }
+
       return false;
     }
 
@@ -191,7 +202,7 @@ namespace Jorteck.Toolbox
         NwGameObject newSelection = objectList[index];
         if (newSelection != SelectedObject)
         {
-          UpdateSelection(index);
+          UpdateSelection(newSelection);
         }
         else if (Time.TimeSinceStartup - lastSelectionClick < UXConstants.DoubleClickThreshold)
         {
@@ -207,14 +218,25 @@ namespace Jorteck.Toolbox
       windowToken.Player.ControlledCreature.JumpToObject(gameObject);
     }
 
-    private void UpdateSelection(int index)
+    private void UpdateSelection(NwObject newSelection)
     {
+      if (newSelection == SelectedObject)
+      {
+        return;
+      }
+
       ResetExistingSelection();
+      if (newSelection is NwGameObject gameObject)
+      {
+        int index = objectList.IndexOf(gameObject);
+        if (index >= 0)
+        {
+          rowColors[index] = UXConstants.SelectedColor;
+        }
+      }
 
-      rowColors[index] = UXConstants.SelectedColor;
       windowToken.SetBindValues(view.RowColors, rowColors);
-
-      SelectedObject = objectList[index];
+      SelectedObject = newSelection;
       OnObjectSelectChange?.Invoke();
     }
 

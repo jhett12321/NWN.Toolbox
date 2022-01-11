@@ -22,6 +22,10 @@ namespace Jorteck.Toolbox
         BlueprintObjectType.Placeable => NwPlaceable.Create(ResRef, location),
         BlueprintObjectType.Store => NwStore.Create(ResRef, location),
         BlueprintObjectType.Waypoint => NwWaypoint.Create(ResRef, location),
+        BlueprintObjectType.Door => NwDoor.Create(ResRef, location),
+        BlueprintObjectType.Encounter => NwEncounter.Create(ResRef, location),
+        BlueprintObjectType.Sound => NwSound.Create(ResRef, location),
+        BlueprintObjectType.Trigger => NwTrigger.Create(ResRef, location),
         _ => throw new NotImplementedException($"{ObjectType} blueprints are not supported."),
       };
     }

@@ -32,15 +32,22 @@ namespace Jorteck.Toolbox
     public readonly NuiLabel ObjectTagTexts;
 
     // Buttons
-    public NuiButtonImage SearchButton { get; }
-    public NuiButton ChangeAreaButton { get; }
-    public NuiCombo ObjectTypeFilter { get; }
+    public readonly NuiButtonImage ObjectPickerButton;
+    public readonly NuiButtonImage SearchButton;
+    public readonly NuiButton ChangeAreaButton;
+    public readonly NuiCombo ObjectTypeFilter;
 
     // Rendered Sub View
     public IReadOnlyList<NuiElement> SubView { get; }
 
     public ObjectSelectionListView()
     {
+      ObjectPickerButton = new NuiButtonImage("dm_findnext")
+      {
+        Id = "btn_pickobj",
+        Aspect = 1f,
+      };
+
       SearchButton = new NuiButtonImage("isk_search")
       {
         Id = "btn_search",
@@ -140,11 +147,12 @@ namespace Jorteck.Toolbox
           Height = 40f,
           Children = new List<NuiElement>
           {
+            ObjectPickerButton,
             SearchButton,
             new NuiTextEdit("Search for objects...", Search, 255, false),
             new NuiTextEdit("Dist. (m)", SearchDistance, 10, false)
             {
-              Width = 100f,
+              Width = 70f,
             },
             ObjectTypeFilter,
             ChangeAreaButton,

@@ -29,7 +29,8 @@ namespace Jorteck.Toolbox
     public readonly NuiButtonImage ExamineButton;
     public readonly NuiButtonImage PossessButton;
     public readonly NuiButtonImage ToggleImmortalButton;
-    public readonly NuiButtonImage TogglePlotMode;
+    public readonly NuiButtonImage TogglePlotModeButton;
+    public readonly NuiButtonImage CloneButton;
 
     // Button States
     public readonly NuiBind<bool> GoToButtonEnabled = new NuiBind<bool>("goto");
@@ -44,6 +45,7 @@ namespace Jorteck.Toolbox
     public readonly NuiBind<bool> PossessButtonEnabled = new NuiBind<bool>("possess");
     public readonly NuiBind<bool> ToggleImmortalButtonEnabled = new NuiBind<bool>("immortal");
     public readonly NuiBind<bool> TogglePlotButtonEnabled = new NuiBind<bool>("god");
+    public readonly NuiBind<bool> CloneButtonEnabled = new NuiBind<bool>("clone");
 
     public readonly NuiBind<bool>[] AllButtonStates;
 
@@ -137,11 +139,19 @@ namespace Jorteck.Toolbox
         Width = 40f,
         Aspect = 1f,
       };
-      TogglePlotMode = new NuiButtonImage("dm_god")
+      TogglePlotModeButton = new NuiButtonImage("dm_god")
       {
         Id = "btn_god",
         Tooltip = "Toggle Plot/God Mode (Cannot take damage)",
         Enabled = TogglePlotButtonEnabled,
+        Width = 40f,
+        Aspect = 1f,
+      };
+      CloneButton = new NuiButtonImage("dm_encounter")
+      {
+        Id = "btn_clone",
+        Tooltip = "Clones the selected object",
+        Enabled = CloneButtonEnabled,
         Width = 40f,
         Aspect = 1f,
       };
@@ -160,6 +170,7 @@ namespace Jorteck.Toolbox
         PossessButtonEnabled,
         ToggleImmortalButtonEnabled,
         TogglePlotButtonEnabled,
+        CloneButtonEnabled,
       };
 
       NuiColumn root = new NuiColumn
@@ -174,6 +185,7 @@ namespace Jorteck.Toolbox
               GoToButton,
               DestroyButton,
               ExamineButton,
+              CloneButton,
               JumpButton,
               ToggleAIButton,
               HealButton,
@@ -182,7 +194,7 @@ namespace Jorteck.Toolbox
               RestButton,
               LimboButton,
               ToggleImmortalButton,
-              TogglePlotMode,
+              TogglePlotModeButton,
               new NuiSpacer(),
             },
           },

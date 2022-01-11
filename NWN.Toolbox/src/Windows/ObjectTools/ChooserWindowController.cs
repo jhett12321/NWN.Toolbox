@@ -45,7 +45,7 @@ namespace Jorteck.Toolbox
       }
       else if (objectSelectionListController.SelectedObject is NwDoor)
       {
-        UpdateAvailableChooserButtons(View.GoToButtonEnabled, View.DestroyButtonEnabled, View.ExamineButtonEnabled, View.TogglePlotButtonEnabled);
+        UpdateAvailableChooserButtons(View.GoToButtonEnabled, View.DestroyButtonEnabled, View.ExamineButtonEnabled, View.TogglePlotButtonEnabled, View.CloneButtonEnabled);
       }
       else if (objectSelectionListController.SelectedObject is NwEncounter)
       {
@@ -53,11 +53,11 @@ namespace Jorteck.Toolbox
       }
       else if (objectSelectionListController.SelectedObject is NwItem)
       {
-        UpdateAvailableChooserButtons(View.GoToButtonEnabled, View.DestroyButtonEnabled, View.ExamineButtonEnabled, View.TogglePlotButtonEnabled);
+        UpdateAvailableChooserButtons(View.GoToButtonEnabled, View.DestroyButtonEnabled, View.ExamineButtonEnabled, View.TogglePlotButtonEnabled, View.CloneButtonEnabled);
       }
       else if (objectSelectionListController.SelectedObject is NwPlaceable)
       {
-        UpdateAvailableChooserButtons(View.GoToButtonEnabled, View.JumpButtonEnabled, View.DestroyButtonEnabled, View.ExamineButtonEnabled, View.TogglePlotButtonEnabled, View.HealButtonEnabled);
+        UpdateAvailableChooserButtons(View.GoToButtonEnabled, View.JumpButtonEnabled, View.DestroyButtonEnabled, View.ExamineButtonEnabled, View.TogglePlotButtonEnabled, View.HealButtonEnabled, View.CloneButtonEnabled);
       }
       else if (objectSelectionListController.SelectedObject is NwSound)
       {
@@ -65,15 +65,15 @@ namespace Jorteck.Toolbox
       }
       else if (objectSelectionListController.SelectedObject is NwStore)
       {
-        UpdateAvailableChooserButtons(View.GoToButtonEnabled, View.DestroyButtonEnabled, View.TogglePlotButtonEnabled);
+        UpdateAvailableChooserButtons(View.GoToButtonEnabled, View.DestroyButtonEnabled, View.TogglePlotButtonEnabled, View.CloneButtonEnabled);
       }
       else if (objectSelectionListController.SelectedObject is NwTrigger)
       {
-        UpdateAvailableChooserButtons(View.GoToButtonEnabled, View.DestroyButtonEnabled, View.ExamineButtonEnabled, View.TogglePlotButtonEnabled);
+        UpdateAvailableChooserButtons(View.GoToButtonEnabled, View.DestroyButtonEnabled, View.ExamineButtonEnabled, View.TogglePlotButtonEnabled, View.CloneButtonEnabled);
       }
       else if (objectSelectionListController.SelectedObject is NwWaypoint)
       {
-        UpdateAvailableChooserButtons(View.GoToButtonEnabled, View.DestroyButtonEnabled, View.TogglePlotButtonEnabled);
+        UpdateAvailableChooserButtons(View.GoToButtonEnabled, View.DestroyButtonEnabled, View.TogglePlotButtonEnabled, View.CloneButtonEnabled);
       }
       else if (objectSelectionListController.SelectedObject is NwModule)
       {
@@ -160,10 +160,56 @@ namespace Jorteck.Toolbox
       {
         ToggleImmortal(player, gameObject);
       }
-      else if (elementId == View.TogglePlotMode.Id)
+      else if (elementId == View.TogglePlotModeButton.Id)
       {
         TogglePlotMode(player, gameObject);
       }
+      else if (elementId == View.CloneButton.Id)
+      {
+        CloneObject(player, gameObject);
+      }
+    }
+
+    private void CloneObject(NwPlayer player, NwGameObject gameObject)
+    {
+      player.EnterTargetMode(eventData =>
+      {
+        if (eventData.IsCancelled)
+        {
+          return;
+        }
+
+        Location location;
+        if (eventData.TargetObject is NwArea area)
+        {
+          location = Location.Create(area, eventData.TargetPosition, player.ControlledCreature.Rotation);
+        }
+        else if (eventData.TargetObject is NwGameObject targetObject)
+        {
+          location = targetObject.Location;
+        }
+        else
+        {
+          return;
+        }
+
+        NwGameObject clone = gameObject.Clone(location);
+        player.SendServerMessage($"{gameObject.Name}: Cloned");
+
+        if (clone is NwItem item)
+        {
+          if (eventData.TargetObject is NwCreature creature)
+          {
+            creature.AcquireItem(item);
+          }
+          else if (eventData.TargetObject is NwPlaceable placeable && placeable.HasInventory)
+          {
+            placeable.AcquireItem(item);
+          }
+        }
+
+        SchedulerService.Schedule(objectSelectionListController.Refresh, TimeSpan.Zero);
+      });
     }
 
     private void DestroyObject(NwPlayer player, NwGameObject gameObject)
