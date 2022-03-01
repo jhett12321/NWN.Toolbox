@@ -14,7 +14,7 @@ namespace Jorteck.Toolbox
 
     public readonly NuiBind<string> CurrentArea = new NuiBind<string>("area");
 
-    public readonly NuiBind<NuiColor> RowColors = new NuiBind<NuiColor>("obj_row_colors");
+    public readonly NuiBind<Color> RowColors = new NuiBind<Color>("obj_row_colors");
     public readonly NuiBind<string> ObjectTypes = new NuiBind<string>("obj_types_val");
     public readonly NuiBind<string> ObjectNames = new NuiBind<string>("obj_names_val");
     public readonly NuiBind<string> ObjectResRefs = new NuiBind<string>("obj_resrefs_val");

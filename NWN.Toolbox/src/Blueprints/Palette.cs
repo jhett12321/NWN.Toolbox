@@ -21,9 +21,6 @@ namespace Jorteck.Toolbox
     [Inject]
     public ResourceManager ResourceManager { private get; init; }
 
-    [Inject]
-    public TlkTable TlkTable { private get; init; }
-
     private readonly List<PaletteBlueprint> blueprints = new List<PaletteBlueprint>();
 
     public Palette(string palettePrefix, BlueprintObjectType paletteType)
@@ -85,7 +82,7 @@ namespace Jorteck.Toolbox
         }
         else if (field.TryGetValue("STRREF", out GffResourceField creatureNameStrRefField))
         {
-          name = TlkTable.GetSimpleString(creatureNameStrRefField.Value<uint>());
+          name = new StrRef(creatureNameStrRefField.Value<uint>()).ToString();
         }
 
         if (field.TryGetValue("CR", out GffResourceField creatureChallengeRatingField))
@@ -113,7 +110,7 @@ namespace Jorteck.Toolbox
       {
         if (field.TryGetValue("STRREF", out GffResourceField groupStrRef))
         {
-          path = Path.Combine(path, TlkTable.GetSimpleString(groupStrRef.Value<uint>()));
+          path = Path.Combine(path, new StrRef(groupStrRef.Value<uint>()).ToString());
         }
 
         if (field.TryGetValue("LIST", out GffResourceField list))

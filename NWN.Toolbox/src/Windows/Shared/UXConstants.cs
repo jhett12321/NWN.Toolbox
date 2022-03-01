@@ -7,8 +7,8 @@ namespace Jorteck.Toolbox
   {
     public static readonly TimeSpan DoubleClickThreshold = TimeSpan.FromMilliseconds(500);
 
-    public static readonly NuiColor DefaultColor = new NuiColor(255, 255, 255);
-    public static readonly NuiColor DefaultColor2 = new NuiColor(128, 128, 128);
-    public static readonly NuiColor SelectedColor = new NuiColor(255, 255, 0);
+    public static readonly Color DefaultColor = new Color(255, 255, 255);
+    public static readonly Color DefaultColor2 = new Color(128, 128, 128);
+    public static readonly Color SelectedColor = new Color(255, 255, 0);
   }
 }

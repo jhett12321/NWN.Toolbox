@@ -4,7 +4,7 @@ using Anvil.API;
 
 namespace Jorteck.Toolbox
 {
-  internal static class NuiUtils
+  public static class NuiUtils
   {
     public static NuiCombo CreateComboForEnum<T>(NuiBind<int> selected) where T : struct, Enum
     {

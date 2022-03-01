@@ -11,7 +11,7 @@ namespace Jorteck.Toolbox
   public sealed class ObjectSelectionListController
   {
     private List<NwGameObject> objectList;
-    private NuiColor[] rowColors;
+    private Color[] rowColors;
 
     public NwObject SelectedObject { get; private set; }
     private NwArea selectedArea;
@@ -164,7 +164,7 @@ namespace Jorteck.Toolbox
 
     private void UpdateListViewBinds(List<NwGameObject> gameObjects)
     {
-      rowColors = new NuiColor[gameObjects.Count];
+      rowColors = new Color[gameObjects.Count];
 
       string[] objectTypes = new string[gameObjects.Count];
       string[] objectNames = new string[gameObjects.Count];
