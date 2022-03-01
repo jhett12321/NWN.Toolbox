@@ -22,15 +22,30 @@ namespace Jorteck.Toolbox
 
     public event Action OnObjectSelectChange;
 
+    public bool RestrictTypeSelection
+    {
+      get => !windowToken.GetBindValue(view.UnrestrictedType);
+      set => windowToken.SetBindValue(view.UnrestrictedType, !value);
+    }
+
+    public bool RestrictAreaSelection
+    {
+      get => !windowToken.GetBindValue(view.UnrestrictedArea);
+      set => windowToken.SetBindValue(view.UnrestrictedArea, !value);
+    }
+
     public ObjectSelectionListController(ObjectSelectionListView view, WindowToken windowToken)
     {
       this.view = view;
       this.windowToken = windowToken;
+
+      RestrictTypeSelection = false;
+      RestrictAreaSelection = false;
     }
 
-    public void Init(NwArea area)
+    public void Init(NwArea area, ObjectSelectionTypes initialSelectionTypes = ObjectSelectionTypes.Creature)
     {
-      windowToken.SetBindValue(view.SearchObjectType, (int)ObjectSelectionTypes.Creature);
+      windowToken.SetBindValue(view.SearchObjectType, (int)initialSelectionTypes);
       UpdateAreaSelection(area);
       RefreshObjectList();
     }

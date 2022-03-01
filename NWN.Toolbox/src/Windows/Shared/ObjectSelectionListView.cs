@@ -37,6 +37,10 @@ namespace Jorteck.Toolbox
     public readonly NuiButton ChangeAreaButton;
     public readonly NuiCombo ObjectTypeFilter;
 
+    // Visibility
+    public readonly NuiBind<bool> UnrestrictedArea = new NuiBind<bool>("vis_area");
+    public readonly NuiBind<bool> UnrestrictedType = new NuiBind<bool>("vis_type");
+
     // Rendered Sub View
     public IReadOnlyList<NuiElement> SubView { get; }
 
@@ -58,9 +62,13 @@ namespace Jorteck.Toolbox
       {
         Id = "cng_area_btn",
         Tooltip = CurrentArea,
+        Visible = UnrestrictedArea,
+        Enabled = UnrestrictedArea,
       };
 
       ObjectTypeFilter = NuiUtils.CreateComboForEnum<ObjectSelectionTypes>(SearchObjectType);
+      ObjectTypeFilter.Visible = UnrestrictedType;
+      ObjectTypeFilter.Enabled = UnrestrictedType;
 
       ObjectTypeTexts = new NuiLabel(ObjectTypes)
       {
