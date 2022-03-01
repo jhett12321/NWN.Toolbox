@@ -3,7 +3,7 @@ using Anvil.API;
 
 namespace Jorteck.Toolbox
 {
-  public sealed class EnhancedCreatorWindowView : WindowView<EnhancedCreatorWindowView>
+  public sealed class CreatorWindowView : WindowView<CreatorWindowView>
   {
     public readonly string BlueprintRowId = "rows";
 
@@ -13,13 +13,13 @@ namespace Jorteck.Toolbox
 
     public override IWindowController CreateDefaultController(NwPlayer player)
     {
-      return CreateController<EnhancedCreatorWindowController>(player);
+      return CreateController<CreatorWindowController>(player);
     }
 
     // Value Binds
     public readonly NuiBind<string> Search = new NuiBind<string>("search_val");
     public readonly NuiBind<int> BlueprintType = new NuiBind<int>("type_val");
-    public readonly NuiBind<NuiColor> RowColors = new NuiBind<NuiColor>("row_colors");
+    public readonly NuiBind<Color> RowColors = new NuiBind<Color>("row_colors");
     public readonly NuiBind<string> BlueprintNamesAndCategories = new NuiBind<string>("names_val");
     public readonly NuiBind<string> BlueprintCRs = new NuiBind<string>("crs_val");
     public readonly NuiBind<string> BlueprintFactions = new NuiBind<string>("factions_val");
@@ -39,7 +39,7 @@ namespace Jorteck.Toolbox
     // Button States
     public readonly NuiBind<bool> CreateButtonEnabled = new NuiBind<bool>("create");
 
-    public EnhancedCreatorWindowView()
+    public CreatorWindowView()
     {
       SearchButton = new NuiButtonImage("isk_search")
       {

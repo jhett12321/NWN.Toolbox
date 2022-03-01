@@ -6,7 +6,7 @@ using Anvil.Services;
 
 namespace Jorteck.Toolbox
 {
-  public sealed class EnhancedCreatorWindowController : WindowController<EnhancedCreatorWindowView>
+  public sealed class CreatorWindowController : WindowController<CreatorWindowView>
   {
     private const int MaxItems = 1000;
 
@@ -14,7 +14,7 @@ namespace Jorteck.Toolbox
     public BlueprintManager BlueprintManager { private get; init; }
 
     private List<IBlueprint> blueprintRowMapping;
-    private List<NuiColor> rowColors;
+    private List<Color> rowColors;
 
     private IBlueprint selectedBlueprint;
 
@@ -168,7 +168,7 @@ namespace Jorteck.Toolbox
       blueprintRowMapping = new List<IBlueprint>(blueprints.Count * 2);
 
       int listCapacity = blueprints.Count * 2;
-      rowColors = new List<NuiColor>(listCapacity);
+      rowColors = new List<Color>(listCapacity);
       List<string> blueprintNamesAndCategories = new List<string>(listCapacity);
       List<string> blueprintCRs = new List<string>(listCapacity);
       List<string> blueprintFactions = new List<string>(listCapacity);
