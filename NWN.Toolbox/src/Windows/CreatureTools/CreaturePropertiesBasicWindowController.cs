@@ -62,7 +62,7 @@ namespace Jorteck.Toolbox
       Token.SetBindValue(View.Tag, selectedCreature.Tag);
       string value = ((int)selectedCreature.Race.RacialType).ToString();
       Token.SetBindValue(View.Race, value);
-      string value1 = ((int)selectedCreature.CreatureAppearanceType).ToString();
+      string value1 = selectedCreature.Appearance.RowIndex.ToString();
       Token.SetBindValue(View.Appearance, value1);
       string value2 = ((int)selectedCreature.Phenotype).ToString();
       Token.SetBindValue(View.Phenotype, value2);
@@ -121,7 +121,10 @@ namespace Jorteck.Toolbox
 
       if (Token.GetBindValue(View.Appearance).TryParseInt(out int appearanceType))
       {
-        selectedCreature.CreatureAppearanceType = (AppearanceType)appearanceType;
+        if (appearanceType > 0 && appearanceType < NwGameTables.AppearanceTable.Count)
+        {
+          selectedCreature.Appearance = NwGameTables.AppearanceTable[appearanceType];
+        }
       }
 
       if (Token.GetBindValue(View.Phenotype).TryParseInt(out int phenotype))

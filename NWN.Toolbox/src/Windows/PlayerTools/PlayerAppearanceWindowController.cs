@@ -60,7 +60,7 @@ namespace Jorteck.Toolbox
       Token.SetBindValue(View.CreatureName, value1);
       Token.SetBindValue(View.Portrait, playerCreature.PortraitResRef);
       Token.SetBindValue(View.SoundSet, playerCreature.SoundSet.ToString());
-      string value2 = ((int)playerCreature.CreatureAppearanceType).ToString();
+      string value2 = playerCreature.Appearance.RowIndex.ToString();
       Token.SetBindValue(View.Appearance, value2);
 
       UpdatePortraitPreview();
@@ -108,7 +108,10 @@ namespace Jorteck.Toolbox
 
       if (Token.GetBindValue(View.Appearance).TryParseInt(out int appearanceType))
       {
-        playerCreature.CreatureAppearanceType = (AppearanceType)appearanceType;
+        if (appearanceType > 0 && appearanceType < NwGameTables.AppearanceTable.Count)
+        {
+          playerCreature.Appearance = NwGameTables.AppearanceTable[appearanceType];
+        }
       }
 
       if (ushort.TryParse(Token.GetBindValue(View.SoundSet), out ushort soundSet))
