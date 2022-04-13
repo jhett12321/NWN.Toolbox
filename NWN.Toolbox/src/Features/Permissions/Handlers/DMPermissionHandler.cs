@@ -12,7 +12,14 @@ namespace Jorteck.Toolbox.Features.Permissions
     public DMPermissionHandler(PermissionsService permissionsService)
     {
       this.permissionsService = permissionsService;
+      if (permissionsService.IsEnabled)
+      {
+        InitEventHandlers();
+      }
+    }
 
+    private void InitEventHandlers()
+    {
       NwModule module = NwModule.Instance;
       module.OnDMGiveXP += eventData => OnDMGive(eventData, DMPermissionConstants.DMGiveXp);
       module.OnDMGiveLevel += eventData => OnDMGive(eventData, DMPermissionConstants.DMGiveLevel);
