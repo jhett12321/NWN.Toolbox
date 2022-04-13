@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
 using Anvil.API;
+using Anvil.Services;
 using Jorteck.Toolbox.Config;
 
 namespace Jorteck.Toolbox.Features.Permissions
 {
+  [ServiceBinding(typeof(PermissionsConfigService))]
   internal class PermissionsConfigService
   {
     private readonly ConfigService configService;

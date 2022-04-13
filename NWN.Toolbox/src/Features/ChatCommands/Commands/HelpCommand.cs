@@ -15,7 +15,7 @@ namespace Jorteck.Toolbox.Features.ChatCommands
     private ConfigService ConfigService { get; init; }
 
     [Inject]
-    private Lazy<CommandListProvider> CommandListProvider { get; init; }
+    private Lazy<ChatCommandService> ChatCommandService { get; init; }
 
     public string Command => "help";
     public int? ArgCount => null;
@@ -127,9 +127,9 @@ namespace Jorteck.Toolbox.Features.ChatCommands
 
     private IEnumerable<IChatCommand> GetAvailableCommands(NwPlayer player)
     {
-      foreach (IChatCommand command in CommandListProvider.Value.Commands)
+      foreach (IChatCommand command in ChatCommandService.Value.Commands)
       {
-        if (command.IsAvailable && CommandListProvider.Value.CanUseCommand(player, command))
+        if (command.IsAvailable && ChatCommandService.Value.CanUseCommand(player, command))
         {
           yield return command;
         }
@@ -138,7 +138,7 @@ namespace Jorteck.Toolbox.Features.ChatCommands
 
     private IChatCommand GetCommand(string commandName)
     {
-      foreach (IChatCommand command in CommandListProvider.Value.Commands)
+      foreach (IChatCommand command in ChatCommandService.Value.Commands)
       {
         if (command.Command == commandName)
         {

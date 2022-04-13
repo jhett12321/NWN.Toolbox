@@ -7,36 +7,52 @@ using Anvil.API;
 using Anvil.API.Events;
 using Anvil.Services;
 using Jorteck.Toolbox.Config;
+using Jorteck.Toolbox.Features.Permissions;
 
 namespace Jorteck.Toolbox.Features.ChatCommands
 {
   [ServiceBinding(typeof(ChatCommandService))]
-  internal sealed class ChatCommandService
+  internal sealed class ChatCommandService : IInitializable
   {
-    private readonly ConfigService configService;
+    private string helpCommandText;
 
-    private readonly CommandListProvider commandListProvider;
-    private readonly HelpCommand helpCommand;
-    private readonly string helpCommandText;
+    [Inject]
+    private ConfigService ConfigService { get; init; }
 
-    public ChatCommandService(CommandListProvider commandListProvider, ConfigService configService, HelpCommand helpCommand)
+    [Inject]
+    private PermissionsService PermissionsService { get; init; }
+
+    [Inject]
+    public IReadOnlyList<IChatCommand> Commands { get; init; }
+
+    [Inject]
+    private HelpCommand HelpCommand { get; init; }
+
+    public void Init()
     {
-      if (!configService.Config.ChatCommands.IsEnabled())
+      if (!ConfigService.Config.ChatCommands.IsEnabled())
       {
         return;
       }
 
-      if (configService.Config.ChatCommands.CommandPrefixes == null || configService.Config.ChatCommands.CommandPrefixes.Count == 0)
+      if (ConfigService.Config.ChatCommands.CommandPrefixes == null || ConfigService.Config.ChatCommands.CommandPrefixes.Count == 0)
       {
         throw new InvalidOperationException("No command prefixes defined!");
       }
 
-      this.commandListProvider = commandListProvider;
-      this.configService = configService;
-      this.helpCommand = helpCommand;
-      helpCommandText = $"{configService.Config.ChatCommands.CommandPrefixes[0]}{helpCommand.Command}".ColorString(ColorConstants.Orange);
+      helpCommandText = $"{ConfigService.Config.ChatCommands.CommandPrefixes[0]}{HelpCommand.Command}".ColorString(ColorConstants.Orange);
 
       NwModule.Instance.OnChatMessageSend += OnChatMessageSend;
+    }
+
+    public bool CanUseCommand(NwPlayer player, IChatCommand command)
+    {
+      if (!PermissionsService.IsEnabled)
+      {
+        return !command.DMOnly || player.IsDM;
+      }
+
+      return PermissionsService.HasPermission(player, command.PermissionKey);
     }
 
     private void OnChatMessageSend(OnChatMessageSend eventData)
@@ -46,7 +62,7 @@ namespace Jorteck.Toolbox.Features.ChatCommands
         return;
       }
 
-      foreach (string commandPrefix in configService.Config.ChatCommands.CommandPrefixes)
+      foreach (string commandPrefix in ConfigService.Config.ChatCommands.CommandPrefixes)
       {
         if (eventData.Message.StartsWith(commandPrefix))
         {
@@ -79,7 +95,7 @@ namespace Jorteck.Toolbox.Features.ChatCommands
 
     private bool ShouldIgnoreCommand(string commandText)
     {
-      foreach (string ignoreCommand in configService.Config.ChatCommands.IgnoreCommands)
+      foreach (string ignoreCommand in ConfigService.Config.ChatCommands.IgnoreCommands)
       {
         if (commandText.StartsWith(ignoreCommand))
         {
@@ -92,7 +108,7 @@ namespace Jorteck.Toolbox.Features.ChatCommands
 
     private bool TryProcessCommand(NwPlayer sender, string rawCommand)
     {
-      foreach (IChatCommand command in commandListProvider.Commands)
+      foreach (IChatCommand command in Commands)
       {
         if (rawCommand == command.Command)
         {
@@ -101,7 +117,7 @@ namespace Jorteck.Toolbox.Features.ChatCommands
         }
       }
 
-      foreach (IChatCommand command in commandListProvider.Commands)
+      foreach (IChatCommand command in Commands)
       {
         if (rawCommand.StartsWith(command.Command))
         {
@@ -127,13 +143,13 @@ namespace Jorteck.Toolbox.Features.ChatCommands
       {
         ShowCommandUnavailableError(command, sender);
       }
-      else if (!commandListProvider.CanUseCommand(sender, command))
+      else if (!CanUseCommand(sender, command))
       {
         ShowNoPermissionError(sender);
       }
       else if (command.ArgCount.HasValue && command.ArgCount != args.Count)
       {
-        TryExecuteCommand(sender, helpCommand, new[] { command.Command });
+        TryExecuteCommand(sender, HelpCommand, new[] { command.Command });
       }
       else
       {
