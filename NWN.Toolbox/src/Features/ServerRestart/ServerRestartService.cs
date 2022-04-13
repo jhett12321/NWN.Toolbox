@@ -6,7 +6,7 @@ using Cronos;
 using Jorteck.Toolbox.Config;
 using NLog;
 
-namespace Jorteck.Toolbox.Features
+namespace Jorteck.Toolbox.Features.ServerRestart
 {
   [ServiceBinding(typeof(ServerRestartService))]
   public sealed class ServerRestartService : IInitializable
