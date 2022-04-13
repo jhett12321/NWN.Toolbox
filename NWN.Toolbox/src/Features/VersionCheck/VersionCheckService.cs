@@ -37,10 +37,5 @@ namespace Jorteck.Toolbox.Features.VersionCheck
         eventData.Player.SendErrorMessage($"This server recommends updating your client to {recommendedVersion.ToString(2)} or newer.");
       }
     }
-
-    private void OnClientConnect(OnClientConnect eventData)
-    {
-      throw new System.NotImplementedException();
-    }
   }
 }
