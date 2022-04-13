@@ -1,8 +1,10 @@
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 
 namespace Jorteck.Toolbox.Config
 {
+  [Serializable]
   internal sealed class ChatCommandConfig : IFeatureConfig
   {
     [Description("Enable/disable the chat command system.")]

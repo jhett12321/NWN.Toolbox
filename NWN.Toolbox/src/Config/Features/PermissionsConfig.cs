@@ -1,7 +1,9 @@
+using System;
 using System.ComponentModel;
 
 namespace Jorteck.Toolbox.Config
 {
+  [Serializable]
   internal sealed class PermissionsConfig : IFeatureConfig
   {
     [Description("Enable/disable the permission system.")]

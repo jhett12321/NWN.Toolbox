@@ -21,5 +21,8 @@ namespace Jorteck.Toolbox.Config
 
     [Description("Permissions is a module that allows server admins to control what tools and features players/DMs can use by creating groups and assigning permissions.")]
     public PermissionsConfig Permissions { get; set; } = new PermissionsConfig();
+
+    [Description("VersionCheck is a module that defines client version requirements to connect to the server (e.g. for NUI).")]
+    public VersionCheckConfig VersionCheck { get; set; } = new VersionCheckConfig();
   }
 }
