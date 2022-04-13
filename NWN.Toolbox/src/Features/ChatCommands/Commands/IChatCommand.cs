@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Anvil.API;
 
@@ -31,9 +32,13 @@ namespace Jorteck.Toolbox.Features.ChatCommands
     string PermissionKey => $"command.{Command.Replace(" ", ".")}";
 
     /// <summary>
-    /// The number of arguments expected by this command. Set to null if the arguments are variable.
+    /// The number of arguments expected by this command. Supports the range syntax:<br/>
+    /// 2 arguments: "2..2"<br/>
+    /// 2 or more arguments: "2.."<br/>
+    /// No more than 2 arguments: "..2"<br/>
+    /// 1-3 arguments: "1..3"
     /// </summary>
-    int? ArgCount { get; }
+    Range ArgCount { get; }
 
     /// <summary>
     /// The description for this command. Shown in the help list.

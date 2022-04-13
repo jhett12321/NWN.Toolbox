@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Anvil.API;
 using Anvil.Services;
@@ -6,25 +7,19 @@ using Jorteck.Toolbox.Features.ChatCommands;
 namespace Jorteck.Toolbox.Features.Permissions
 {
   [ServiceBinding(typeof(IChatCommand))]
-  internal class UserListPermsCommand : IChatCommand
+  internal class UserListPermsCommand : PermissionsCommand
   {
-    [Inject]
-    private PermissionsConfigService PermissionsConfigService { get; init; }
+    public override string SubCommand => "user listpermissions";
+    public override Range ArgCount => 0..0;
 
-    public string Command => PermissionsConfigService.GetFullChatCommand("user listpermissions");
-    public string[] Aliases => null;
-    public bool DMOnly => true;
-    public string PermissionKey => PermissionConstants.List;
+    public override string Description => "Lists all user permissions.";
 
-    public int? ArgCount => 0;
-    public string Description => "Lists all user permissions.";
-
-    public CommandUsage[] Usages { get; } =
+    public override CommandUsage[] Usages { get; } =
     {
       new CommandUsage("List all permissions for the target user."),
     };
 
-    public void ProcessCommand(NwPlayer caller, IReadOnlyList<string> args)
+    public override void ProcessCommand(NwPlayer caller, IReadOnlyList<string> args)
     {
       caller.EnterPlayerTargetMode(ListPermissionsOfTarget);
     }

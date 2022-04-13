@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Anvil;
 using Anvil.API;
@@ -10,7 +11,7 @@ namespace Jorteck.Toolbox.Features.ChatCommands
   public class ReloadServerCommand : IChatCommand
   {
     public string Command => "reload";
-    public int? ArgCount => 0;
+    public Range ArgCount => ..0;
     public bool DMOnly => true;
     public string Description => "Reload anvil plugins and services";
     public bool IsAvailable => EnvironmentConfig.ReloadEnabled;

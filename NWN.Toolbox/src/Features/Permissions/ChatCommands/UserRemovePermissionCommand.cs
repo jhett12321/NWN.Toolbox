@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Anvil.API;
 using Anvil.Services;
@@ -6,25 +7,19 @@ using Jorteck.Toolbox.Features.ChatCommands;
 namespace Jorteck.Toolbox.Features.Permissions
 {
   [ServiceBinding(typeof(IChatCommand))]
-  internal class UserRemovePermissionCommand : IChatCommand
+  internal class UserRemovePermissionCommand : PermissionsCommand
   {
-    [Inject]
-    private PermissionsConfigService PermissionsConfigService { get; init; }
+    public override string SubCommand => "user removepermission";
+    public override Range ArgCount => 1..1;
 
-    public string Command => PermissionsConfigService.GetFullChatCommand("user removepermission");
-    public string[] Aliases => null;
-    public bool DMOnly => true;
-    public string PermissionKey => PermissionConstants.UserRemovePermission;
+    public override string Description => "Removes a permission from a user.";
 
-    public int? ArgCount => 1;
-    public string Description => "Removes a permission from a user.";
-
-    public CommandUsage[] Usages { get; } =
+    public override CommandUsage[] Usages { get; } =
     {
       new CommandUsage("<permission_name>", "Remove the specified permission from the target user."),
     };
 
-    public void ProcessCommand(NwPlayer caller, IReadOnlyList<string> args)
+    public override void ProcessCommand(NwPlayer caller, IReadOnlyList<string> args)
     {
       string permission = args[0];
       caller.EnterPlayerTargetMode(selection => RemoveUserPermissionFromTarget(selection, permission));

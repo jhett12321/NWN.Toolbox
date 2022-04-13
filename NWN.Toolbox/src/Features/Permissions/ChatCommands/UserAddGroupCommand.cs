@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Anvil.API;
 using Anvil.Services;
@@ -6,23 +7,19 @@ using Jorteck.Toolbox.Features.ChatCommands;
 namespace Jorteck.Toolbox.Features.Permissions
 {
   [ServiceBinding(typeof(IChatCommand))]
-  internal class UserAddGroupCommand : IChatCommand
+  internal class UserAddGroupCommand : PermissionsCommand
   {
-    [Inject]
-    private PermissionsConfigService PermissionsConfigService { get; init; }
+    public override string SubCommand => "user addgroup";
+    public override Range ArgCount => 1..1;
 
-    public string Command => PermissionsConfigService.GetFullChatCommand("user addgroup");
-    public string[] Aliases => null;
-    public bool DMOnly => true;
-    public int? ArgCount => 1;
-    public string Description => "Adds a group membership to a user.";
+    public override string Description => "Adds a group membership to a user.";
 
-    public CommandUsage[] Usages { get; } =
+    public override CommandUsage[] Usages { get; } =
     {
       new CommandUsage("<group_name>", "Add a player to the specified group."),
     };
 
-    public void ProcessCommand(NwPlayer caller, IReadOnlyList<string> args)
+    public override void ProcessCommand(NwPlayer caller, IReadOnlyList<string> args)
     {
       string group = args[0];
       if (!PermissionsConfigService.GroupConfig.IsValidGroup(group))

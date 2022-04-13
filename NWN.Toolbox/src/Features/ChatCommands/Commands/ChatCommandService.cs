@@ -23,7 +23,7 @@ namespace Jorteck.Toolbox.Features.ChatCommands
     private PermissionsService PermissionsService { get; init; }
 
     [Inject]
-    public IReadOnlyList<IChatCommand> Commands { get; init; }
+    public IReadOnlyList<IChatCommand> Commands { get; set; }
 
     [Inject]
     private HelpCommand HelpCommand { get; init; }
@@ -40,6 +40,7 @@ namespace Jorteck.Toolbox.Features.ChatCommands
         throw new InvalidOperationException("No command prefixes defined!");
       }
 
+      Commands = Commands.OrderBy(command => command.Command).ToList();
       helpCommandText = $"{ConfigService.Config.ChatCommands.CommandPrefixes[0]}{HelpCommand.Command}".ColorString(ColorConstants.Orange);
 
       NwModule.Instance.OnChatMessageSend += OnChatMessageSend;
@@ -147,7 +148,7 @@ namespace Jorteck.Toolbox.Features.ChatCommands
       {
         ShowNoPermissionError(sender);
       }
-      else if (command.ArgCount.HasValue && command.ArgCount != args.Count)
+      else if (!IsValidArgCount(command.ArgCount, args.Count))
       {
         TryExecuteCommand(sender, HelpCommand, new[] { command.Command });
       }
@@ -155,6 +156,19 @@ namespace Jorteck.Toolbox.Features.ChatCommands
       {
         command.ProcessCommand(sender, args);
       }
+    }
+
+    private bool IsValidArgCount(Range commandRange, int argCount)
+    {
+      if (commandRange.Start.IsFromEnd || (commandRange.End.IsFromEnd && commandRange.End.Value != 0))
+      {
+        throw new InvalidOperationException("Invalid arg count range specified.");
+      }
+
+      int min = commandRange.Start.Value;
+      int max = commandRange.End.IsFromEnd ? int.MaxValue : commandRange.End.Value;
+
+      return argCount >= min && argCount <= max;
     }
 
     private void ShowCommandUnavailableError(IChatCommand command, NwPlayer player)

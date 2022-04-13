@@ -18,7 +18,7 @@ namespace Jorteck.Toolbox.Features.ChatCommands
     private Lazy<ChatCommandService> ChatCommandService { get; init; }
 
     public string Command => "help";
-    public int? ArgCount => null;
+    public Range ArgCount => ..;
     public bool DMOnly => false;
     public string Description => "Shows this command list, or help for a specific command.";
 
