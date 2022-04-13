@@ -6,7 +6,7 @@ namespace Jorteck.Toolbox.Config
   internal sealed class ChatCommandConfig : IFeatureConfig
   {
     [Description("Enable/disable the chat command system.")]
-    public bool Enabled { get; set; } = false;
+    public bool Enabled { get; set; } = true;
 
     [Description("Character prefixes that define if a message is detected as a command.")]
     public List<string> CommandPrefixes { get; set; } = new List<string> { "/" };
