@@ -1,9 +1,10 @@
+using System;
 using System.IO;
 using Anvil.Services;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
 
-namespace Jorteck.Toolbox
+namespace Jorteck.Toolbox.Config
 {
   [ServiceBinding(typeof(ConfigService))]
   internal sealed class ConfigService
@@ -28,7 +29,7 @@ namespace Jorteck.Toolbox
       Config = LoadConfig<Config>(Config.ConfigName);
     }
 
-    private T LoadConfig<T>(string fileName) where T : new()
+    public T LoadConfig<T>(string fileName) where T : class, new()
     {
       string configPath = GetConfigPath(fileName);
       T retVal;
@@ -45,10 +46,15 @@ namespace Jorteck.Toolbox
         SaveConfig(fileName, retVal);
       }
 
+      if (retVal == null)
+      {
+        throw new Exception($"Failed to initialize config {typeof(T).FullName}");
+      }
+
       return retVal;
     }
 
-    private void SaveConfig<T>(string fileName, T instance)
+    public void SaveConfig<T>(string fileName, T instance)
     {
       string yaml = serializer.Serialize(instance);
       File.WriteAllText(GetConfigPath(fileName), yaml);

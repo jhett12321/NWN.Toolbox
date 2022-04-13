@@ -2,10 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 
-namespace Jorteck.Toolbox
+namespace Jorteck.Toolbox.Config
 {
   [Serializable]
-  internal sealed class ServerRestartConfig
+  internal sealed class ServerRestartConfig : IFeatureConfig
   {
     [Description("Enable/disable automatic server restarts.")]
     public bool Enabled { get; set; } = false;

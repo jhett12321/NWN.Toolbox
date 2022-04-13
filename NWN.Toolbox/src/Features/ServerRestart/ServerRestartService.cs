@@ -3,9 +3,10 @@ using System.Text;
 using Anvil.API;
 using Anvil.Services;
 using Cronos;
+using Jorteck.Toolbox.Config;
 using NLog;
 
-namespace Jorteck.Toolbox
+namespace Jorteck.Toolbox.Features
 {
   [ServiceBinding(typeof(ServerRestartService))]
   public sealed class ServerRestartService : IInitializable
@@ -18,16 +19,14 @@ namespace Jorteck.Toolbox
     [Inject]
     private SchedulerService SchedulerService { get; init; }
 
-    private ServerRestartConfig config;
     private ScheduledTask restartSchedule;
 
     void IInitializable.Init()
     {
-      config = ConfigService.Config?.ServerRestart;
-      if (config?.Enabled == true)
+      if (ConfigService.Config.ServerRestart.IsEnabled())
       {
         restartSchedule = SchedulerService.Schedule(ShutdownServer, GetDelayForRestart());
-        if (config.RestartWarningSecs != null && config.RestartWarningSecs.Count > 0)
+        if (ConfigService.Config.ServerRestart.RestartWarningSecs != null && ConfigService.Config.ServerRestart.RestartWarningSecs.Count > 0)
         {
           SchedulerService.ScheduleRepeating(CheckForWarning, TimeSpan.FromSeconds(1));
         }
@@ -55,7 +54,7 @@ namespace Jorteck.Toolbox
     /// <summary>
     /// Gets if automatic server restart is configured.
     /// </summary>
-    public bool IsEnabled => config?.Enabled == true;
+    public bool IsEnabled => ConfigService.Config.ServerRestart.IsEnabled();
 
     /// <summary>
     /// Broadcasts the restart timer warning message to all players on the server.
@@ -92,11 +91,11 @@ namespace Jorteck.Toolbox
 
     private TimeSpan GetDelayForRestart()
     {
-      if (!string.IsNullOrEmpty(config.RestartTimeCron))
+      if (!string.IsNullOrEmpty(ConfigService.Config.ServerRestart.RestartTimeCron))
       {
         try
         {
-          CronExpression expression = CronExpression.Parse(config.RestartTimeCron);
+          CronExpression expression = CronExpression.Parse(ConfigService.Config.ServerRestart.RestartTimeCron);
           DateTime? next = expression.GetNextOccurrence(DateTime.UtcNow);
           if (next != null)
           {
@@ -109,7 +108,7 @@ namespace Jorteck.Toolbox
         }
       }
 
-      return TimeSpan.FromSeconds(config.RestartTimeSecs);
+      return TimeSpan.FromSeconds(ConfigService.Config.ServerRestart.RestartTimeSecs);
     }
 
     private void ShutdownServer()
@@ -118,7 +117,7 @@ namespace Jorteck.Toolbox
       NwServer.Instance.PlayerPassword = Guid.NewGuid().ToUUIDString();
 
       // Boot Players
-      string reason = config.BootMessage ?? string.Empty;
+      string reason = ConfigService.Config.ServerRestart.BootMessage ?? string.Empty;
       foreach (NwPlayer player in NwModule.Instance.Players)
       {
         player.BootPlayer(reason);
@@ -131,7 +130,7 @@ namespace Jorteck.Toolbox
     private void CheckForWarning()
     {
       double remainingSecs = TimeUntilRestart.TotalSeconds;
-      if (remainingSecs >= 0 && config.RestartWarningSecs.Contains((uint)remainingSecs))
+      if (remainingSecs >= 0 && ConfigService.Config.ServerRestart.RestartWarningSecs.Contains((uint)remainingSecs))
       {
         SendRestartTimeMessageToAllPlayers();
       }
@@ -141,10 +140,10 @@ namespace Jorteck.Toolbox
     {
       if (TimeUntilRestart.TotalSeconds < 1)
       {
-        return config.WarnMessageNow;
+        return ConfigService.Config.ServerRestart.WarnMessageNow;
       }
 
-      return config.WarnMessage.Replace("<time>", GetFormattedTime(TimeUntilRestart));
+      return ConfigService.Config.ServerRestart.WarnMessage.Replace("<time>", GetFormattedTime(TimeUntilRestart));
     }
 
     private string GetFormattedTime(TimeSpan timeSpan)

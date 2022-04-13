@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Numerics;
 
-namespace Jorteck.Toolbox
+namespace Jorteck.Toolbox.Config
 {
   [Serializable]
   internal sealed class WindowConfig
