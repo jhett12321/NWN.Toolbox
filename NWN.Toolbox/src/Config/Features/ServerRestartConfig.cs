@@ -10,6 +10,9 @@ namespace Jorteck.Toolbox.Config
     [Description("Enable/disable automatic server restarts.")]
     public bool Enabled { get; set; } = false;
 
+    [Description("Adds support for managing the server restart schedule with chat commands. Requires the ChatCommand module to be enabled.")]
+    public bool ChatCommandEnable { get; set; } = true;
+
     [Description("The amount of time in seconds to trigger a restart after the server has started.")]
     public uint RestartTimeSecs { get; set; } = 44 * 60 * 60;
 

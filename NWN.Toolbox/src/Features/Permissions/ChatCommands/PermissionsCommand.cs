@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Anvil.API;
 using Anvil.Services;
+using Jorteck.Toolbox.Config;
 using Jorteck.Toolbox.Features.ChatCommands;
 
 namespace Jorteck.Toolbox.Features.Permissions
@@ -12,12 +13,15 @@ namespace Jorteck.Toolbox.Features.Permissions
     protected PermissionsService PermissionsService { get; init; }
 
     [Inject]
+    protected ConfigService ConfigService { get; init; }
+
+    [Inject]
     protected PermissionsConfigService PermissionsConfigService { get; init; }
 
     public string Command => PermissionsConfigService.GetFullChatCommand(SubCommand);
     public string PermissionKey => $"permissions.{SubCommand.Replace(" ", ".")}";
     public bool DMOnly => true;
-    public bool IsAvailable => PermissionsService.IsEnabled;
+    public bool IsAvailable => PermissionsService.IsEnabled && ConfigService.Config.Permissions?.ChatCommandEnable == true;
 
     public abstract Range ArgCount { get; }
     public abstract string Description { get; }
