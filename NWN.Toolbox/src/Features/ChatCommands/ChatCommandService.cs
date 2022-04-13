@@ -160,7 +160,7 @@ namespace Jorteck.Toolbox.Features.ChatCommands
 
     private bool IsValidArgCount(Range commandRange, int argCount)
     {
-      if (commandRange.Start.IsFromEnd || (commandRange.End.IsFromEnd && commandRange.End.Value != 0))
+      if (commandRange.Start.IsFromEnd || commandRange.End.IsFromEnd && commandRange.End.Value != 0)
       {
         throw new InvalidOperationException("Invalid arg count range specified.");
       }

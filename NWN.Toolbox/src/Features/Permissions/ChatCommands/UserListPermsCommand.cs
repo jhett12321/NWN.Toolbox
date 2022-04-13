@@ -10,7 +10,7 @@ namespace Jorteck.Toolbox.Features.Permissions
   internal class UserListPermsCommand : PermissionsCommand
   {
     public override string SubCommand => "user listpermissions";
-    public override Range ArgCount => 0..0;
+    public override Range ArgCount => ..0;
 
     public override string Description => "Lists all user permissions.";
 
