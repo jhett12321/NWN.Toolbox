@@ -120,7 +120,7 @@ namespace Jorteck.Toolbox.Features.ChatCommands
 
       foreach (IChatCommand command in Commands)
       {
-        if (rawCommand.StartsWith(command.Command))
+        if (rawCommand.StartsWith(command.Command + " "))
         {
           string[] args = GetArgs(rawCommand[command.Command.Length..]);
           TryExecuteCommand(sender, command, args);
