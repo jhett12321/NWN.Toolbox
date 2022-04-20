@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <!--Build-->
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <LangVersion>9.0</LangVersion>
     <RuntimeIdentifier>linux-x64</RuntimeIdentifier>
 
@@ -61,9 +61,9 @@
     <PackageReference Include="Cronos" Version="0.7.1" PrivateAssets="compile" />
     <PackageReference Include="NWN.Anvil" Version="8193.34.5" ExcludeAssets="runtime" PrivateAssets="all" />
     <PackageReference Include="YamlDotNet" Version="11.2.1" PrivateAssets="compile" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.11" PrivateAssets="compile" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.11" PrivateAssets="compile" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="5.0.11" PrivateAssets="compile" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.4" PrivateAssets="compile" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.4" PrivateAssets="compile" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.4" PrivateAssets="compile" />
   </ItemGroup>
 
   <Target Name="ZipOutputPath" AfterTargets="Build">
