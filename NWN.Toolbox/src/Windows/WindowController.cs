@@ -1,13 +1,16 @@
 using Anvil.API;
 using Anvil.API.Events;
 using Anvil.Services;
+using Jorteck.Toolbox.Features.Permissions;
 
 namespace Jorteck.Toolbox
 {
   public abstract class WindowController<TView> : IWindowController where TView : WindowView<TView>, new()
   {
+    private const string UseWindowPermissionKeyFormat = "toolbox.window.use.{0}.{1}";
+
     [Inject]
-    public IPermissionProvider PermissionProvider { private get; init; }
+    public PermissionsService PermissionsService { get; init; }
 
     public TView View { protected get; init; }
 
@@ -29,8 +32,8 @@ namespace Jorteck.Toolbox
     {
       foreach (NuiBind<bool> nuiBind in binds)
       {
-        string permissionKey = string.Format(PermissionKeys.UseWindowFormat, View.Id.ToLowerInvariant(), nuiBind.Key.ToLowerInvariant());
-        Token.SetBindValue(nuiBind, PermissionProvider.HasPermission(Token.Player, permissionKey));
+        string permissionKey = string.Format(UseWindowPermissionKeyFormat, View.Id.ToLowerInvariant(), nuiBind.Key.ToLowerInvariant());
+        Token.SetBindValue(nuiBind, !PermissionsService.IsEnabled || PermissionsService.HasPermission(Token.Player, permissionKey));
       }
     }
   }
