@@ -12,7 +12,6 @@ namespace Jorteck.Toolbox.Features.Permissions
     public ChatShoutPermissionHandler(PermissionsService permissionsService)
     {
       this.permissionsService = permissionsService;
-
       if (permissionsService.IsEnabled)
       {
         NwModule.Instance.OnChatMessageSend += OnChatMessageSend;

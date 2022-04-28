@@ -33,7 +33,7 @@ namespace Jorteck.Toolbox
       foreach (NuiBind<bool> nuiBind in binds)
       {
         string permissionKey = string.Format(UseWindowPermissionKeyFormat, View.Id.ToLowerInvariant(), nuiBind.Key.ToLowerInvariant());
-        Token.SetBindValue(nuiBind, !PermissionsService.IsEnabled || PermissionsService.HasPermission(Token.Player, permissionKey));
+        Token.SetBindValue(nuiBind, PermissionsService.HasPermission(Token.Player, permissionKey, true));
       }
     }
   }

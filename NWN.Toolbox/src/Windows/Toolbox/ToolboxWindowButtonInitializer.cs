@@ -38,7 +38,7 @@ namespace Jorteck.Toolbox
 
     private void TryOpenWindow(NwPlayer player)
     {
-      if (PermissionsService.HasPermission(player, OpenToolboxPermissionKey))
+      if (PermissionsService.HasPermission(player, OpenToolboxPermissionKey, player.IsDM))
       {
         WindowManager.OpenWindow<ToolboxWindowButtonView>(player);
       }

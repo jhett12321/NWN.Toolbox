@@ -48,12 +48,7 @@ namespace Jorteck.Toolbox.Features.ChatCommands
 
     public bool CanUseCommand(NwPlayer player, IChatCommand command)
     {
-      if (!PermissionsService.IsEnabled)
-      {
-        return !command.DMOnly || player.IsDM;
-      }
-
-      return PermissionsService.HasPermission(player, command.PermissionKey);
+      return PermissionsService.HasPermission(player, command.PermissionKey, !command.DMOnly || player.IsDM);
     }
 
     private void OnChatMessageSend(OnChatMessageSend eventData)
@@ -111,7 +106,7 @@ namespace Jorteck.Toolbox.Features.ChatCommands
     {
       foreach (IChatCommand command in Commands)
       {
-        if (rawCommand == command.Command)
+        if (rawCommand == command.Command || command.Aliases?.Any(commandAlias => rawCommand == commandAlias) == true)
         {
           TryExecuteCommand(sender, command, ImmutableArray<string>.Empty);
           return true;
@@ -125,6 +120,21 @@ namespace Jorteck.Toolbox.Features.ChatCommands
           string[] args = GetArgs(rawCommand[command.Command.Length..]);
           TryExecuteCommand(sender, command, args);
           return true;
+        }
+
+        if (command.Aliases == null)
+        {
+          continue;
+        }
+
+        foreach (string commandAlias in command.Aliases)
+        {
+          if (rawCommand.StartsWith(commandAlias))
+          {
+            string[] args = GetArgs(rawCommand[commandAlias.Length..]);
+            TryExecuteCommand(sender, command, args);
+            return true;
+          }
         }
       }
 

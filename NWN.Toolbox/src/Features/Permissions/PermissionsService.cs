@@ -22,12 +22,13 @@ namespace Jorteck.Toolbox.Features.Permissions
     /// </summary>
     /// <param name="player">The player to check.</param>
     /// <param name="permission">The permission to query.</param>
+    /// <param name="defaultIfDisabled">The default value to return if the PermissionService is disabled.</param>
     /// <returns>True if the player has the specified permission, otherwise false.</returns>
-    public bool HasPermission(NwPlayer player, string permission)
+    public bool HasPermission(NwPlayer player, string permission, bool defaultIfDisabled = false)
     {
       if (!ConfigService.Config.Permissions.IsEnabled())
       {
-        return false;
+        return defaultIfDisabled;
       }
 
       PermissionSet permissionSet = PermissionsConfigService.GetPermissionsForPlayer(player);
