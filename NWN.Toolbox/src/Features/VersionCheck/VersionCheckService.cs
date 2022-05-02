@@ -2,7 +2,7 @@ using System;
 using Anvil.API;
 using Anvil.API.Events;
 using Anvil.Services;
-using Jorteck.Toolbox.Config;
+using Jorteck.Toolbox.Core;
 
 namespace Jorteck.Toolbox.Features.VersionCheck
 {

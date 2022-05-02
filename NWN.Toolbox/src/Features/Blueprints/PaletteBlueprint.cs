@@ -1,7 +1,7 @@
 using System;
 using Anvil.API;
 
-namespace Jorteck.Toolbox
+namespace Jorteck.Toolbox.Features.Blueprints
 {
   internal sealed class PaletteBlueprint : IBlueprint
   {

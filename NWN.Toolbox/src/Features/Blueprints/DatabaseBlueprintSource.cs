@@ -1,7 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
+using Jorteck.Toolbox.Core;
 
-namespace Jorteck.Toolbox
+namespace Jorteck.Toolbox.Features.Blueprints
 {
   //[ServiceBinding(typeof(IBlueprintSource))] // Disabled for now...
   internal sealed class DatabaseBlueprintSource : IBlueprintSource

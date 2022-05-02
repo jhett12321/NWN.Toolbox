@@ -1,6 +1,7 @@
 using Anvil.API;
+using Jorteck.Toolbox.Core;
 
-namespace Jorteck.Toolbox
+namespace Jorteck.Toolbox.Features.Blueprints
 {
   internal sealed class DatabaseBlueprint : IBlueprint
   {

@@ -6,7 +6,7 @@ using Anvil.API.Events;
 using Anvil.Services;
 using NLog;
 
-namespace Jorteck.Toolbox
+namespace Jorteck.Toolbox.Core
 {
   [ServiceBinding(typeof(WindowManager))]
   public sealed class WindowManager : IDisposable
@@ -39,12 +39,12 @@ namespace Jorteck.Toolbox
       where TController : WindowController<TView>, new()
     {
       TView view = (TView)GetWindowFromType(typeof(TView));
-      if (view != null && view.WindowTemplate.TryCreateWindow(player, out int token))
+      if (view != null && player.TryCreateNuiWindow(view.WindowTemplate, out NuiWindowToken token))
       {
         TController controller = injectionService.Inject(new TController
         {
           View = view,
-          Token = new WindowToken(player, token),
+          Token = token,
         });
 
         InitController(controller, player);
@@ -109,7 +109,7 @@ namespace Jorteck.Toolbox
     {
       if (windowControllers.TryGetValue(eventData.Player, out List<IWindowController> playerControllers))
       {
-        IWindowController controller = playerControllers.FirstOrDefault(windowController => windowController.Token.WindowId == eventData.WindowToken);
+        IWindowController controller = playerControllers.FirstOrDefault(windowController => windowController.Token == eventData.Token);
         controller?.ProcessEvent(eventData);
       }
     }

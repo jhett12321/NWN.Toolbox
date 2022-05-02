@@ -1,6 +1,6 @@
 using Anvil.API;
 
-namespace Jorteck.Toolbox
+namespace Jorteck.Toolbox.Core
 {
   /// <summary>
   /// Internal interface - implement <see cref="WindowView{TView}"/> instead.

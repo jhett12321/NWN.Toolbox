@@ -1,9 +1,10 @@
 using Anvil.API;
 using Anvil.API.Events;
+using Jorteck.Toolbox.Core;
 
-namespace Jorteck.Toolbox
+namespace Jorteck.Toolbox.Features.ToolWindows
 {
-  public sealed class PlayerAppearanceWindowController : WindowController<PlayerAppearanceWindowView>
+  public sealed class PlayerVitalsWindowController : WindowController<PlayerVitalsWindowView>
   {
     private NuiBind<bool>[] widgetEnabledBinds;
     private NwPlayer selectedPlayer;
@@ -12,13 +13,17 @@ namespace Jorteck.Toolbox
     {
       widgetEnabledBinds = new[]
       {
-        View.PortraitEnabled,
-        View.SoundSetEnabled,
-        View.AppearanceEnabled,
+        View.FirstNameEnabled,
+        View.LastNameEnabled,
+        View.GenderEnabled,
+        View.RaceEnabled,
+        View.SubRaceEnabled,
+        View.AgeEnabled,
+        View.DeityEnabled,
+        View.DescriptionEnabled,
         View.SaveEnabled,
       };
 
-      Token.SetBindWatch(View.Portrait, true);
       Update();
     }
 
@@ -28,9 +33,6 @@ namespace Jorteck.Toolbox
       {
         case NuiEventType.Click:
           HandleButtonClick(eventData);
-          break;
-        case NuiEventType.Watch:
-          HandleWatchUpdate(eventData);
           break;
         case NuiEventType.Open:
           Update();
@@ -56,14 +58,16 @@ namespace Jorteck.Toolbox
       ApplyPermissionBindings(widgetEnabledBinds);
       string value = $"Player: {selectedPlayer.PlayerName}";
       Token.SetBindValue(View.PlayerName, value);
-      string value1 = $"{playerCreature.OriginalFirstName} {playerCreature.OriginalLastName}";
-      Token.SetBindValue(View.CreatureName, value1);
-      Token.SetBindValue(View.Portrait, playerCreature.PortraitResRef);
-      Token.SetBindValue(View.SoundSet, playerCreature.SoundSet.ToString());
-      string value2 = playerCreature.Appearance.RowIndex.ToString();
-      Token.SetBindValue(View.Appearance, value2);
-
-      UpdatePortraitPreview();
+      Token.SetBindValue(View.FirstName, playerCreature.OriginalFirstName);
+      Token.SetBindValue(View.LastName, playerCreature.OriginalLastName);
+      int value1 = (int)playerCreature.Gender;
+      Token.SetBindValue(View.Gender, value1);
+      string value2 = ((int)playerCreature.Race.RacialType).ToString();
+      Token.SetBindValue(View.Race, value2);
+      Token.SetBindValue(View.SubRace, playerCreature.SubRace);
+      Token.SetBindValue(View.Age, playerCreature.Age.ToString());
+      Token.SetBindValue(View.Deity, playerCreature.Deity);
+      Token.SetBindValue(View.Description, playerCreature.Description);
     }
 
     private void HandleButtonClick(ModuleEvents.OnNuiEvent eventData)
@@ -82,20 +86,6 @@ namespace Jorteck.Toolbox
       }
     }
 
-    private void HandleWatchUpdate(ModuleEvents.OnNuiEvent eventData)
-    {
-      if (eventData.ElementId == View.Portrait.Key)
-      {
-        UpdatePortraitPreview();
-      }
-    }
-
-    private void UpdatePortraitPreview()
-    {
-      string value = Token.GetBindValue(View.Portrait) + "l";
-      Token.SetBindValue(View.PortraitPreview, value);
-    }
-
     private void SaveChanges()
     {
       if (selectedPlayer == null || !selectedPlayer.IsValid)
@@ -104,20 +94,26 @@ namespace Jorteck.Toolbox
       }
 
       NwCreature playerCreature = selectedPlayer.LoginCreature;
-      playerCreature.PortraitResRef = Token.GetBindValue(View.Portrait);
+      playerCreature.OriginalFirstName = Token.GetBindValue(View.FirstName);
+      playerCreature.OriginalLastName = Token.GetBindValue(View.LastName);
 
-      if (Token.GetBindValue(View.Appearance).TryParseInt(out int appearanceType))
+      playerCreature.Name = playerCreature.OriginalFirstName + " " + playerCreature.OriginalLastName;
+      playerCreature.Gender = (Gender)Token.GetBindValue(View.Gender);
+
+      if (Token.GetBindValue(View.Race).TryParseInt(out int racialType))
       {
-        if (appearanceType > 0 && appearanceType < NwGameTables.AppearanceTable.Count)
-        {
-          playerCreature.Appearance = NwGameTables.AppearanceTable[appearanceType];
-        }
+        playerCreature.Race = NwRace.FromRacialType((RacialType)racialType);
       }
 
-      if (ushort.TryParse(Token.GetBindValue(View.SoundSet), out ushort soundSet))
+      playerCreature.SubRace = Token.GetBindValue(View.SubRace);
+
+      if (Token.GetBindValue(View.Age).TryParseInt(out int age))
       {
-        playerCreature.SoundSet = soundSet;
+        playerCreature.Age = age;
       }
+
+      playerCreature.Deity = Token.GetBindValue(View.Deity);
+      playerCreature.Description = Token.GetBindValue(View.Description);
 
       Update();
     }

@@ -1,6 +1,6 @@
 using Anvil.API;
 
-namespace Jorteck.Toolbox
+namespace Jorteck.Toolbox.Features.Blueprints
 {
   public interface IBlueprint
   {

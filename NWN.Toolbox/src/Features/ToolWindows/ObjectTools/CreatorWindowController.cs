@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using Anvil.API;
 using Anvil.API.Events;
 using Anvil.Services;
+using Jorteck.Toolbox.Core;
+using Jorteck.Toolbox.Features.Blueprints;
 
-namespace Jorteck.Toolbox
+namespace Jorteck.Toolbox.Features.ToolWindows
 {
   public sealed class CreatorWindowController : WindowController<CreatorWindowView>
   {

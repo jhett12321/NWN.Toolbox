@@ -1,7 +1,8 @@
 using System.Collections.Generic;
 using Anvil.API;
+using Jorteck.Toolbox.Core;
 
-namespace Jorteck.Toolbox
+namespace Jorteck.Toolbox.Features.ToolWindows
 {
   public sealed class VisualTransformWindowView : WindowView<VisualTransformWindowView>
   {

@@ -1,4 +1,4 @@
-namespace Jorteck.Toolbox.Config
+namespace Jorteck.Toolbox.Core
 {
   internal interface IFeatureConfig
   {

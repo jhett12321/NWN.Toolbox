@@ -1,9 +1,9 @@
 using Anvil.API;
 using Anvil.Services;
-using Jorteck.Toolbox.Config;
+using Jorteck.Toolbox.Core;
 using Jorteck.Toolbox.Features.Permissions;
 
-namespace Jorteck.Toolbox
+namespace Jorteck.Toolbox.Features.ToolWindows
 {
   [ServiceBinding(typeof(ToolboxWindowButtonInitializer))]
   public sealed class ToolboxWindowButtonInitializer : IInitializable

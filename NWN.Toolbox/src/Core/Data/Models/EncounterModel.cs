@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Jorteck.Toolbox
+namespace Jorteck.Toolbox.Core
 {
   internal sealed class EncounterModel
   {

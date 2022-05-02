@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Anvil.Services;
 
-namespace Jorteck.Toolbox
+namespace Jorteck.Toolbox.Features.Blueprints
 {
   [ServiceBinding(typeof(BlueprintManager))]
   public sealed class BlueprintManager

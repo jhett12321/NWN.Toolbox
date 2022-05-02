@@ -2,7 +2,7 @@ using System;
 using YamlDotNet.Core;
 using YamlDotNet.Serialization;
 
-namespace Jorteck.Toolbox
+namespace Jorteck.Toolbox.Core
 {
   internal sealed class CommentsObjectDescriptor : IObjectDescriptor
   {

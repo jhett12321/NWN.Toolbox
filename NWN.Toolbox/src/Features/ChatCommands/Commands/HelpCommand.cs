@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Anvil.API;
 using Anvil.Services;
-using Jorteck.Toolbox.Config;
+using Jorteck.Toolbox.Core;
 
 namespace Jorteck.Toolbox.Features.ChatCommands
 {

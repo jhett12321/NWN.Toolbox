@@ -1,7 +1,7 @@
 using System;
 using Anvil.API;
 
-namespace Jorteck.Toolbox
+namespace Jorteck.Toolbox.Core
 {
   internal static class UXConstants
   {

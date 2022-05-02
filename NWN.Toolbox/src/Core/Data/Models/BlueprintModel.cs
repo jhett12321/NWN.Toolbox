@@ -1,8 +1,10 @@
 using System;
+using Jorteck.Toolbox.Features;
+using Jorteck.Toolbox.Features.Blueprints;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Jorteck.Toolbox
+namespace Jorteck.Toolbox.Core
 {
   internal sealed class BlueprintModel
   {

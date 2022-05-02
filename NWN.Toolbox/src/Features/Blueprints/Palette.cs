@@ -5,7 +5,7 @@ using Anvil.API;
 using Anvil.Services;
 using NLog;
 
-namespace Jorteck.Toolbox
+namespace Jorteck.Toolbox.Features.Blueprints
 {
   internal sealed class Palette
   {

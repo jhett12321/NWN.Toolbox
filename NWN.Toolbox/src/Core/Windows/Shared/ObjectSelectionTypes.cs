@@ -1,6 +1,6 @@
 using System;
 
-namespace Jorteck.Toolbox
+namespace Jorteck.Toolbox.Core
 {
   [Flags]
   public enum ObjectSelectionTypes

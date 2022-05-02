@@ -3,7 +3,7 @@ using Anvil.API.Events;
 using Anvil.Services;
 using Jorteck.Toolbox.Features.Permissions;
 
-namespace Jorteck.Toolbox
+namespace Jorteck.Toolbox.Core
 {
   public abstract class WindowController<TView> : IWindowController where TView : WindowView<TView>, new()
   {
@@ -14,7 +14,7 @@ namespace Jorteck.Toolbox
 
     public TView View { protected get; init; }
 
-    public WindowToken Token { get; init; }
+    public NuiWindowToken Token { get; init; }
 
     public abstract void Init();
 
@@ -23,7 +23,7 @@ namespace Jorteck.Toolbox
     public void Close()
     {
       OnClose();
-      Token?.Dispose();
+      Token.Dispose();
     }
 
     protected abstract void OnClose();

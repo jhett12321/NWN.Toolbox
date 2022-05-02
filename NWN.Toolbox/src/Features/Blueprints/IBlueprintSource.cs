@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Jorteck.Toolbox
+namespace Jorteck.Toolbox.Features.Blueprints
 {
   public interface IBlueprintSource
   {

@@ -4,7 +4,7 @@ using Anvil.Services;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
 
-namespace Jorteck.Toolbox.Config
+namespace Jorteck.Toolbox.Core
 {
   [ServiceBinding(typeof(ConfigService))]
   internal sealed class ConfigService

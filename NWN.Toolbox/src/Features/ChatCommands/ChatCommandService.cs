@@ -6,7 +6,7 @@ using System.Text.RegularExpressions;
 using Anvil.API;
 using Anvil.API.Events;
 using Anvil.Services;
-using Jorteck.Toolbox.Config;
+using Jorteck.Toolbox.Core;
 using Jorteck.Toolbox.Features.Permissions;
 
 namespace Jorteck.Toolbox.Features.ChatCommands

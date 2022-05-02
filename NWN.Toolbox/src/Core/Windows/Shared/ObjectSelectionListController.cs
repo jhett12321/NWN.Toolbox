@@ -6,7 +6,7 @@ using Anvil.API;
 using Anvil.API.Events;
 using Action = System.Action;
 
-namespace Jorteck.Toolbox
+namespace Jorteck.Toolbox.Core
 {
   public sealed class ObjectSelectionListController
   {
@@ -17,7 +17,7 @@ namespace Jorteck.Toolbox
     private NwArea selectedArea;
 
     private readonly ObjectSelectionListView view;
-    private readonly WindowToken windowToken;
+    private readonly NuiWindowToken windowToken;
     private TimeSpan lastSelectionClick;
 
     public event Action OnObjectSelectChange;
@@ -34,7 +34,7 @@ namespace Jorteck.Toolbox
       set => windowToken.SetBindValue(view.UnrestrictedArea, !value);
     }
 
-    public ObjectSelectionListController(ObjectSelectionListView view, WindowToken windowToken)
+    public ObjectSelectionListController(ObjectSelectionListView view, NuiWindowToken windowToken)
     {
       this.view = view;
       this.windowToken = windowToken;

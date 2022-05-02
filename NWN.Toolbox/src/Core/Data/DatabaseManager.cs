@@ -5,7 +5,7 @@ using Anvil.Services;
 using Microsoft.EntityFrameworkCore;
 using NLog;
 
-namespace Jorteck.Toolbox
+namespace Jorteck.Toolbox.Core
 {
   [ServiceBinding(typeof(DatabaseManager))]
   internal sealed class DatabaseManager : IDisposable

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Anvil.API;
 
-namespace Jorteck.Toolbox
+namespace Jorteck.Toolbox.Core
 {
   public sealed class ObjectSelectionListView
   {

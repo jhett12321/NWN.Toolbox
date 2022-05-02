@@ -1,26 +1,21 @@
 using Anvil.API;
 using Anvil.API.Events;
+using Jorteck.Toolbox.Core;
 
-namespace Jorteck.Toolbox
+namespace Jorteck.Toolbox.Features.ToolWindows
 {
-  public sealed class CreaturePropertiesBasicWindowController : WindowController<CreaturePropertiesBasicWindowView>
+  public sealed class PlayerAppearanceWindowController : WindowController<PlayerAppearanceWindowView>
   {
     private NuiBind<bool>[] widgetEnabledBinds;
-    private NwCreature selectedCreature;
+    private NwPlayer selectedPlayer;
 
     public override void Init()
     {
       widgetEnabledBinds = new[]
       {
-        View.NameEnabled,
-        View.TagEnabled,
-        View.RaceEnabled,
-        View.AppearanceEnabled,
-        View.PhenotypeEnabled,
-        View.GenderEnabled,
-        View.DescriptionEnabled,
         View.PortraitEnabled,
-        View.DialogEnabled,
+        View.SoundSetEnabled,
+        View.AppearanceEnabled,
         View.SaveEnabled,
       };
 
@@ -46,38 +41,35 @@ namespace Jorteck.Toolbox
 
     protected override void OnClose()
     {
-      selectedCreature = null;
+      selectedPlayer = null;
     }
 
     private void Update()
     {
-      if (selectedCreature == null)
+      if (selectedPlayer == null || !selectedPlayer.IsValid)
       {
         SetElementsEnabled(false);
         return;
       }
 
+      NwCreature playerCreature = selectedPlayer.LoginCreature;
+
       ApplyPermissionBindings(widgetEnabledBinds);
-      Token.SetBindValue(View.Name, selectedCreature.Name);
-      Token.SetBindValue(View.Tag, selectedCreature.Tag);
-      string value = ((int)selectedCreature.Race.RacialType).ToString();
-      Token.SetBindValue(View.Race, value);
-      string value1 = selectedCreature.Appearance.RowIndex.ToString();
-      Token.SetBindValue(View.Appearance, value1);
-      string value2 = ((int)selectedCreature.Phenotype).ToString();
-      Token.SetBindValue(View.Phenotype, value2);
-      int value3 = (int)selectedCreature.Gender;
-      Token.SetBindValue(View.Gender, value3);
-      Token.SetBindValue(View.Description, selectedCreature.Description);
-      Token.SetBindValue(View.Dialog, selectedCreature.DialogResRef);
-      Token.SetBindValue(View.Portrait, selectedCreature.PortraitResRef);
+      string value = $"Player: {selectedPlayer.PlayerName}";
+      Token.SetBindValue(View.PlayerName, value);
+      string value1 = $"{playerCreature.OriginalFirstName} {playerCreature.OriginalLastName}";
+      Token.SetBindValue(View.CreatureName, value1);
+      Token.SetBindValue(View.Portrait, playerCreature.PortraitResRef);
+      Token.SetBindValue(View.SoundSet, playerCreature.SoundSet.ToString());
+      string value2 = playerCreature.Appearance.RowIndex.ToString();
+      Token.SetBindValue(View.Appearance, value2);
 
       UpdatePortraitPreview();
     }
 
     private void HandleButtonClick(ModuleEvents.OnNuiEvent eventData)
     {
-      if (eventData.ElementId == View.SelectCreatureButton.Id)
+      if (eventData.ElementId == View.SelectPlayerButton.Id)
       {
         Token.Player.TryEnterTargetMode(OnCreatureSelected, ObjectTypes.Creature);
       }
@@ -107,35 +99,26 @@ namespace Jorteck.Toolbox
 
     private void SaveChanges()
     {
-      if (selectedCreature == null || !selectedCreature.IsValid)
+      if (selectedPlayer == null || !selectedPlayer.IsValid)
       {
         return;
       }
 
-      selectedCreature.Name = Token.GetBindValue(View.Name);
-      selectedCreature.Tag = Token.GetBindValue(View.Tag);
-      if (Token.GetBindValue(View.Race).TryParseInt(out int racialType))
-      {
-        selectedCreature.Race = NwRace.FromRacialType((RacialType)racialType);
-      }
+      NwCreature playerCreature = selectedPlayer.LoginCreature;
+      playerCreature.PortraitResRef = Token.GetBindValue(View.Portrait);
 
       if (Token.GetBindValue(View.Appearance).TryParseInt(out int appearanceType))
       {
         if (appearanceType > 0 && appearanceType < NwGameTables.AppearanceTable.Count)
         {
-          selectedCreature.Appearance = NwGameTables.AppearanceTable[appearanceType];
+          playerCreature.Appearance = NwGameTables.AppearanceTable[appearanceType];
         }
       }
 
-      if (Token.GetBindValue(View.Phenotype).TryParseInt(out int phenotype))
+      if (ushort.TryParse(Token.GetBindValue(View.SoundSet), out ushort soundSet))
       {
-        selectedCreature.Phenotype = (Phenotype)phenotype;
+        playerCreature.SoundSet = soundSet;
       }
-
-      selectedCreature.Gender = (Gender)Token.GetBindValue(View.Gender);
-      selectedCreature.Description = Token.GetBindValue(View.Description);
-      selectedCreature.PortraitResRef = Token.GetBindValue(View.Portrait);
-      selectedCreature.DialogResRef = Token.GetBindValue(View.Dialog);
 
       Update();
     }
@@ -147,13 +130,13 @@ namespace Jorteck.Toolbox
         return;
       }
 
-      if (creature.IsLoginPlayerCharacter)
+      if (!creature.IsLoginPlayerCharacter(out NwPlayer player))
       {
-        eventData.Player.SendServerMessage("You may not select players.");
+        eventData.Player.SendServerMessage("You may only select player characters.");
         return;
       }
 
-      selectedCreature = creature;
+      selectedPlayer = player;
       Update();
     }
 

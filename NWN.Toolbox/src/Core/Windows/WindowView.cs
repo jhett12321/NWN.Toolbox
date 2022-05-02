@@ -1,7 +1,7 @@
 using Anvil.API;
 using Anvil.Services;
 
-namespace Jorteck.Toolbox
+namespace Jorteck.Toolbox.Core
 {
   [ServiceBinding(typeof(IWindowView))]
   public abstract class WindowView<TView> : IWindowView
@@ -19,12 +19,12 @@ namespace Jorteck.Toolbox
 
     protected T CreateController<T>(NwPlayer player) where T : WindowController<TView>, new()
     {
-      if (WindowTemplate.TryCreateWindow(player, out int token))
+      if (player.TryCreateNuiWindow(WindowTemplate, out NuiWindowToken token))
       {
         return new T
         {
           View = (TView)this,
-          Token = new WindowToken(player, token),
+          Token = token,
         };
       }
 

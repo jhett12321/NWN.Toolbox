@@ -3,7 +3,7 @@ using System.Text;
 using Anvil.API;
 using Anvil.Services;
 using Cronos;
-using Jorteck.Toolbox.Config;
+using Jorteck.Toolbox.Core;
 using NLog;
 
 namespace Jorteck.Toolbox.Features.ServerRestart

@@ -1,7 +1,9 @@
 using System.Collections.Generic;
 using Anvil.API;
+using Jorteck.Toolbox.Core;
+using Jorteck.Toolbox.Features.Blueprints;
 
-namespace Jorteck.Toolbox
+namespace Jorteck.Toolbox.Features.ToolWindows
 {
   public sealed class CreatorWindowView : WindowView<CreatorWindowView>
   {

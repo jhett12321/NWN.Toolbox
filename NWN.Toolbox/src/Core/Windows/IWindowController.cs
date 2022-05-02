@@ -1,13 +1,14 @@
+using Anvil.API;
 using Anvil.API.Events;
 
-namespace Jorteck.Toolbox
+namespace Jorteck.Toolbox.Core
 {
   /// <summary>
   /// Internal interface - implement <see cref="WindowController{TView}"/> instead.
   /// </summary>
   public interface IWindowController
   {
-    public WindowToken Token { get; init; }
+    public NuiWindowToken Token { get; init; }
 
     public void Init();
 

@@ -2,8 +2,9 @@ using System.Globalization;
 using System.Numerics;
 using Anvil.API;
 using Anvil.API.Events;
+using Jorteck.Toolbox.Core;
 
-namespace Jorteck.Toolbox
+namespace Jorteck.Toolbox.Features.ToolWindows
 {
   public sealed class VisualTransformWindowController : WindowController<VisualTransformWindowView>
   {

@@ -3,7 +3,7 @@ using YamlDotNet.Core.Events;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.ObjectGraphVisitors;
 
-namespace Jorteck.Toolbox
+namespace Jorteck.Toolbox.Core
 {
   internal sealed class CommentsObjectGraphVisitor : ChainedObjectGraphVisitor
   {

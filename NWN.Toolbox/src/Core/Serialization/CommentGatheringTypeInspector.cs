@@ -6,7 +6,7 @@ using YamlDotNet.Core;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.TypeInspectors;
 
-namespace Jorteck.Toolbox
+namespace Jorteck.Toolbox.Core
 {
   internal sealed class CommentGatheringTypeInspector : TypeInspectorSkeleton
   {

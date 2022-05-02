@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 
-namespace Jorteck.Toolbox
+namespace Jorteck.Toolbox.Core
 {
   internal sealed class Database : DbContext
   {

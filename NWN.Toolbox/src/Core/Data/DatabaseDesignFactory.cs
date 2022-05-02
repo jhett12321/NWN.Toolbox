@@ -2,7 +2,7 @@ using System.IO;
 using System.Reflection;
 using Microsoft.EntityFrameworkCore.Design;
 
-namespace Jorteck.Toolbox
+namespace Jorteck.Toolbox.Core
 {
   internal sealed class DatabaseDesignFactory : IDesignTimeDbContextFactory<Database>
   {

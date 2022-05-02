@@ -1,7 +1,7 @@
 using System;
 using System.ComponentModel;
 
-namespace Jorteck.Toolbox.Config
+namespace Jorteck.Toolbox.Core
 {
   [Serializable]
   internal sealed class VersionCheckConfig : IFeatureConfig
