@@ -15,7 +15,7 @@ namespace Jorteck.Toolbox.Features.VersionCheck
     private Version minVersion;
     private Version recommendedVersion;
 
-    private Version noVersion = new Version(0, 0);
+    private readonly Version noVersion = new Version(0, 0);
 
     public void Init()
     {
