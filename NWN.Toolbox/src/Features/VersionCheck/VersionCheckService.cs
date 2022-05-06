@@ -15,6 +15,8 @@ namespace Jorteck.Toolbox.Features.VersionCheck
     private Version minVersion;
     private Version recommendedVersion;
 
+    private Version noVersion = new Version(0, 0);
+
     public void Init()
     {
       if (ConfigService.Config.VersionCheck.IsEnabled())
@@ -23,16 +25,27 @@ namespace Jorteck.Toolbox.Features.VersionCheck
         recommendedVersion = ConfigService.Config.VersionCheck.RecommendedVersion.AsVersion();
 
         NwModule.Instance.OnClientEnter += OnClientEnter;
+        NwModule.Instance.OnClientConnect += OnClientConnect;
+      }
+    }
+
+    private void OnClientConnect(OnClientConnect eventData)
+    {
+      if (eventData.ClientVersion == noVersion)
+      {
+        eventData.KickMessage = "Could not determine your game version. Please update your client and try again.";
+        eventData.BlockConnection = true;
+      }
+      else if (eventData.ClientVersion < minVersion)
+      {
+        eventData.KickMessage = $"This server requires updating your client to {minVersion.ToString(2)} or newer.";
+        eventData.BlockConnection = true;
       }
     }
 
     private void OnClientEnter(ModuleEvents.OnClientEnter eventData)
     {
-      if (eventData.Player.ClientVersion < minVersion)
-      {
-        eventData.Player.BootPlayer($"This server requires updating your client to {minVersion.ToString(2)} or newer.");
-      }
-      else if (eventData.Player.ClientVersion < recommendedVersion)
+      if (eventData.Player.ClientVersion < recommendedVersion)
       {
         eventData.Player.SendErrorMessage($"This server recommends updating your client to {recommendedVersion.ToString(2)} or newer.");
       }
