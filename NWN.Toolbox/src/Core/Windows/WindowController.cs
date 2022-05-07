@@ -20,10 +20,14 @@ namespace Jorteck.Toolbox.Core
 
     public abstract void ProcessEvent(ModuleEvents.OnNuiEvent eventData);
 
-    public void Close()
+    public void Close(bool destroyWindow = true)
     {
       OnClose();
-      Token.Dispose();
+
+      if (destroyWindow)
+      {
+        Token.Dispose();
+      }
     }
 
     protected abstract void OnClose();

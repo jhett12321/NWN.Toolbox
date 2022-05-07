@@ -109,8 +109,30 @@ namespace Jorteck.Toolbox.Core
     {
       if (windowControllers.TryGetValue(eventData.Player, out List<IWindowController> playerControllers))
       {
-        IWindowController controller = playerControllers.FirstOrDefault(windowController => windowController.Token == eventData.Token);
-        controller?.ProcessEvent(eventData);
+        IWindowController controller = null;
+        int index;
+
+        for (index = 0; index < playerControllers.Count; index++)
+        {
+          IWindowController playerController = playerControllers[index];
+          if (eventData.Token == playerController.Token)
+          {
+            controller = playerController;
+            break;
+          }
+        }
+
+        if (controller == null)
+        {
+          return;
+        }
+
+        controller.ProcessEvent(eventData);
+        if (eventData.EventType == NuiEventType.Close)
+        {
+          controller.Close(false);
+          playerControllers.RemoveAt(index);
+        }
       }
     }
 

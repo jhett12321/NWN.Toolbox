@@ -14,6 +14,6 @@ namespace Jorteck.Toolbox.Core
 
     public void ProcessEvent(ModuleEvents.OnNuiEvent eventData);
 
-    public void Close();
+    public void Close(bool destroyWindow = true);
   }
 }
