@@ -53,6 +53,10 @@ namespace Jorteck.Toolbox.Features.ToolWindows
       }
 
       NwCreature playerCreature = selectedPlayer.LoginCreature;
+      if (playerCreature == null)
+      {
+        return;
+      }
 
       ApplyPermissionBindings(widgetEnabledBinds);
       string value = $"Player: {selectedPlayer.PlayerName}";
@@ -105,9 +109,14 @@ namespace Jorteck.Toolbox.Features.ToolWindows
       }
 
       NwCreature playerCreature = selectedPlayer.LoginCreature;
-      playerCreature.PortraitResRef = Token.GetBindValue(View.Portrait);
+      if (playerCreature == null)
+      {
+        return;
+      }
 
-      if (Token.GetBindValue(View.Appearance).TryParseInt(out int appearanceType))
+      playerCreature.PortraitResRef = Token.GetBindValue(View.Portrait)!;
+
+      if (Token.GetBindValue(View.Appearance)!.TryParseInt(out int appearanceType))
       {
         if (appearanceType > 0 && appearanceType < NwGameTables.AppearanceTable.Count)
         {

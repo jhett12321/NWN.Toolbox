@@ -75,7 +75,7 @@ namespace Jorteck.Toolbox.Features.ToolWindows
     private void RefreshWindowList()
     {
       string search = Token.GetBindValue(View.Search);
-      visibleWindows = allWindows.Where(view => view.Title.Contains(search, StringComparison.OrdinalIgnoreCase)).ToList();
+      visibleWindows = allWindows.Where(view => view.Title.Contains(search!, StringComparison.OrdinalIgnoreCase)).ToList();
 
       List<string> windowNames = visibleWindows.Select(view => view.Title).ToList();
       Token.SetBindValues(View.WindowNames, windowNames);

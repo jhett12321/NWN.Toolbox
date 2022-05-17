@@ -40,7 +40,7 @@ namespace Jorteck.Toolbox.Features.Blueprints
       NwItem item = null;
       if (owner is NwCreature creature)
       {
-        item = NwItem.Create(ResRef, owner.Location);
+        item = NwItem.Create(ResRef, owner.Location!);
         if (item != null)
         {
           creature.AcquireItem(item);
@@ -48,7 +48,7 @@ namespace Jorteck.Toolbox.Features.Blueprints
       }
       else if (owner is NwPlaceable placeable && placeable.HasInventory)
       {
-        item = NwItem.Create(ResRef, owner.Location);
+        item = NwItem.Create(ResRef, owner.Location!);
         if (item != null)
         {
           placeable.AcquireItem(item);

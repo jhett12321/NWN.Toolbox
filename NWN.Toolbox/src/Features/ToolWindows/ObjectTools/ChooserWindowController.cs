@@ -19,7 +19,11 @@ namespace Jorteck.Toolbox.Features.ToolWindows
 
     public override void Init()
     {
-      Init(Token.Player.ControlledCreature.Area);
+      NwArea area = Token.Player.ControlledCreature?.Area;
+      if (area != null)
+      {
+        Init(area);
+      }
     }
 
     public void Init(NwArea area)
@@ -175,7 +179,7 @@ namespace Jorteck.Toolbox.Features.ToolWindows
     {
       player.EnterTargetMode(eventData =>
       {
-        if (eventData.IsCancelled)
+        if (eventData.IsCancelled || player.ControlledCreature == null)
         {
           return;
         }
@@ -188,6 +192,10 @@ namespace Jorteck.Toolbox.Features.ToolWindows
         else if (eventData.TargetObject is NwGameObject targetObject)
         {
           location = targetObject.Location;
+          if (location == null)
+          {
+            return;
+          }
         }
         else
         {
@@ -237,7 +245,10 @@ namespace Jorteck.Toolbox.Features.ToolWindows
 
     private void JumpToDM(NwPlayer player, NwGameObject gameObject)
     {
-      gameObject.Location = player.ControlledCreature.Location;
+      if (player.ControlledCreature != null)
+      {
+        gameObject.Location = player.ControlledCreature.Location;
+      }
     }
 
     private void ToggleAI(NwPlayer player)

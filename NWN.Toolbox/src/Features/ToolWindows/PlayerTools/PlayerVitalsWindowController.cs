@@ -54,6 +54,10 @@ namespace Jorteck.Toolbox.Features.ToolWindows
       }
 
       NwCreature playerCreature = selectedPlayer.LoginCreature;
+      if (playerCreature == null)
+      {
+        return;
+      }
 
       ApplyPermissionBindings(widgetEnabledBinds);
       string value = $"Player: {selectedPlayer.PlayerName}";
@@ -94,26 +98,31 @@ namespace Jorteck.Toolbox.Features.ToolWindows
       }
 
       NwCreature playerCreature = selectedPlayer.LoginCreature;
-      playerCreature.OriginalFirstName = Token.GetBindValue(View.FirstName);
-      playerCreature.OriginalLastName = Token.GetBindValue(View.LastName);
+      if (playerCreature == null)
+      {
+        return;
+      }
+
+      playerCreature.OriginalFirstName = Token.GetBindValue(View.FirstName)!;
+      playerCreature.OriginalLastName = Token.GetBindValue(View.LastName)!;
 
       playerCreature.Name = playerCreature.OriginalFirstName + " " + playerCreature.OriginalLastName;
       playerCreature.Gender = (Gender)Token.GetBindValue(View.Gender);
 
-      if (Token.GetBindValue(View.Race).TryParseInt(out int racialType))
+      if (Token.GetBindValue(View.Race)!.TryParseInt(out int racialType))
       {
-        playerCreature.Race = NwRace.FromRacialType((RacialType)racialType);
+        playerCreature.Race = NwRace.FromRaceId(racialType)!;
       }
 
-      playerCreature.SubRace = Token.GetBindValue(View.SubRace);
+      playerCreature.SubRace = Token.GetBindValue(View.SubRace)!;
 
-      if (Token.GetBindValue(View.Age).TryParseInt(out int age))
+      if (Token.GetBindValue(View.Age)!.TryParseInt(out int age))
       {
         playerCreature.Age = age;
       }
 
-      playerCreature.Deity = Token.GetBindValue(View.Deity);
-      playerCreature.Description = Token.GetBindValue(View.Description);
+      playerCreature.Deity = Token.GetBindValue(View.Deity)!;
+      playerCreature.Description = Token.GetBindValue(View.Description)!;
 
       Update();
     }

@@ -102,7 +102,7 @@ namespace Jorteck.Toolbox.Features.Permissions
         return userEntry;
       }
 
-      if (UserConfig.UsersCharacter.TryGetValue(player.LoginCreature.UUID.ToUUIDString(), out userEntry))
+      if (UserConfig.UsersCharacter.TryGetValue(player.LoginCreature!.UUID.ToUUIDString(), out userEntry))
       {
         return userEntry;
       }
