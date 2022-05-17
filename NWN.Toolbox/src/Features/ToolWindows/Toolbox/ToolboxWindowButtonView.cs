@@ -39,7 +39,7 @@ namespace Jorteck.Toolbox.Features.ToolWindows
         },
       };
 
-      WindowTemplate = new NuiWindow(root, null)
+      WindowTemplate = new NuiWindow(root, string.Empty)
       {
         Geometry = ButtonGeometry,
         Border = false,

@@ -124,11 +124,12 @@ namespace Jorteck.Toolbox.Core
 
       List<NwGameObject> results = new List<NwGameObject>();
 
-      NwCreature playerCreature = windowToken.Player.ControlledCreature;
+      NwCreature playerCreature = windowToken.Player.ControlledCreature!;
+
       NwArea playerArea = playerCreature.Area;
       Vector3 playerPos = playerCreature.Position;
 
-      float distance = windowToken.GetBindValue(view.SearchDistance).ParseFloat(0f);
+      float distance = windowToken.GetBindValue(view.SearchDistance)!.ParseFloat(0f);
       float? distanceSqr = distance == 0 ? null : distance * distance;
 
       if (searchTypes.HasFlag(ObjectSelectionTypes.Player))
@@ -230,7 +231,7 @@ namespace Jorteck.Toolbox.Core
 
     public void JumpToObject(NwGameObject gameObject)
     {
-      windowToken.Player.ControlledCreature.JumpToObject(gameObject);
+      windowToken.Player.ControlledCreature!.JumpToObject(gameObject);
     }
 
     private void UpdateSelection(NwObject newSelection)

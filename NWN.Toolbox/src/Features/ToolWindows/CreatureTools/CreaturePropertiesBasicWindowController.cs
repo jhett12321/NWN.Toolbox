@@ -113,14 +113,14 @@ namespace Jorteck.Toolbox.Features.ToolWindows
         return;
       }
 
-      selectedCreature.Name = Token.GetBindValue(View.Name);
-      selectedCreature.Tag = Token.GetBindValue(View.Tag);
-      if (Token.GetBindValue(View.Race).TryParseInt(out int racialType))
+      selectedCreature.Name = Token.GetBindValue(View.Name)!;
+      selectedCreature.Tag = Token.GetBindValue(View.Tag)!;
+      if (Token.GetBindValue(View.Race)!.TryParseInt(out int racialType))
       {
-        selectedCreature.Race = NwRace.FromRacialType((RacialType)racialType);
+        selectedCreature.Race = NwRace.FromRaceId(racialType)!;
       }
 
-      if (Token.GetBindValue(View.Appearance).TryParseInt(out int appearanceType))
+      if (Token.GetBindValue(View.Appearance)!.TryParseInt(out int appearanceType))
       {
         if (appearanceType > 0 && appearanceType < NwGameTables.AppearanceTable.Count)
         {
@@ -128,15 +128,15 @@ namespace Jorteck.Toolbox.Features.ToolWindows
         }
       }
 
-      if (Token.GetBindValue(View.Phenotype).TryParseInt(out int phenotype))
+      if (Token.GetBindValue(View.Phenotype)!.TryParseInt(out int phenotype))
       {
         selectedCreature.Phenotype = (Phenotype)phenotype;
       }
 
       selectedCreature.Gender = (Gender)Token.GetBindValue(View.Gender);
-      selectedCreature.Description = Token.GetBindValue(View.Description);
-      selectedCreature.PortraitResRef = Token.GetBindValue(View.Portrait);
-      selectedCreature.DialogResRef = Token.GetBindValue(View.Dialog);
+      selectedCreature.Description = Token.GetBindValue(View.Description)!;
+      selectedCreature.PortraitResRef = Token.GetBindValue(View.Portrait)!;
+      selectedCreature.DialogResRef = Token.GetBindValue(View.Dialog)!;
 
       Update();
     }

@@ -134,14 +134,14 @@ namespace Jorteck.Toolbox.Features.ToolWindows
         return;
       }
 
-      selectedCreature.SetsRawAbilityScore(Ability.Strength, byte.Parse(Token.GetBindValue(View.StrengthScoreRaw)));
-      selectedCreature.SetsRawAbilityScore(Ability.Dexterity, byte.Parse(Token.GetBindValue(View.DexterityScoreRaw)));
-      selectedCreature.SetsRawAbilityScore(Ability.Constitution, byte.Parse(Token.GetBindValue(View.ConstitutionScoreRaw)));
-      selectedCreature.SetsRawAbilityScore(Ability.Intelligence, byte.Parse(Token.GetBindValue(View.IntelligenceScoreRaw)));
-      selectedCreature.SetsRawAbilityScore(Ability.Wisdom, byte.Parse(Token.GetBindValue(View.WisdomScoreRaw)));
-      selectedCreature.SetsRawAbilityScore(Ability.Charisma, byte.Parse(Token.GetBindValue(View.CharismaScoreRaw)));
+      selectedCreature.SetsRawAbilityScore(Ability.Strength, byte.Parse(Token.GetBindValue(View.StrengthScoreRaw)!));
+      selectedCreature.SetsRawAbilityScore(Ability.Dexterity, byte.Parse(Token.GetBindValue(View.DexterityScoreRaw)!));
+      selectedCreature.SetsRawAbilityScore(Ability.Constitution, byte.Parse(Token.GetBindValue(View.ConstitutionScoreRaw)!));
+      selectedCreature.SetsRawAbilityScore(Ability.Intelligence, byte.Parse(Token.GetBindValue(View.IntelligenceScoreRaw)!));
+      selectedCreature.SetsRawAbilityScore(Ability.Wisdom, byte.Parse(Token.GetBindValue(View.WisdomScoreRaw)!));
+      selectedCreature.SetsRawAbilityScore(Ability.Charisma, byte.Parse(Token.GetBindValue(View.CharismaScoreRaw)!));
 
-      selectedCreature.BaseAC = sbyte.Parse(Token.GetBindValue(View.NaturalAC));
+      selectedCreature.BaseAC = sbyte.Parse(Token.GetBindValue(View.NaturalAC)!);
 
       // TODO: missing the saves
       // TODO: missing the base HP
