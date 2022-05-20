@@ -1,0 +1,10 @@
+version: '3'
+services:
+  anvil:
+    image: "nwndotnet/anvil:8193.34.11"
+    env_file:
+      - ${PWD-.}/config/nwserver.env
+    volumes:
+      - ${PWD-.}/NWN.Toolbox.Tests:/nwn/run/anvil/Plugins/NWN.Toolbox.Tests
+      - ${PWD-.}/paket:/nwn/run/anvil/Paket
+      - ${PWD-.}/results:/nwn/run/anvil/PluginData/NWN.Anvil.TestRunner
