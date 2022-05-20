@@ -24,5 +24,8 @@ namespace Jorteck.Toolbox.Core
 
     [Description("VersionCheck is a module that defines client version requirements to connect to the server (e.g. for NUI).")]
     public VersionCheckConfig VersionCheck { get; set; } = new VersionCheckConfig();
+
+    [Description("Languages is a module that allows characters to speak in different languages.")]
+    public LanguageConfig Languages { get; set; } = new LanguageConfig();
   }
 }
