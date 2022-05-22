@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Text;
 using Anvil.API;
 using Anvil.Services;
 using Jorteck.Toolbox.Core;
@@ -10,6 +11,9 @@ namespace Jorteck.Toolbox.Features.Languages
   [ServiceBinding(typeof(IChatCommand))]
   public sealed class LanguageDMCommand : IChatCommand
   {
+    [Inject]
+    private IReadOnlyList<ILanguage> Languages { get; init; }
+
     [Inject]
     private LanguageService LanguageService { get; init; }
 
@@ -55,8 +59,10 @@ namespace Jorteck.Toolbox.Features.Languages
           caller.EnterPlayerTargetMode(eventData => RemoveLanguage(eventData, args[1]));
           break;
         case "list" when args.Count == 1:
+          caller.EnterPlayerTargetMode(ListPlayerLanguages);
           break;
         case "list" when args.Count == 2 && args[1] == "all":
+          caller.EnterPlayerTargetMode(ListAvailableLanguages);
           break;
         default:
           HelpCommand.ShowCommandHelpToPlayer(caller, this);
@@ -66,7 +72,7 @@ namespace Jorteck.Toolbox.Features.Languages
 
     private void AddLanguage(NwPlayerExtensions.PlayerTargetPlayerEvent eventData, ILanguage language, int proficiency)
     {
-      LanguageService.UpdateLanguageState(eventData.Caller, state =>
+      LanguageService.UpdateLanguageState(eventData.Target, state =>
       {
         state.LanguageProficiencies ??= new Dictionary<string, int>();
         state.LanguageProficiencies[language.Id] = proficiency;
@@ -75,11 +81,11 @@ namespace Jorteck.Toolbox.Features.Languages
 
     private void RemoveLanguage(NwPlayerExtensions.PlayerTargetPlayerEvent eventData, string languageId)
     {
-      LanguageService.UpdateLanguageState(eventData.Caller, state =>
+      LanguageService.UpdateLanguageState(eventData.Target, state =>
       {
         if (state.LanguageProficiencies?.Remove(languageId) == true)
         {
-          eventData.Caller.SendServerMessage($"Successfully removed known language \"{languageId}\" {eventData.Caller.ControlledCreature?.Name}");
+          eventData.Caller.SendServerMessage($"Successfully removed known language \"{languageId}\" {eventData.Target.ControlledCreature?.Name}");
         }
         else
         {
@@ -90,7 +96,37 @@ namespace Jorteck.Toolbox.Features.Languages
 
     private void ListPlayerLanguages(NwPlayerExtensions.PlayerTargetPlayerEvent eventData)
     {
+      LanguageState languageState = LanguageService.GetStateForPlayer(eventData.Target);
+      if (languageState?.LanguageProficiencies == null || languageState.LanguageProficiencies.Count == 0)
+      {
+        eventData.Caller.SendServerMessage($"{eventData.Target.ControlledCreature?.Name} has no known languages.");
+        return;
+      }
 
+      StringBuilder stringBuilder = new StringBuilder();
+      stringBuilder.AppendLine($"{eventData.Target.ControlledCreature?.Name} - Known languages");
+
+      foreach (ILanguage language in Languages)
+      {
+        if (language.Enabled && languageState.LanguageProficiencies.ContainsKey(language.Id))
+        {
+          stringBuilder.AppendLine($"{language.Name.ColorString(language.ChatColor)} ({language.Id})");
+        }
+      }
+    }
+
+    private void ListAvailableLanguages(NwPlayerExtensions.PlayerTargetPlayerEvent eventData)
+    {
+      StringBuilder stringBuilder = new StringBuilder();
+      stringBuilder.AppendLine("Available languages:");
+
+      foreach (ILanguage language in Languages)
+      {
+        if (language.Enabled)
+        {
+          stringBuilder.AppendLine($"{language.Name.ColorString(language.ChatColor)} ({language.Id})");
+        }
+      }
     }
   }
 }
