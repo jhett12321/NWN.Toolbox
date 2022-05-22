@@ -1,38 +1,46 @@
 using System.Collections.Generic;
+using Anvil.API;
 using Anvil.Services;
 using Jorteck.Toolbox.Core;
 
 namespace Jorteck.Toolbox.Features.Languages
 {
   [ServiceBinding(typeof(ILanguage))]
-  public sealed class LanguageGoblin : ILanguage
+  public sealed class LanguageGnome : ILanguage
   {
     [Inject]
     private ConfigService ConfigService { get; init; }
 
-    public string Id => "";
+    public string Id => "gnome";
+
+    public string Name => "Gnome";
+
+    public string[] Aliases => new[] { "gnomish" };
+
+    public Color ChatColor => new Color(51, 51, 255);
+
     public bool Enabled => ConfigService.Config.Languages.IsEnabled() && ConfigService.Config.Languages.IsLanguageEnabled(this);
 
     private readonly Dictionary<char, string> dictionary = new Dictionary<char, string>
     {
-      ['a'] = "u",
-      ['A'] = "U",
+      ['a'] = "y",
+      ['A'] = "Y",
       ['b'] = "p",
       ['B'] = "P",
-      ['c'] = "",
-      ['C'] = "",
+      ['c'] = "l",
+      ['C'] = "L",
       ['d'] = "t",
       ['D'] = "T",
-      ['e'] = "'",
-      ['E'] = "'",
+      ['e'] = "a",
+      ['E'] = "A",
       ['f'] = "v",
       ['F'] = "V",
       ['g'] = "k",
       ['G'] = "K",
       ['h'] = "r",
       ['H'] = "R",
-      ['i'] = "o",
-      ['I'] = "O",
+      ['i'] = "e",
+      ['I'] = "E",
       ['j'] = "z",
       ['J'] = "Z",
       ['k'] = "g",
@@ -41,28 +49,28 @@ namespace Jorteck.Toolbox.Features.Languages
       ['L'] = "M",
       ['m'] = "s",
       ['M'] = "S",
-      ['n'] = "",
-      ['N'] = "",
+      ['n'] = "h",
+      ['N'] = "H",
       ['o'] = "u",
       ['O'] = "U",
       ['p'] = "b",
       ['P'] = "B",
-      ['q'] = "",
-      ['Q'] = "",
+      ['q'] = "x",
+      ['Q'] = "X",
       ['r'] = "n",
       ['R'] = "N",
-      ['s'] = "k",
-      ['S'] = "K",
+      ['s'] = "c",
+      ['S'] = "C",
       ['t'] = "d",
       ['T'] = "D",
-      ['u'] = "u",
-      ['U'] = "U",
-      ['v'] = "",
-      ['V'] = "",
-      ['w'] = "'",
-      ['W'] = "'",
-      ['x'] = "",
-      ['X'] = "",
+      ['u'] = "i",
+      ['U'] = "I",
+      ['v'] = "j",
+      ['V'] = "J",
+      ['w'] = "f",
+      ['W'] = "F",
+      ['x'] = "q",
+      ['X'] = "Q",
       ['y'] = "o",
       ['Y'] = "O",
       ['z'] = "w",
@@ -71,7 +79,7 @@ namespace Jorteck.Toolbox.Features.Languages
 
     public LanguageOutput Translate(string phrase, int proficiency)
     {
-      return LanguageUtils.TranslateUsingDictionary(dictionary, phrase, proficiency);
+      return LanguageUtils.TranslateUsingDictionary(this, dictionary, phrase, proficiency);
     }
   }
 }

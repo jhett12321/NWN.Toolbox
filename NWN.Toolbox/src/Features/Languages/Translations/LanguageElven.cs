@@ -1,16 +1,23 @@
 using System.Collections.Generic;
+using Anvil.API;
 using Anvil.Services;
 using Jorteck.Toolbox.Core;
 
 namespace Jorteck.Toolbox.Features.Languages
 {
   [ServiceBinding(typeof(ILanguage))]
-  public sealed class LanguageDrow : ILanguage
+  public sealed class LanguageElven : ILanguage
   {
     [Inject]
     private ConfigService ConfigService { get; init; }
 
-    public string Id => "";
+    public string Id => "elven";
+
+    public string Name => "Elven";
+
+    public string[] Aliases => new[] { "elf" };
+
+    public Color ChatColor => new Color(51, 153, 255);
 
     public bool Enabled => ConfigService.Config.Languages.IsEnabled() && ConfigService.Config.Languages.IsLanguageEnabled(this);
 
@@ -20,8 +27,8 @@ namespace Jorteck.Toolbox.Features.Languages
       ['A'] = "Il",
       ['b'] = "f",
       ['B'] = "F",
-      ['c'] = "st",
-      ['C'] = "St",
+      ['c'] = "ny",
+      ['C'] = "Ny",
       ['d'] = "w",
       ['D'] = "W",
       ['e'] = "a",
@@ -34,22 +41,22 @@ namespace Jorteck.Toolbox.Features.Languages
       ['H'] = "Ir",
       ['i'] = "e",
       ['I'] = "E",
-      ['j'] = "vi",
-      ['J'] = "Vi",
-      ['k'] = "go",
-      ['K'] = "Go",
+      ['j'] = "qu",
+      ['J'] = "Qu",
+      ['k'] = "n",
+      ['K'] = "N",
       ['l'] = "c",
       ['L'] = "C",
-      ['m'] = "li",
-      ['M'] = "Li",
+      ['m'] = "s",
+      ['M'] = "S",
       ['n'] = "l",
       ['N'] = "L",
       ['o'] = "e",
       ['O'] = "E",
       ['p'] = "ty",
       ['P'] = "Ty",
-      ['q'] = "r",
-      ['Q'] = "R",
+      ['q'] = "h",
+      ['Q'] = "H",
       ['r'] = "m",
       ['R'] = "M",
       ['s'] = "la",
@@ -60,19 +67,19 @@ namespace Jorteck.Toolbox.Features.Languages
       ['U'] = "Y",
       ['v'] = "el",
       ['V'] = "El",
-      ['w'] = "ky",
-      ['W'] = "Ky",
+      ['w'] = "am",
+      ['W'] = "Am",
       ['x'] = "'",
       ['X'] = "'",
       ['y'] = "a",
       ['Y'] = "A",
-      ['z'] = "p'",
-      ['Z'] = "P'",
+      ['z'] = "j",
+      ['Z'] = "J",
     };
 
     public LanguageOutput Translate(string phrase, int proficiency)
     {
-      return LanguageUtils.TranslateUsingDictionary(dictionary, phrase, proficiency);
+      return LanguageUtils.TranslateUsingDictionary(this, dictionary, phrase, proficiency);
     }
   }
 }

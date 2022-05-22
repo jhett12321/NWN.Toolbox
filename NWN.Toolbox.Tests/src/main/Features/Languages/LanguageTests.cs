@@ -24,9 +24,9 @@ namespace Jorteck.Toolbox.Tests.Features.Languages
       LanguageOutput outputMixed = language.Translate(inputMixed, LanguageProficiency.Fluent);
       LanguageOutput outputUpper = language.Translate(inputUpper, LanguageProficiency.Fluent);
 
-      Assert.That(outputLower.SpokenText, Is.EqualTo(expectedOutputLower));
-      Assert.That(outputMixed.SpokenText, Is.EqualTo(expectedOutputMixed));
-      Assert.That(outputUpper.SpokenText, Is.EqualTo(expectedOutputUpper));
+      Assert.That(outputLower.Output, Is.EqualTo(expectedOutputLower));
+      Assert.That(outputMixed.Output, Is.EqualTo(expectedOutputMixed));
+      Assert.That(outputUpper.Output, Is.EqualTo(expectedOutputUpper));
     }
 
     private static object[] LanguageTranslationCases()

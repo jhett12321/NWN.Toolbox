@@ -21,15 +21,28 @@ namespace Jorteck.Toolbox.Features.Languages
       };
     }
 
-    public static LanguageOutput TranslateUsingDictionary(Dictionary<char, string> dictionary, string phrase, int proficiency)
+    public static LanguageOutput TranslateUsingDictionary(ILanguage language, Dictionary<char, string> dictionary, string phrase, int proficiency)
     {
       int fluency = GetFluencyFromProficiency(proficiency);
 
       StringBuilder interpretation = new StringBuilder(phrase.Length);
       StringBuilder output = new StringBuilder();
 
+      bool escaped = false;
       foreach (char c in phrase)
       {
+        if (c == '*')
+        {
+          escaped = !escaped;
+        }
+
+        if (escaped)
+        {
+          interpretation.Append(c);
+          output.Append(c);
+          continue;
+        }
+
         int check = Random.Next(0, 100);
         if (check < fluency)
         {
@@ -52,11 +65,7 @@ namespace Jorteck.Toolbox.Features.Languages
         }
       }
 
-      return new LanguageOutput
-      {
-        Interpretation = interpretation.ToString(),
-        SpokenText = output.ToString(),
-      };
+      return new LanguageOutput(language, interpretation.ToString(), output.ToString());
     }
   }
 }

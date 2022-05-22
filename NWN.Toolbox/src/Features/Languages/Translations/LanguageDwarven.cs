@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Anvil.API;
 using Anvil.Services;
 using Jorteck.Toolbox.Core;
 
@@ -10,7 +11,14 @@ namespace Jorteck.Toolbox.Features.Languages
     [Inject]
     private ConfigService ConfigService { get; init; }
 
-    public string Id => "";
+    public string Id => "dwarven";
+
+    public string Name => "Dwarven";
+
+    public string[] Aliases => new[] { "dwarf" };
+
+    public Color ChatColor => new Color(255, 255, 51);
+
     public bool Enabled => ConfigService.Config.Languages.IsEnabled() && ConfigService.Config.Languages.IsLanguageEnabled(this);
 
     private readonly Dictionary<char, string> dictionary = new Dictionary<char, string>
@@ -71,7 +79,7 @@ namespace Jorteck.Toolbox.Features.Languages
 
     public LanguageOutput Translate(string phrase, int proficiency)
     {
-      return LanguageUtils.TranslateUsingDictionary(dictionary, phrase, proficiency);
+      return LanguageUtils.TranslateUsingDictionary(this, dictionary, phrase, proficiency);
     }
   }
 }
