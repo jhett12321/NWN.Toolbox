@@ -48,10 +48,10 @@
         <TargetPath>..\docker-compose.yml</TargetPath>
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </ContentWithTargetPath>
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="src\docker\paket" />
+      <ContentWithTargetPath Include="src\docker\paket\paket.dependencies">
+        <TargetPath>..\paket\paket.dependencies</TargetPath>
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </ContentWithTargetPath>
     </ItemGroup>
 
 </Project>
