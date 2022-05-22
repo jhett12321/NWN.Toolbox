@@ -5,6 +5,6 @@ services:
     env_file:
       - ${PWD-.}/config/nwserver.env
     volumes:
-      - ${PWD-.}/NWN.Toolbox.Tests:/nwn/run/anvil/Plugins/NWN.Toolbox.Tests
-      - ${PWD-.}/paket:/nwn/run/anvil/Paket
-      - ${PWD-.}/results:/nwn/run/anvil/PluginData/NWN.Anvil.TestRunner
+      - ${PWD-.}/NWN.Toolbox.Tests:/nwn/home/anvil/Plugins/NWN.Toolbox.Tests
+      - ${PWD-.}/paket:/nwn/home/anvil/Paket
+      - ${PWD-.}/results:/nwn/home/anvil/PluginData/NWN.Anvil.TestRunner
