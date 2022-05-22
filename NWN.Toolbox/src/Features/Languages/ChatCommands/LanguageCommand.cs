@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Anvil.API;
 using Anvil.Services;
+using Jorteck.Toolbox.Core;
 using Jorteck.Toolbox.Features.ChatCommands;
 
 namespace Jorteck.Toolbox.Features.Languages
@@ -10,6 +11,9 @@ namespace Jorteck.Toolbox.Features.Languages
   [ServiceBinding(typeof(IChatCommand))]
   public sealed class LanguageCommand : IChatCommand
   {
+    [Inject]
+    private ConfigService ConfigService { get; init; }
+
     [Inject]
     private HelpCommand HelpCommand { get; init; }
 
@@ -21,8 +25,9 @@ namespace Jorteck.Toolbox.Features.Languages
 
     public string Command => "language";
     public string[] Aliases => new[] { "lang" };
-    public bool DMOnly => false;
     public Range ArgCount => 1..;
+    public bool DMOnly => false;
+    public bool IsAvailable => ConfigService.Config.Languages.IsEnabled();
 
     public string Description => "Commands for speaking different languages.";
 
