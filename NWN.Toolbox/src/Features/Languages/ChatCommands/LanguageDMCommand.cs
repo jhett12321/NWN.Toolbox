@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Anvil.API;
 using Anvil.Services;
@@ -106,7 +107,7 @@ namespace Jorteck.Toolbox.Features.Languages
       StringBuilder stringBuilder = new StringBuilder();
       stringBuilder.AppendLine($"{eventData.Target.ControlledCreature?.Name} - Known languages");
 
-      foreach (ILanguage language in Languages)
+      foreach (ILanguage language in Languages.OrderBy(language => language.Name))
       {
         if (language.Enabled && languageState.LanguageProficiencies.ContainsKey(language.Id))
         {
@@ -120,7 +121,7 @@ namespace Jorteck.Toolbox.Features.Languages
       StringBuilder stringBuilder = new StringBuilder();
       stringBuilder.AppendLine("Available languages:");
 
-      foreach (ILanguage language in Languages)
+      foreach (ILanguage language in Languages.OrderBy(language => language.Name))
       {
         if (language.Enabled)
         {
