@@ -29,6 +29,27 @@ namespace Jorteck.Toolbox.Tests.Features.Languages
       Assert.That(outputUpper.Output, Is.EqualTo(expectedOutputUpper));
     }
 
+    [Test(Description = "Translating the pangram \"the five boxing wizards jump quickly.\" with a custom language seed returns the expected output.")]
+    [TestCase(101, "bli sozi duXovh cojeykq mant waofprg.", "Bli Sozi DuXovh Cojeykq Mant Waofprg.", "BLI SOZI DUOVH COJEYKQ MANT WAOFPRG.")]
+    [TestCase(102, "dro qujo kauzl fumigpw nevb ceustyh.", "Dro Qujo Kauzl Fumigpw Nevb Ceustyh.", "DRO QUJO KAUZL FUMIGPW NEVB CEUSTYH.")]
+    [TestCase(103, "kyu wamu peajr sanohtc vizd fiaqbgl.", "Kyu Wamu Peajr Sanohtc Vizd Fiaqbgl.", "KYU WAMU PEAJR SANOHTC VIZD FIAQBGL.")]
+    [TestCase(104, "pga cena tiemy qevulbf zojk soewdhr.", "Pga Cena Tiemy Qevulbf Zojk Soewdhr.", "PGA CENA TIxEMY QEVULBF ZOJK SOEWDHR.")]
+    [TestCase(105, "bye qine doximr fivahkw zujt cuispgl.", "Bye Qine Doximr Fivahkw Zujt Cuispgl.", "BYE QINE DOXIMR FIVAHKW ZUJT CUISPGL.")]
+    public void LanguageCipherWithSeedReturnsExpectedTranslation(int seed, string expectedOutputLower, string expectedOutputMixed, string expectedOutputUpper)
+    {
+      string inputLower = "the five boxing wizards jump quickly.";
+      string inputMixed = "The Five Boxing Wizards Jump Quickly.";
+      string inputUpper = "THE FIVE BOXING WIZARDS JUMP QUICKLY.";
+
+      LanguageOutput outputLower = LanguageUtils.TranslateWithSeed(null, seed, inputLower, LanguageProficiency.Fluent);
+      LanguageOutput outputMixed = LanguageUtils.TranslateWithSeed(null, seed, inputMixed, LanguageProficiency.Fluent);
+      LanguageOutput outputUpper = LanguageUtils.TranslateWithSeed(null, seed, inputUpper, LanguageProficiency.Fluent);
+
+      Assert.That(outputLower.Output, Is.EqualTo(expectedOutputLower));
+      Assert.That(outputMixed.Output, Is.EqualTo(expectedOutputMixed));
+      Assert.That(outputUpper.Output, Is.EqualTo(expectedOutputUpper));
+    }
+
     private static object[] LanguageTranslationCases()
     {
       return new object[]
