@@ -159,8 +159,8 @@ jobs:
         with:
           name: NuGet Packages
           path: |
-            NWN.Toolbox/bin/Release/*.nupkg
-            NWN.Toolbox/bin/Release/*.snupkg
+            NWN.Toolbox/bin/Release/NWN.Toolbox/*.nupkg
+            NWN.Toolbox/bin/Release/NWN.Toolbox/*.snupkg
           if-no-files-found: error
 
       - name: Upload Build Artifacts
@@ -168,9 +168,9 @@ jobs:
         with:
           name: Binaries
           path: |
-            NWN.Toolbox/bin/Release/
-            !NWN.Toolbox/bin/Release/*.nupkg
-            !NWN.Toolbox/bin/Release/*.snupkg
+            NWN.Toolbox/bin/Release/NWN.Toolbox/
+            !NWN.Toolbox/bin/Release/NWN.Toolbox/*.nupkg
+            !NWN.Toolbox/bin/Release/NWN.Toolbox/*.snupkg
           if-no-files-found: error
 
   release:
