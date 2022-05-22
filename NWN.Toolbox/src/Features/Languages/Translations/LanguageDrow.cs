@@ -11,9 +11,9 @@ namespace Jorteck.Toolbox.Features.Languages
     [Inject]
     private ConfigService ConfigService { get; init; }
 
-    public string Id => "Drow";
+    public string Id => "drow";
 
-    public string Name => "drow";
+    public string Name => "Drow";
 
     public Color ChatColor => new Color(153, 51, 255);
 

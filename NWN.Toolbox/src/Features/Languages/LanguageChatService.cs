@@ -4,12 +4,15 @@ using Anvil.API;
 using Anvil.API.Events;
 using Anvil.Services;
 using Jorteck.Toolbox.Core;
+using NLog;
 
 namespace Jorteck.Toolbox.Features.Languages
 {
   [ServiceBinding(typeof(LanguageChatService))]
   public sealed class LanguageChatService : IInitializable
   {
+    private static readonly Logger Log = LogManager.GetCurrentClassLogger();
+
     [Inject]
     private ChatService ChatService { get; init; }
 
@@ -35,6 +38,8 @@ namespace Jorteck.Toolbox.Features.Languages
       {
         return;
       }
+
+      Log.Info($"[{area.Name}] {playerCreature.Name}: [{message.Language.Name}] {message.Interpretation}");
 
       switch (volume)
       {
