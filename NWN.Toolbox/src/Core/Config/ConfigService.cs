@@ -13,6 +13,7 @@ namespace Jorteck.Toolbox.Core
 
     private readonly IDeserializer deserializer = new DeserializerBuilder()
       .WithNamingConvention(UnderscoredNamingConvention.Instance)
+      .IgnoreUnmatchedProperties()
       .Build();
 
     private readonly ISerializer serializer = new SerializerBuilder()
