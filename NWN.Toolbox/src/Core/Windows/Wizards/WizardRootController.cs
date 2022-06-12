@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Anvil.API;
 using Anvil.API.Events;
 using Anvil.Services;
@@ -21,17 +22,14 @@ namespace Jorteck.Toolbox.Core
       {
         currentStep?.OnClose();
         currentStep = value;
+
         Token.SetGroupLayout(View.ViewContainer, currentStep.View.ViewTemplate);
-        RefreshWizardButtons();
 
         currentStep.Init();
-      }
-    }
+        RefreshWizardButtons();
 
-    protected virtual bool IsFinalStep(IWizardStepController step)
-    {
-      int stepIndex = Steps.IndexOf(step);
-      return stepIndex >= 0 && stepIndex == Steps.Count - 1;
+        Token.SetBindValue(View.WindowTitleText, currentStep.StepTitle);
+      }
     }
 
     public sealed override void Init()
@@ -47,6 +45,8 @@ namespace Jorteck.Toolbox.Core
     public override void ProcessEvent(ModuleEvents.OnNuiEvent eventData)
     {
       CurrentStep?.ProcessEvent(eventData);
+      RefreshWizardButtons();
+
       if (eventData.EventType == NuiEventType.Click)
       {
         HandleButtonClick(eventData);
@@ -64,16 +64,37 @@ namespace Jorteck.Toolbox.Core
         }
         else
         {
-          CurrentStep = Steps[Steps.IndexOf(CurrentStep) + 1];
+          CurrentStep = GetNextStep();
         }
       }
       else if (eventData.ElementId == View.PreviousButton.Id)
       {
-        CurrentStep = Steps[Steps.IndexOf(CurrentStep) - 1];
+        CurrentStep = GetPreviousStep();
       }
     }
 
-    protected void RegisterStep<TView, TController>()
+    protected virtual bool IsFinalStep(IWizardStepController step)
+    {
+      int stepIndex = Steps.IndexOf(step);
+      return stepIndex >= 0 && stepIndex == Steps.Count - 1;
+    }
+
+    protected virtual IWizardStepController GetNextStep()
+    {
+      return Steps[Steps.IndexOf(CurrentStep) + 1];
+    }
+
+    protected virtual IWizardStepController GetPreviousStep()
+    {
+      return Steps[Steps.IndexOf(CurrentStep) - 1];
+    }
+
+    protected virtual TStep GetStep<TStep>() where TStep : IWizardStepController
+    {
+      return Steps.OfType<TStep>().FirstOrDefault();
+    }
+
+    protected TController RegisterStep<TView, TController>()
       where TView : IWizardStepView, new()
       where TController : IWizardStepController<TView>, new()
     {
@@ -81,9 +102,11 @@ namespace Jorteck.Toolbox.Core
       TController controller = InjectionService.Inject(new TController
       {
         View = view,
+        Token = Token,
       });
 
       Steps.Add(controller);
+      return controller;
     }
 
     protected void RegisterStep(IWizardStepController controller)
@@ -95,7 +118,7 @@ namespace Jorteck.Toolbox.Core
     {
       int stepIndex = Steps.IndexOf(CurrentStep);
 
-      Token.SetBindValue(View.NextButtonEnabled, true);
+      Token.SetBindValue(View.NextButtonEnabled, CurrentStep.CanCompleteStep);
       Token.SetBindValue(View.PreviousButtonEnabled, stepIndex > 0 && Steps.Count > 1);
       Token.SetBindValue(View.NextButtonText, !IsFinalStep(CurrentStep) ? View.WizardTexts.NextButton : View.WizardTexts.FinishButton);
     }
