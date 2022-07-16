@@ -26,7 +26,10 @@ namespace Jorteck.Toolbox.Features.Languages
 
     void IInitializable.Init()
     {
-      NwModule.Instance.OnPlayerChat += OnPlayerChat;
+      if (ConfigService.Config.Languages.IsEnabled())
+      {
+        NwModule.Instance.OnPlayerChat += OnPlayerChat;
+      }
     }
 
     public void SendTranslatedMessage(NwPlayer player, LanguageOutput message, TalkVolume volume)
