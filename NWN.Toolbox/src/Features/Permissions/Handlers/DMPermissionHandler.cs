@@ -25,7 +25,7 @@ namespace Jorteck.Toolbox.Features.Permissions
       module.OnDMGiveLevel += eventData => OnDMGive(eventData, DMPermissionConstants.DMGiveLevel);
       module.OnDMGiveGold += eventData => OnDMGive(eventData, DMPermissionConstants.DMGiveGold);
       module.OnDMGiveAlignment += OnDMGiveAlignment;
-      module.OnDMGiveItemBefore += OnDMGiveItemBefore;
+      module.OnDMGiveItem += OnDMGiveItem;
 
       module.OnDMPlayerDMLogin += OnPlayerDMLogin;
       module.OnDMPlayerDMLogout += OnPlayerDMLogout;
@@ -65,7 +65,7 @@ namespace Jorteck.Toolbox.Features.Permissions
       module.OnDMChangeDifficulty += OnDMChangeDifficulty;
       module.OnDMViewInventory += OnDMViewInventory;
 
-      module.OnDMSpawnObjectBefore += OnDMSpawnObject;
+      module.OnDMSpawnObject += OnDMSpawnObject;
     }
 
     private void OnClientEnter(ModuleEvents.OnClientEnter eventData)
@@ -94,7 +94,7 @@ namespace Jorteck.Toolbox.Features.Permissions
       }
     }
 
-    private void OnDMGiveItemBefore(OnDMGiveItemBefore eventData)
+    private void OnDMGiveItem(OnDMGiveItem eventData)
     {
       if (!permissionsService.HasPermission(eventData.DungeonMaster, DMPermissionConstants.DMGiveItem))
       {
@@ -185,7 +185,7 @@ namespace Jorteck.Toolbox.Features.Permissions
       }
     }
 
-    private void OnDMStandardEvent(DMStandardEvent eventData, string permission)
+    private void OnDMStandardEvent(DMEvent eventData, string permission)
     {
       if (!permissionsService.HasPermission(eventData.DungeonMaster, permission))
       {
@@ -244,7 +244,7 @@ namespace Jorteck.Toolbox.Features.Permissions
       }
     }
 
-    private void OnDMSpawnObject(OnDMSpawnObjectBefore eventData)
+    private void OnDMSpawnObject(OnDMSpawnObject eventData)
     {
       if (permissionsService.HasPermission(eventData.DungeonMaster, DMPermissionConstants.DMSpawn))
       {
