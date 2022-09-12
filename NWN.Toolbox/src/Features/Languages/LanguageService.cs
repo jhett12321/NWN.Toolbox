@@ -14,6 +14,8 @@ namespace Jorteck.Toolbox.Features.Languages
 
     private readonly Dictionary<string, ILanguage> languages = new Dictionary<string, ILanguage>();
 
+    public IReadOnlyCollection<ILanguage> Languages => languages.Values;
+
     public LanguageService(IReadOnlyList<ILanguage> languages)
     {
       foreach (ILanguage language in languages)
