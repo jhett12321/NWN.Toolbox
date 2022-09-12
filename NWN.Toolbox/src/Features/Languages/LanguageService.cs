@@ -69,7 +69,7 @@ namespace Jorteck.Toolbox.Features.Languages
     {
       foreach (ILanguage availableLanguage in languages.Values)
       {
-        if (key == availableLanguage.Id || (availableLanguage.Aliases != null && availableLanguage.Aliases.Contains(key)))
+        if (key == availableLanguage.Id || availableLanguage.Aliases?.Contains(key) == true)
         {
           language = availableLanguage;
           return true;
