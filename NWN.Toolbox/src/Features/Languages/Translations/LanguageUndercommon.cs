@@ -13,6 +13,8 @@ namespace Jorteck.Toolbox.Features.Languages
 
     public string Id => "undercommon";
 
+    public string[] Aliases => new[] { "drow" };
+
     public string Name => "Undercommon";
 
     public Color ChatColor => new Color(153, 51, 255);

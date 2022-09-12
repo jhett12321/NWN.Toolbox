@@ -3,14 +3,24 @@ using System.Collections.Generic;
 using System.Linq;
 using Anvil.API;
 using Anvil.Services;
+using NLog;
 
 namespace Jorteck.Toolbox.Features.Languages
 {
   [ServiceBinding(typeof(LanguageService))]
   public sealed class LanguageService
   {
-    [Inject]
-    private IReadOnlyList<ILanguage> Languages { get; init; }
+    private static readonly Logger Log = LogManager.GetCurrentClassLogger();
+
+    private readonly Dictionary<string, ILanguage> languages = new Dictionary<string, ILanguage>();
+
+    public LanguageService(IReadOnlyList<ILanguage> languages)
+    {
+      foreach (ILanguage language in languages)
+      {
+        RegisterLanguage(language);
+      }
+    }
 
     public bool PlayerKnowsLanguage(NwPlayer player, ILanguage language, LanguageState languageState)
     {
@@ -57,9 +67,9 @@ namespace Jorteck.Toolbox.Features.Languages
 
     public bool TryGetLanguage(string key, out ILanguage language)
     {
-      foreach (ILanguage availableLanguage in Languages)
+      foreach (ILanguage availableLanguage in languages.Values)
       {
-        if (key == availableLanguage.Id || availableLanguage.Aliases != null && availableLanguage.Aliases.Contains(key))
+        if (key == availableLanguage.Id || (availableLanguage.Aliases != null && availableLanguage.Aliases.Contains(key)))
         {
           language = availableLanguage;
           return true;
@@ -68,6 +78,18 @@ namespace Jorteck.Toolbox.Features.Languages
 
       language = null;
       return false;
+    }
+
+    public void RegisterLanguage(ILanguage language)
+    {
+      if (languages.TryAdd(language.Id, language))
+      {
+        Log.Debug($"Registered language {language.Name} ({language.Id})");
+      }
+      else
+      {
+        Log.Error($"Cannot register language as the ID {language.Id} is already in use.");
+      }
     }
   }
 }
