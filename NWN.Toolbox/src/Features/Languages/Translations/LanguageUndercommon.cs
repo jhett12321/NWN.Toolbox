@@ -6,14 +6,14 @@ using Jorteck.Toolbox.Core;
 namespace Jorteck.Toolbox.Features.Languages
 {
   [ServiceBinding(typeof(ILanguage))]
-  public sealed class LanguageDrow : ILanguage
+  public sealed class LanguageUndercommon : ILanguage
   {
     [Inject]
     private ConfigService ConfigService { get; init; }
 
-    public string Id => "drow";
+    public string Id => "undercommon";
 
-    public string Name => "Drow";
+    public string Name => "Undercommon";
 
     public Color ChatColor => new Color(153, 51, 255);
 
