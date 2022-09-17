@@ -10,9 +10,9 @@ namespace Jorteck.Toolbox.Features.Languages
     [Inject]
     private ConfigService ConfigService { get; init; }
 
-    public string Id => "animal";
+    public string Id => "druidic";
 
-    public string Name => "Animal";
+    public string Name => "Druidic";
 
     public Color ChatColor => new Color(51, 255, 153);
 
