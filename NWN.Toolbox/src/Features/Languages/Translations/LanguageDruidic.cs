@@ -5,7 +5,7 @@ using Jorteck.Toolbox.Core;
 namespace Jorteck.Toolbox.Features.Languages
 {
   [ServiceBinding(typeof(ILanguage))]
-  public sealed class LanguageAnimal : ILanguage
+  public sealed class LanguageDruidic : ILanguage
   {
     [Inject]
     private ConfigService ConfigService { get; init; }

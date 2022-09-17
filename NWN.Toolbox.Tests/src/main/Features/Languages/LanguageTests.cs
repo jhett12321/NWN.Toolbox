@@ -55,7 +55,7 @@ namespace Jorteck.Toolbox.Tests.Features.Languages
       return new object[]
       {
         new object[] { Languages.OfType<LanguageAbyssal>().First(), "gda kootsa nebboots bootoongm haepb chaeoomblee.", "Gda Kootsa Nebboots Bootoongm Haepb Chaeoomblee.", "GDA KOOTsA NEBbOOTS BOOTOONGM HAePB ChAeOOMBLEe." },
-        new object[] { Languages.OfType<LanguageAnimal>().First(), "''' '''' '''''' ''''''' '''' '''''''.", "''' '''' '''''' ''''''' '''' '''''''.", "''' '''' '''''' ''''''' '''' '''''''." },
+        new object[] { Languages.OfType<LanguageDruidic>().First(), "''' '''' '''''' ''''''' '''' '''''''.", "''' '''' '''''' ''''''' '''' '''''''.", "''' '''' '''''' ''''''' '''' '''''''." },
         new object[] { Languages.OfType<LanguageCelestial>().First(), "yrel bijel pugicw fikantl mosq doivxhz.", "Yrel Bijel Pugicw Fikantl Mosq Doivxhz.", "YREl BIJEl PUGICW FIKANTL MOSQ DOIVXHZ." },
         new object[] { Languages.OfType<LanguageDraconic>().First(), "drnii wunfii poyquunrak ziunjiehutymy vionliba xonunstgochan.", "Drnii Wunfii Poyquunrak Ziunjiehutymy Vionliba Xonunstgochan.", "DrNiI WUnFiI PoYQuUnRaK ZiUnJiEHuTyMy ViOnLiBa XOnUnStGoChAn." },
         new object[] { Languages.OfType<LanguageUndercommon>().First(), "anira oeela fe'elv kyep'ilmwla viylity ryestgoca.", "Anira Oeela Fe'elv Kyep'ilmwla Viylity Ryestgoca.", "AnIrA OEElA FE'ELV KyEP'IlMWLa ViYLiTy RYEStGoCA." },
