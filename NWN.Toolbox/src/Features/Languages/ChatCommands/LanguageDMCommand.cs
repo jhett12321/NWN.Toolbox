@@ -114,6 +114,8 @@ namespace Jorteck.Toolbox.Features.Languages
           stringBuilder.AppendLine($"{language.Name.ColorString(language.ChatColor)} ({language.Id})");
         }
       }
+
+      eventData.Caller.SendServerMessage(stringBuilder.ToString());
     }
 
     private void ListAvailableLanguages(NwPlayerExtensions.PlayerTargetPlayerEvent eventData)
@@ -128,6 +130,8 @@ namespace Jorteck.Toolbox.Features.Languages
           stringBuilder.AppendLine($"{language.Name.ColorString(language.ChatColor)} ({language.Id})");
         }
       }
+
+      eventData.Caller.SendServerMessage(stringBuilder.ToString());
     }
   }
 }
