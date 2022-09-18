@@ -26,7 +26,7 @@ namespace Jorteck.Toolbox.Features.Languages
 
     public string Command => "languagedm";
     public string[] Aliases => new[] { "langdm" };
-    public Range ArgCount => 3..3;
+    public Range ArgCount => 1..3;
     public bool DMOnly => true;
     public bool IsAvailable => ConfigService.Config.Languages.IsEnabled();
 
@@ -131,4 +131,3 @@ namespace Jorteck.Toolbox.Features.Languages
     }
   }
 }
-
