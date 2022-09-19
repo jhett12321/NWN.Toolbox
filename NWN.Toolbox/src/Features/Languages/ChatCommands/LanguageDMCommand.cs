@@ -13,9 +13,6 @@ namespace Jorteck.Toolbox.Features.Languages
   public sealed class LanguageDMCommand : IChatCommand
   {
     [Inject]
-    private IReadOnlyList<ILanguage> Languages { get; init; }
-
-    [Inject]
     private LanguageService LanguageService { get; init; }
 
     [Inject]
@@ -107,7 +104,7 @@ namespace Jorteck.Toolbox.Features.Languages
       StringBuilder stringBuilder = new StringBuilder();
       stringBuilder.AppendLine($"{eventData.Target.ControlledCreature?.Name} - Known languages");
 
-      foreach (ILanguage language in Languages.OrderBy(language => language.Name))
+      foreach (ILanguage language in LanguageService.Languages.OrderBy(language => language.Name))
       {
         if (language.Enabled && languageState.LanguageProficiencies.ContainsKey(language.Id))
         {
@@ -123,7 +120,7 @@ namespace Jorteck.Toolbox.Features.Languages
       StringBuilder stringBuilder = new StringBuilder();
       stringBuilder.AppendLine("Available languages:");
 
-      foreach (ILanguage language in Languages.OrderBy(language => language.Name))
+      foreach (ILanguage language in LanguageService.Languages.OrderBy(language => language.Name))
       {
         if (language.Enabled)
         {
