@@ -57,10 +57,10 @@ namespace Jorteck.Toolbox.Features.Chat
           caller.EnterPlayerTargetMode(eventData => RemoveLanguage(eventData, args[1]));
           break;
         case "list" when args.Count == 1:
-          caller.EnterPlayerTargetMode(ListPlayerLanguages);
+          caller.EnterPlayerTargetMode(eventData => LanguageService.ListPlayerLanguages(caller, eventData.Target));
           break;
         case "list" when args.Count == 2 && args[1] == "all":
-          caller.EnterPlayerTargetMode(ListAvailableLanguages);
+          ListAvailableLanguages(caller);
           break;
         default:
           HelpCommand.ShowCommandHelpToPlayer(caller, this);
@@ -92,30 +92,7 @@ namespace Jorteck.Toolbox.Features.Chat
       });
     }
 
-    private void ListPlayerLanguages(NwPlayerExtensions.PlayerTargetPlayerEvent eventData)
-    {
-      LanguageState languageState = LanguageService.GetStateForPlayer(eventData.Target);
-      if (languageState?.LanguageProficiencies == null || languageState.LanguageProficiencies.Count == 0)
-      {
-        eventData.Caller.SendServerMessage($"{eventData.Target.ControlledCreature?.Name} has no known languages.");
-        return;
-      }
-
-      StringBuilder stringBuilder = new StringBuilder();
-      stringBuilder.AppendLine($"{eventData.Target.ControlledCreature?.Name} - Known languages");
-
-      foreach (ILanguage language in LanguageService.Languages.OrderBy(language => language.Name))
-      {
-        if (language.Enabled && languageState.LanguageProficiencies.ContainsKey(language.Id))
-        {
-          stringBuilder.AppendLine($"{language.Name.ColorString(language.ChatColor)} ({language.Id})");
-        }
-      }
-
-      eventData.Caller.SendServerMessage(stringBuilder.ToString());
-    }
-
-    private void ListAvailableLanguages(NwPlayerExtensions.PlayerTargetPlayerEvent eventData)
+    private void ListAvailableLanguages(NwPlayer caller)
     {
       StringBuilder stringBuilder = new StringBuilder();
       stringBuilder.AppendLine("Available languages:");
@@ -128,7 +105,7 @@ namespace Jorteck.Toolbox.Features.Chat
         }
       }
 
-      eventData.Caller.SendServerMessage(stringBuilder.ToString());
+      caller.SendServerMessage(stringBuilder.ToString());
     }
   }
 }

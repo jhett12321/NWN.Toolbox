@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using Anvil.API;
 using Anvil.Services;
 using NLog;
@@ -92,6 +93,41 @@ namespace Jorteck.Toolbox.Features.Languages
       {
         Log.Error($"Cannot register language as the ID {language.Id} is already in use.");
       }
+    }
+
+    public void ListPlayerLanguages(NwPlayer showTo, NwPlayer target)
+    {
+      LanguageState languageState = GetStateForPlayer(target);
+      if (languageState == null)
+      {
+        return;
+      }
+
+      StringBuilder message = new StringBuilder();
+      message.AppendLine($"===={target.ControlledCreature?.Name} - Known languages====");
+
+      foreach (KeyValuePair<string, int> languageData in languageState.LanguageProficiencies.OrderBy(pair => pair.Key))
+      {
+        if (TryGetLanguage(languageData.Key, out ILanguage language))
+        {
+          message.AppendLine($"{language.Name.ColorString(language.ChatColor)} ({language.Id}): {GetFluencyNameFromProficiency(languageData.Value)} ({languageData.Value})");
+        }
+      }
+
+      message.AppendLine("=========");
+      showTo.SendServerMessage(message.ToString());
+    }
+
+    private string GetFluencyNameFromProficiency(int proficiency)
+    {
+      return proficiency switch
+      {
+        >= LanguageProficiency.Fluent => "Fluent",
+        >= LanguageProficiency.Advanced => "Advanced",
+        >= LanguageProficiency.Intermediate => "Intermediate",
+        >= LanguageProficiency.Beginner => "Beginner",
+        _ => "Untrained",
+      };
     }
   }
 }

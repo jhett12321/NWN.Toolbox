@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using Anvil.API;
 using Anvil.Services;
 using Jorteck.Toolbox.Core;
@@ -49,16 +50,7 @@ namespace Jorteck.Toolbox.Features.Chat
       switch (args[0])
       {
         case "list":
-          List<string> languages = languageState?.LanguageProficiencies?.Keys.ToList();
-          if (languages != null && languages.Count > 0)
-          {
-            caller.SendServerMessage($"Known languages: {string.Join(',', languages)}");
-          }
-          else
-          {
-            caller.SendServerMessage("You have no known languages.");
-          }
-
+          LanguageService.ListPlayerLanguages(caller, caller);
           break;
         case "say" when args.Count > 2:
           SpeakMessage(caller, languageState, args[1], string.Join(' ', args.Skip(2)), ChatVolume.Talk);
