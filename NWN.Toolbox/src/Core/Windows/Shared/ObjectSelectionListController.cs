@@ -229,9 +229,9 @@ namespace Jorteck.Toolbox.Core
       }
     }
 
-    public void JumpToObject(NwGameObject gameObject)
+    public async void JumpToObject(NwGameObject gameObject)
     {
-      windowToken.Player.ControlledCreature!.JumpToObject(gameObject);
+      await windowToken.Player.ControlledCreature!.JumpToObject(gameObject);
     }
 
     private void UpdateSelection(NwObject newSelection)

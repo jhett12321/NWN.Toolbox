@@ -5,7 +5,7 @@ using Anvil.API;
 using Anvil.Internal;
 using Anvil.Services;
 
-namespace Jorteck.Toolbox.Features.ChatCommands
+namespace Jorteck.Toolbox.Features.Chat
 {
   [ServiceBinding(typeof(IChatCommand))]
   public class ReloadServerCommand : IChatCommand
@@ -27,4 +27,3 @@ namespace Jorteck.Toolbox.Features.ChatCommands
     }
   }
 }
-

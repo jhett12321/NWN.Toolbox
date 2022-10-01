@@ -4,6 +4,7 @@ using Anvil.API;
 using Anvil.API.Events;
 using Anvil.Services;
 using Jorteck.Toolbox.Core;
+using Jorteck.Toolbox.Features.Chat;
 using NLog;
 
 namespace Jorteck.Toolbox.Features.Languages
@@ -22,6 +23,9 @@ namespace Jorteck.Toolbox.Features.Languages
     [Inject]
     private ConfigService ConfigService { get; init; }
 
+    [Inject]
+    private AreaShoutService AreaShoutService { get; init; }
+
     private readonly Regex translatePattern = new Regex(@"\[(?<message>.*?)\]", RegexOptions.Compiled);
 
     void IInitializable.Init()
@@ -32,23 +36,38 @@ namespace Jorteck.Toolbox.Features.Languages
       }
     }
 
-    public void SendTranslatedMessage(NwPlayer player, LanguageOutput message, TalkVolume volume)
+    private LanguageOutput GetTranslatedChatFromPattern(ILanguage language, int proficiency, string message)
     {
-      NwCreature playerCreature = player.ControlledCreature!;
-      NwArea area = playerCreature.Area;
+      string interpretation = translatePattern.Replace(message, match => language.Translate(match.Groups["message"].Value, proficiency).Interpretation);
+      string output = translatePattern.Replace(message, match => language.Translate(match.Groups["message"].Value, proficiency).Output);
+      return new LanguageOutput(language, interpretation, output);
+    }
 
+    public void SendTranslatedMessage(NwCreature sender, ChatVolume volume, bool isDm, bool matchChatPattern, string message, ILanguage language, int proficiency)
+    {
+      NwArea area = sender?.Area;
       if (area == null)
       {
         return;
       }
 
-      Log.Info($"[{area.Name}] {playerCreature.Name}: [{message.Language.Name}] {message.Interpretation}");
+      LanguageOutput translatedMessage;
+      if (matchChatPattern)
+      {
+        translatedMessage = GetTranslatedChatFromPattern(language, proficiency, message);
+      }
+      else
+      {
+        translatedMessage = language.Translate(message, proficiency);
+      }
 
+      Log.Info($"[{area.Name}] {sender.Name}: [{translatedMessage.Language.Name}] {translatedMessage.Interpretation}");
+
+      ChatChannel channel = GetChannel(volume, isDm);
       switch (volume)
       {
-        case TalkVolume.Talk:
-        case TalkVolume.Whisper:
-          ChatChannel channel = GetChannel(player, volume);
+        case ChatVolume.Talk:
+        case ChatVolume.Whisper:
           foreach (NwPlayer onlinePlayer in NwModule.Instance.Players)
           {
             if (!onlinePlayer.IsConnected)
@@ -63,21 +82,35 @@ namespace Jorteck.Toolbox.Features.Languages
             }
 
             float chatDistance = ChatService.GetPlayerChatHearingDistance(onlinePlayer, channel);
-            if (onlinePlayerCreature.DistanceSquared(playerCreature) < chatDistance * chatDistance)
+            if (onlinePlayerCreature.DistanceSquared(sender) < chatDistance * chatDistance)
             {
-              ChatService.SendMessage(channel, GetMessageForPlayer(onlinePlayer, message), playerCreature, onlinePlayer);
+              ChatService.SendMessage(channel, GetMessageForPlayer(onlinePlayer, translatedMessage), sender, onlinePlayer);
             }
           }
 
           break;
-        case TalkVolume.Party:
-          foreach (NwPlayer partyMember in player.PartyMembers)
+        case ChatVolume.Area:
+          foreach (NwPlayer onlinePlayer in NwModule.Instance.Players)
           {
-            ChatService.SendMessage(ChatChannel.PlayerParty, GetMessageForPlayer(partyMember, message), playerCreature, partyMember);
+            if (!onlinePlayer.IsConnected)
+            {
+              continue;
+            }
+
+            if (onlinePlayer.ControlledCreature.Area == area)
+            {
+              string rawMessage = GetMessageForPlayer(onlinePlayer, translatedMessage);
+              ChatService.SendMessage(channel, AreaShoutService.GetFormattedAreaMessage(rawMessage), sender, onlinePlayer);
+            }
           }
 
           break;
-        case TalkVolume.Tell:
+        case ChatVolume.Party when sender.IsPlayerControlled(out NwPlayer player):
+          foreach (NwPlayer partyMember in player.PartyMembers)
+          {
+            ChatService.SendMessage(channel, GetMessageForPlayer(partyMember, translatedMessage), sender, partyMember);
+          }
+
           break;
       }
     }
@@ -108,31 +141,18 @@ namespace Jorteck.Toolbox.Features.Languages
         return;
       }
 
-      LanguageOutput message = ParseMessage(eventData.Message, language, proficiency.Value);
+      SendTranslatedMessage(eventData.Sender.ControlledCreature, eventData.Volume.ToChatVolume(), eventData.Sender.IsDM, true, eventData.Message, language, proficiency.Value);
       eventData.Message = string.Empty;
-
-      SendTranslatedMessage(eventData.Sender, message, eventData.Volume);
     }
 
-    private LanguageOutput ParseMessage(string message, ILanguage language, int proficiency)
-    {
-      string interpretation = translatePattern.Replace(message, match => language.Translate(match.Groups["message"].Value, proficiency).Interpretation);
-      string output = translatePattern.Replace(message, match => language.Translate(match.Groups["message"].Value, proficiency).Output);
-
-      return new LanguageOutput(language, interpretation, output);
-    }
-
-    private ChatChannel GetChannel(NwPlayer player, TalkVolume volume)
+    private ChatChannel GetChannel(ChatVolume volume, bool isDM)
     {
       return volume switch
       {
-        TalkVolume.Talk => player.IsDM ? ChatChannel.DmTalk : ChatChannel.PlayerTalk,
-        TalkVolume.Whisper => player.IsDM ? ChatChannel.DmWhisper : ChatChannel.PlayerWhisper,
-        TalkVolume.Shout => player.IsDM ? ChatChannel.DmShout : ChatChannel.PlayerShout,
-        TalkVolume.SilentTalk => player.IsDM ? ChatChannel.DmTalk : ChatChannel.PlayerTalk,
-        TalkVolume.SilentShout => player.IsDM ? ChatChannel.DmShout : ChatChannel.PlayerShout,
-        TalkVolume.Party => player.IsDM ? ChatChannel.DmParty : ChatChannel.PlayerParty,
-        TalkVolume.Tell => player.IsDM ? ChatChannel.DmTell : ChatChannel.PlayerTell,
+        ChatVolume.Talk => isDM ? ChatChannel.DmTalk : ChatChannel.PlayerTalk,
+        ChatVolume.Area => isDM ? ChatChannel.DmTalk : ChatChannel.PlayerTalk,
+        ChatVolume.Whisper => isDM ? ChatChannel.DmWhisper : ChatChannel.PlayerWhisper,
+        ChatVolume.Party => isDM ? ChatChannel.DmParty : ChatChannel.PlayerParty,
         _ => throw new ArgumentOutOfRangeException(nameof(volume), volume, null),
       };
     }

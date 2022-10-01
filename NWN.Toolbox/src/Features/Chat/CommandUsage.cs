@@ -1,4 +1,4 @@
-namespace Jorteck.Toolbox.Features.ChatCommands
+namespace Jorteck.Toolbox.Features.Chat
 {
   public sealed class CommandUsage
   {

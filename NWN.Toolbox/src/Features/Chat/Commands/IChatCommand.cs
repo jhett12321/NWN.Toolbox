@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using Anvil.API;
 
-namespace Jorteck.Toolbox.Features.ChatCommands
+namespace Jorteck.Toolbox.Features.Chat
 {
   /// <summary>
   /// A game chat command. Implement to add your own chat command.

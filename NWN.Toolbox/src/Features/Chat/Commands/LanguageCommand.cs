@@ -4,7 +4,7 @@ using System.Linq;
 using Anvil.API;
 using Anvil.Services;
 using Jorteck.Toolbox.Core;
-using Jorteck.Toolbox.Features.ChatCommands;
+using Jorteck.Toolbox.Features.Chat;
 
 namespace Jorteck.Toolbox.Features.Languages
 {
@@ -38,6 +38,7 @@ namespace Jorteck.Toolbox.Features.Languages
       new CommandUsage("say <language> <message>", "Speaks the given message in the language specified."),
       new CommandUsage("whisper <language> <message>", "Whispers the given message in the language specified."),
       new CommandUsage("party <language> <message>", "Party shouts the given message in the language specified."),
+      new CommandUsage("area <language> <message>", "Area shouts the given message in the language specified."),
       new CommandUsage("mode <native/translated/both>", "Changes how chat messages that are understood by your character display in the chat box."),
     };
 
@@ -60,13 +61,16 @@ namespace Jorteck.Toolbox.Features.Languages
 
           break;
         case "say" when args.Count > 2:
-          SpeakMessage(caller, languageState, args[1], string.Join(' ', args.Skip(2)), TalkVolume.Talk);
+          SpeakMessage(caller, languageState, args[1], string.Join(' ', args.Skip(2)), ChatVolume.Talk);
           break;
         case "whisper" when args.Count > 2:
-          SpeakMessage(caller, languageState, args[1], string.Join(' ', args.Skip(2)), TalkVolume.Whisper);
+          SpeakMessage(caller, languageState, args[1], string.Join(' ', args.Skip(2)), ChatVolume.Whisper);
           break;
         case "party" when args.Count > 2:
-          SpeakMessage(caller, languageState, args[1], string.Join(' ', args.Skip(2)), TalkVolume.Party);
+          SpeakMessage(caller, languageState, args[1], string.Join(' ', args.Skip(2)), ChatVolume.Party);
+          break;
+        case "area" when args.Count > 2:
+          SpeakMessage(caller, languageState, args[1], string.Join(' ', args.Skip(2)), ChatVolume.Area);
           break;
         case "mode" when args.Count == 2:
           if (Enum.TryParse(args[1], true, out LanguageDisplayType newType))
@@ -106,15 +110,14 @@ namespace Jorteck.Toolbox.Features.Languages
       }
     }
 
-    private void SpeakMessage(NwPlayer sender, LanguageState languageState, string languageKey, string message, TalkVolume volume)
+    private void SpeakMessage(NwPlayer sender, LanguageState languageState, string languageKey, string message, ChatVolume volume)
     {
       if (LanguageService.TryGetLanguage(languageKey, out ILanguage language))
       {
         int? languageProficiency = LanguageService.GetLanguageProficiency(sender, language, languageState);
         if (languageProficiency != null)
         {
-          LanguageOutput output = language.Translate(message, languageProficiency.Value);
-          LanguageChatService.SendTranslatedMessage(sender, output, volume);
+          LanguageChatService.SendTranslatedMessage(sender.ControlledCreature, volume, true, false, message, language, LanguageProficiency.Fluent);
         }
         else
         {

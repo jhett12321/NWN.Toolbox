@@ -5,7 +5,7 @@ using System.Text;
 using Anvil.API;
 using Anvil.Services;
 using Jorteck.Toolbox.Core;
-using Jorteck.Toolbox.Features.ChatCommands;
+using Jorteck.Toolbox.Features.Chat;
 
 namespace Jorteck.Toolbox.Features.Languages
 {

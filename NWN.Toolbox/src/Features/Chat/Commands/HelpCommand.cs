@@ -5,7 +5,7 @@ using Anvil.API;
 using Anvil.Services;
 using Jorteck.Toolbox.Core;
 
-namespace Jorteck.Toolbox.Features.ChatCommands
+namespace Jorteck.Toolbox.Features.Chat
 {
   [ServiceBinding(typeof(HelpCommand))]
   [ServiceBinding(typeof(IChatCommand))]

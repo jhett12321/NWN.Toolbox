@@ -9,7 +9,7 @@ using Anvil.Services;
 using Jorteck.Toolbox.Core;
 using Jorteck.Toolbox.Features.Permissions;
 
-namespace Jorteck.Toolbox.Features.ChatCommands
+namespace Jorteck.Toolbox.Features.Chat
 {
   [ServiceBinding(typeof(ChatCommandService))]
   internal sealed class ChatCommandService : IInitializable

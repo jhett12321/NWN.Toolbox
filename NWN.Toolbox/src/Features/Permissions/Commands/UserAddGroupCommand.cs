@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using Anvil.API;
 using Anvil.Services;
-using Jorteck.Toolbox.Features.ChatCommands;
+using Jorteck.Toolbox.Features.Chat;
 
 namespace Jorteck.Toolbox.Features.Permissions
 {
