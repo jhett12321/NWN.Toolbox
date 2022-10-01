@@ -34,7 +34,7 @@ namespace Jorteck.Toolbox.Features.Languages
     public CommandUsage[] Usages { get; } =
     {
       new CommandUsage("list", "Lists languages your character can speak."),
-      new CommandUsage("<language>", "Switches your active language to the language specified."),
+      new CommandUsage("<language>", "Switches your active language to the language specified. After setting a language as active, you may speak in the language in any chat message by surrounding the message with [] brackets."),
       new CommandUsage("say <language> <message>", "Speaks the given message in the language specified."),
       new CommandUsage("whisper <language> <message>", "Whispers the given message in the language specified."),
       new CommandUsage("party <language> <message>", "Party shouts the given message in the language specified."),
@@ -128,4 +128,3 @@ namespace Jorteck.Toolbox.Features.Languages
     }
   }
 }
-
