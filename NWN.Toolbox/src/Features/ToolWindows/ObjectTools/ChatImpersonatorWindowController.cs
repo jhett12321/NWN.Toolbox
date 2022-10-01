@@ -39,14 +39,7 @@ namespace Jorteck.Toolbox.Features.ToolWindows
       for (int i = 0; i < languages.Count; i++)
       {
         string languageName = languages[i]?.Name;
-        if (languageName != null)
-        {
-          languageEntries.Add(new NuiComboEntry(languages[i].Name, i));
-        }
-        else
-        {
-          languageEntries.Add(new NuiComboEntry("None", i));
-        }
+        languageEntries.Add(languageName != null ? new NuiComboEntry(languageName, i) : new NuiComboEntry("None", i));
       }
 
       Token.SetBindValue(View.WindowTitle, View.Title);

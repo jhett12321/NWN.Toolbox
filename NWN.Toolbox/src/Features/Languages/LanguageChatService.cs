@@ -51,15 +51,7 @@ namespace Jorteck.Toolbox.Features.Languages
         return;
       }
 
-      LanguageOutput translatedMessage;
-      if (matchChatPattern)
-      {
-        translatedMessage = GetTranslatedChatFromPattern(language, proficiency, message);
-      }
-      else
-      {
-        translatedMessage = language.Translate(message, proficiency);
-      }
+      LanguageOutput translatedMessage = matchChatPattern ? GetTranslatedChatFromPattern(language, proficiency, message) : language.Translate(message, proficiency);
 
       Log.Info($"[{area.Name}] {sender.Name}: [{translatedMessage.Language.Name}] {translatedMessage.Interpretation}");
 

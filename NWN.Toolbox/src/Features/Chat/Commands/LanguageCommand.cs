@@ -4,9 +4,9 @@ using System.Linq;
 using Anvil.API;
 using Anvil.Services;
 using Jorteck.Toolbox.Core;
-using Jorteck.Toolbox.Features.Chat;
+using Jorteck.Toolbox.Features.Languages;
 
-namespace Jorteck.Toolbox.Features.Languages
+namespace Jorteck.Toolbox.Features.Chat
 {
   [ServiceBinding(typeof(IChatCommand))]
   public sealed class LanguageCommand : IChatCommand
