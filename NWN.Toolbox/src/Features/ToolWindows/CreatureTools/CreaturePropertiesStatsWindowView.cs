@@ -16,45 +16,11 @@ namespace Jorteck.Toolbox.Features.ToolWindows
     }
 
     // Sub-views
-    public readonly NuiGroup AbilityScoreListContainer = new NuiGroup
-    {
-      Id = "ability_score_container",
-      Scrollbars = NuiScrollbars.None,
-      Height = 300f,
-      Width = 560f,
-    };
-
-    public readonly NuiGroup SavesListContainer = new NuiGroup
-    {
-      Id = "saves_container",
-      Scrollbars = NuiScrollbars.None,
-      Height = 175f,
-      Width = 560f,
-    };
-
-    public readonly NuiGroup ACListContainer = new NuiGroup
-    {
-      Id = "ac_container",
-      Scrollbars = NuiScrollbars.None,
-      Height = 225f,
-      Width = 270f,
-    };
-
-    public readonly NuiGroup HitPointsListContainer = new NuiGroup
-    {
-      Id = "hp_container",
-      Scrollbars = NuiScrollbars.None,
-      Height = 145f,
-      Width = 280f,
-    };
-
-    public readonly NuiGroup SpeedContainer = new NuiGroup
-    {
-      Id = "speed_container",
-      Scrollbars = NuiScrollbars.None,
-      Height = 50f,
-      Width = 280f,
-    };
+    public readonly NuiGroup AbilityScoreListContainer;
+    public readonly NuiGroup SavesListContainer;
+    public readonly NuiGroup ACListContainer;
+    public readonly NuiGroup HitPointsListContainer;
+    public readonly NuiGroup SpeedContainer;
 
     // Permission Binds
 
@@ -159,32 +125,27 @@ namespace Jorteck.Toolbox.Features.ToolWindows
 
     public CreaturePropertiesStatsWindowView()
     {
-      SelectCreatureButton = new NuiButton("Select Creature")
-      {
-        Id = "btn_crt_sel",
-      };
-
-      SaveChangesButton = new NuiButton("Save")
-      {
-        Id = "btn_save",
-        Enabled = SaveEnabled,
-      };
-
-      DiscardChangesButton = new NuiButton("Discard")
-      {
-        Id = "btn_discard",
-        Enabled = SaveEnabled,
-      };
-
       NuiColumn root = new NuiColumn
       {
         Children = new List<NuiElement>
         {
           new NuiLabel("Ability Scores") { Height = 20f },
-          AbilityScoreListContainer,
+          new NuiGroup
+          {
+            Id = "ability_score_container",
+            Scrollbars = NuiScrollbars.None,
+            Height = 300f,
+            Width = 560f,
+          }.Assign(out AbilityScoreListContainer),
           new NuiSpacer(),
           new NuiLabel("Saves") { Height = 20f },
-          SavesListContainer,
+          new NuiGroup
+          {
+            Id = "saves_container",
+            Scrollbars = NuiScrollbars.None,
+            Height = 175f,
+            Width = 560f,
+          }.Assign(out SavesListContainer),
           new NuiSpacer(),
           new NuiRow
           {
@@ -195,7 +156,13 @@ namespace Jorteck.Toolbox.Features.ToolWindows
                 Children = new List<NuiElement>
                 {
                   new NuiLabel("Armor Class") { Height = 20f },
-                  ACListContainer,
+                  new NuiGroup
+                  {
+                    Id = "ac_container",
+                    Scrollbars = NuiScrollbars.None,
+                    Height = 225f,
+                    Width = 270f,
+                  }.Assign(out ACListContainer),
                 },
               },
               new NuiColumn
@@ -203,9 +170,21 @@ namespace Jorteck.Toolbox.Features.ToolWindows
                 Children = new List<NuiElement>
                 {
                   new NuiLabel("Hit Points") { Height = 20f },
-                  HitPointsListContainer,
+                  new NuiGroup
+                  {
+                    Id = "hp_container",
+                    Scrollbars = NuiScrollbars.None,
+                    Height = 145f,
+                    Width = 280f,
+                  }.Assign(out HitPointsListContainer),
                   new NuiLabel("Speed") { Height = 20f },
-                  SpeedContainer,
+                  new NuiGroup
+                  {
+                    Id = "speed_container",
+                    Scrollbars = NuiScrollbars.None,
+                    Height = 50f,
+                    Width = 280f,
+                  }.Assign(out SpeedContainer),
                 },
               },
             },
@@ -216,10 +195,21 @@ namespace Jorteck.Toolbox.Features.ToolWindows
             Height = 40f,
             Children = new List<NuiElement>
             {
-              SelectCreatureButton,
+              new NuiButton("Select Creature")
+              {
+                Id = "btn_crt_sel",
+              }.Assign(out SelectCreatureButton),
               new NuiSpacer(),
-              SaveChangesButton,
-              DiscardChangesButton,
+              new NuiButton("Save")
+              {
+                Id = "btn_save",
+                Enabled = SaveEnabled,
+              }.Assign(out SaveChangesButton),
+              new NuiButton("Discard")
+              {
+                Id = "btn_discard",
+                Enabled = SaveEnabled,
+              }.Assign(out DiscardChangesButton),
             },
           },
         },

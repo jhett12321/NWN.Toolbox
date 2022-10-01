@@ -36,23 +36,6 @@ namespace Jorteck.Toolbox.Features.ToolWindows
 
     public PlayerAppearanceWindowView()
     {
-      SelectPlayerButton = new NuiButton("Select Player")
-      {
-        Id = "btn_crt_sel",
-      };
-
-      SaveChangesButton = new NuiButton("Save")
-      {
-        Id = "btn_save",
-        Enabled = SaveEnabled,
-      };
-
-      DiscardChangesButton = new NuiButton("Discard")
-      {
-        Id = "btn_discard",
-        Enabled = SaveEnabled,
-      };
-
       NuiColumn root = new NuiColumn
       {
         Children = new List<NuiElement>
@@ -156,10 +139,21 @@ namespace Jorteck.Toolbox.Features.ToolWindows
             Height = 40f,
             Children = new List<NuiElement>
             {
-              SelectPlayerButton,
+              new NuiButton("Select Player")
+              {
+                Id = "btn_crt_sel",
+              }.Assign(out SelectPlayerButton),
               new NuiSpacer(),
-              SaveChangesButton,
-              DiscardChangesButton,
+              new NuiButton("Save")
+              {
+                Id = "btn_save",
+                Enabled = SaveEnabled,
+              }.Assign(out SaveChangesButton),
+              new NuiButton("Discard")
+              {
+                Id = "btn_discard",
+                Enabled = SaveEnabled,
+              }.Assign(out DiscardChangesButton),
             },
           },
         },

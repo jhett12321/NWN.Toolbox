@@ -27,11 +27,6 @@ namespace Jorteck.Toolbox.Features.ToolWindows
     public readonly NuiBind<string> BlueprintFactions = new NuiBind<string>("factions_val");
     public readonly NuiBind<int> BlueprintCount = new NuiBind<int>("count");
 
-    // Object List Elements
-    public readonly NuiLabel BlueprintNamesAndCategoriesTexts;
-    public readonly NuiLabel BlueprintCRsTexts;
-    public readonly NuiLabel BlueprintFactionsTexts;
-
     //public readonly NuiBind<string> SelectedBlueprint = new NuiBind<string>("selected_blue");
 
     // Buttons
@@ -43,48 +38,29 @@ namespace Jorteck.Toolbox.Features.ToolWindows
 
     public CreatorWindowView()
     {
-      SearchButton = new NuiButtonImage("isk_search")
-      {
-        Id = "btn_search",
-        Aspect = 1f,
-      };
-
-      CreateButton = new NuiButton("Create")
-      {
-        Id = "btn_create",
-        Width = 300f,
-        Enabled = CreateButtonEnabled,
-      };
-
-      BlueprintNamesAndCategoriesTexts = new NuiLabel(BlueprintNamesAndCategories)
-      {
-        Id = BlueprintRowId,
-        Tooltip = BlueprintNamesAndCategories,
-        ForegroundColor = RowColors,
-      };
-
-      BlueprintCRsTexts = new NuiLabel(BlueprintCRs)
-      {
-        Id = BlueprintRowId,
-        Tooltip = BlueprintNamesAndCategories,
-        ForegroundColor = RowColors,
-      };
-
-      BlueprintFactionsTexts = new NuiLabel(BlueprintFactions)
-      {
-        Id = BlueprintRowId,
-        Tooltip = BlueprintNamesAndCategories,
-        ForegroundColor = RowColors,
-      };
-
       List<NuiListTemplateCell> rowTemplate = new List<NuiListTemplateCell>
       {
-        new NuiListTemplateCell(BlueprintNamesAndCategoriesTexts),
-        new NuiListTemplateCell(BlueprintCRsTexts)
+        new NuiListTemplateCell(new NuiLabel(BlueprintNamesAndCategories)
+        {
+          Id = BlueprintRowId,
+          Tooltip = BlueprintNamesAndCategories,
+          ForegroundColor = RowColors,
+        }),
+        new NuiListTemplateCell(new NuiLabel(BlueprintCRs)
+        {
+          Id = BlueprintRowId,
+          Tooltip = BlueprintNamesAndCategories,
+          ForegroundColor = RowColors,
+        })
         {
           Width = 40f,
         },
-        new NuiListTemplateCell(BlueprintFactionsTexts)
+        new NuiListTemplateCell(new NuiLabel(BlueprintFactions)
+        {
+          Id = BlueprintRowId,
+          Tooltip = BlueprintNamesAndCategories,
+          ForegroundColor = RowColors,
+        })
         {
           Width = 90f,
         },
@@ -101,7 +77,11 @@ namespace Jorteck.Toolbox.Features.ToolWindows
             {
               NuiUtils.CreateComboForEnum<BlueprintObjectType>(BlueprintType),
               new NuiTextEdit("Search...", Search, 255, false),
-              SearchButton,
+              new NuiButtonImage("isk_search")
+              {
+                Id = "btn_search",
+                Aspect = 1f,
+              }.Assign(out SearchButton),
             },
           },
           new NuiRow
@@ -127,7 +107,12 @@ namespace Jorteck.Toolbox.Features.ToolWindows
             Children = new List<NuiElement>
             {
               new NuiSpacer(),
-              CreateButton,
+              new NuiButton("Create")
+              {
+                Id = "btn_create",
+                Width = 300f,
+                Enabled = CreateButtonEnabled,
+              }.Assign(out CreateButton),
               new NuiSpacer(),
             },
           },

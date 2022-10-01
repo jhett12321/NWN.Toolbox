@@ -27,22 +27,14 @@ namespace Jorteck.Toolbox.Features.ToolWindows
 
     public ToolboxWindowView()
     {
-      SearchButton = new NuiButtonImage("isk_search")
-      {
-        Id = "btn_search",
-        Aspect = 1f,
-      };
-
-      OpenWindowButton = new NuiButtonImage("dm_goto")
-      {
-        Id = "btn_openwin",
-        Aspect = 1f,
-        Tooltip = "Open Window",
-      };
-
       List<NuiListTemplateCell> rowTemplate = new List<NuiListTemplateCell>
       {
-        new NuiListTemplateCell(OpenWindowButton)
+        new NuiListTemplateCell(new NuiButtonImage("dm_goto")
+        {
+          Id = "btn_openwin",
+          Aspect = 1f,
+          Tooltip = "Open Window",
+        }.Assign(out OpenWindowButton))
         {
           VariableSize = false,
           Width = 35f,
@@ -63,7 +55,11 @@ namespace Jorteck.Toolbox.Features.ToolWindows
             Children = new List<NuiElement>
             {
               new NuiTextEdit("Search for tools...", Search, 255, false),
-              SearchButton,
+              new NuiButtonImage("isk_search")
+              {
+                Id = "btn_search",
+                Aspect = 1f,
+              }.Assign(out SearchButton),
             },
           },
           new NuiList(rowTemplate, WindowCount)

@@ -16,7 +16,7 @@ namespace Jorteck.Toolbox.Features.ToolWindows
     }
 
     // Sub Views
-    public readonly ObjectSelectionListView SelectionListView = new ObjectSelectionListView();
+    public readonly ObjectSelectionListView SelectionListView;
 
     // Buttons
     public readonly NuiButtonImage GoToButton;
@@ -52,111 +52,6 @@ namespace Jorteck.Toolbox.Features.ToolWindows
 
     public ChooserWindowView()
     {
-      GoToButton = new NuiButtonImage("dm_goto")
-      {
-        Id = "btn_goto",
-        Tooltip = "Go to object",
-        Enabled = GoToButtonEnabled,
-        Width = 40f,
-        Aspect = 1f,
-      };
-      DestroyButton = new NuiButtonImage("dm_kill")
-      {
-        Id = "btn_kill",
-        Tooltip = "Kill/Destroy Object",
-        Enabled = DestroyButtonEnabled,
-        Width = 40f,
-        Aspect = 1f,
-      };
-      JumpButton = new NuiButtonImage("dm_jump")
-      {
-        Id = "btn_jump",
-        Tooltip = "Summon/Jump to DM",
-        Enabled = JumpButtonEnabled,
-        Width = 40f,
-        Aspect = 1f,
-      };
-      ToggleAIButton = new NuiButtonImage("dm_ai")
-      {
-        Id = "btn_ai",
-        Tooltip = "Toggle Creature AI",
-        Enabled = ToggleAIButtonEnabled,
-        Width = 40f,
-        Aspect = 1f,
-      };
-      HealButton = new NuiButtonImage("dm_heal")
-      {
-        Id = "btn_heal",
-        Tooltip = "Heal",
-        Enabled = HealButtonEnabled,
-        Width = 40f,
-        Aspect = 1f,
-      };
-      ControlButton = new NuiButtonImage("dm_control")
-      {
-        Id = "btn_control",
-        Tooltip = "Take Control",
-        Enabled = ControlButtonEnabled,
-        Width = 40f,
-        Aspect = 1f,
-      };
-      RestButton = new NuiButtonImage("dm_rest")
-      {
-        Id = "btn_rest",
-        Tooltip = "Rest",
-        Enabled = RestButtonEnabled,
-        Width = 40f,
-        Aspect = 1f,
-      };
-      LimboButton = new NuiButtonImage("dm_limbo")
-      {
-        Id = "btn_limbo",
-        Tooltip = "Send to Limbo",
-        Enabled = LimboButtonEnabled,
-        Width = 40f,
-        Aspect = 1f,
-      };
-      ExamineButton = new NuiButtonImage("dm_examine")
-      {
-        Id = "btn_examine",
-        Tooltip = "Examine",
-        Enabled = ExamineButtonEnabled,
-        Width = 40f,
-        Aspect = 1f,
-      };
-      PossessButton = new NuiButtonImage("dm_possess")
-      {
-        Id = "btn_possess",
-        Tooltip = "Possess Creature (Full Powers)",
-        Enabled = PossessButtonEnabled,
-        Width = 40f,
-        Aspect = 1f,
-      };
-      ToggleImmortalButton = new NuiButtonImage("dm_immortal")
-      {
-        Id = "btn_immortal",
-        Tooltip = "Toggle Immortal Mode (Take damage, cannot be killed)",
-        Enabled = ToggleImmortalButtonEnabled,
-        Width = 40f,
-        Aspect = 1f,
-      };
-      TogglePlotModeButton = new NuiButtonImage("dm_god")
-      {
-        Id = "btn_god",
-        Tooltip = "Toggle Plot/God Mode (Cannot take damage)",
-        Enabled = TogglePlotButtonEnabled,
-        Width = 40f,
-        Aspect = 1f,
-      };
-      CloneButton = new NuiButtonImage("dm_encounter")
-      {
-        Id = "btn_clone",
-        Tooltip = "Clone Object",
-        Enabled = CloneButtonEnabled,
-        Width = 40f,
-        Aspect = 1f,
-      };
-
       AllButtonStates = new[]
       {
         GoToButtonEnabled,
@@ -174,6 +69,8 @@ namespace Jorteck.Toolbox.Features.ToolWindows
         CloneButtonEnabled,
       };
 
+      SelectionListView = new ObjectSelectionListView();
+
       NuiColumn root = new NuiColumn
       {
         Children = new List<NuiElement>(SelectionListView.SubView)
@@ -183,19 +80,110 @@ namespace Jorteck.Toolbox.Features.ToolWindows
             Children = new List<NuiElement>
             {
               new NuiSpacer(),
-              GoToButton,
-              DestroyButton,
-              ExamineButton,
-              CloneButton,
-              JumpButton,
-              ToggleAIButton,
-              HealButton,
-              ControlButton,
-              PossessButton,
-              RestButton,
-              LimboButton,
-              ToggleImmortalButton,
-              TogglePlotModeButton,
+              new NuiButtonImage("dm_goto")
+              {
+                Id = "btn_goto",
+                Tooltip = "Go to object",
+                Enabled = GoToButtonEnabled,
+                Width = 40f,
+                Aspect = 1f,
+              }.Assign(out GoToButton),
+              new NuiButtonImage("dm_kill")
+              {
+                Id = "btn_kill",
+                Tooltip = "Kill/Destroy Object",
+                Enabled = DestroyButtonEnabled,
+                Width = 40f,
+                Aspect = 1f,
+              }.Assign(out DestroyButton),
+              new NuiButtonImage("dm_examine")
+              {
+                Id = "btn_examine",
+                Tooltip = "Examine",
+                Enabled = ExamineButtonEnabled,
+                Width = 40f,
+                Aspect = 1f,
+              }.Assign(out ExamineButton),
+              new NuiButtonImage("dm_encounter")
+              {
+                Id = "btn_clone",
+                Tooltip = "Clone Object",
+                Enabled = CloneButtonEnabled,
+                Width = 40f,
+                Aspect = 1f,
+              }.Assign(out CloneButton),
+              new NuiButtonImage("dm_jump")
+              {
+                Id = "btn_jump",
+                Tooltip = "Summon/Jump to DM",
+                Enabled = JumpButtonEnabled,
+                Width = 40f,
+                Aspect = 1f,
+              }.Assign(out JumpButton),
+              new NuiButtonImage("dm_ai")
+              {
+                Id = "btn_ai",
+                Tooltip = "Toggle Creature AI",
+                Enabled = ToggleAIButtonEnabled,
+                Width = 40f,
+                Aspect = 1f,
+              }.Assign(out ToggleAIButton),
+              new NuiButtonImage("dm_heal")
+              {
+                Id = "btn_heal",
+                Tooltip = "Heal",
+                Enabled = HealButtonEnabled,
+                Width = 40f,
+                Aspect = 1f,
+              }.Assign(out HealButton),
+              new NuiButtonImage("dm_control")
+              {
+                Id = "btn_control",
+                Tooltip = "Take Control",
+                Enabled = ControlButtonEnabled,
+                Width = 40f,
+                Aspect = 1f,
+              }.Assign(out ControlButton),
+              new NuiButtonImage("dm_possess")
+              {
+                Id = "btn_possess",
+                Tooltip = "Possess Creature (Full Powers)",
+                Enabled = PossessButtonEnabled,
+                Width = 40f,
+                Aspect = 1f,
+              }.Assign(out PossessButton),
+              new NuiButtonImage("dm_rest")
+              {
+                Id = "btn_rest",
+                Tooltip = "Rest",
+                Enabled = RestButtonEnabled,
+                Width = 40f,
+                Aspect = 1f,
+              }.Assign(out RestButton),
+              new NuiButtonImage("dm_limbo")
+              {
+                Id = "btn_limbo",
+                Tooltip = "Send to Limbo",
+                Enabled = LimboButtonEnabled,
+                Width = 40f,
+                Aspect = 1f,
+              }.Assign(out LimboButton),
+              new NuiButtonImage("dm_immortal")
+              {
+                Id = "btn_immortal",
+                Tooltip = "Toggle Immortal Mode (Take damage, cannot be killed)",
+                Enabled = ToggleImmortalButtonEnabled,
+                Width = 40f,
+                Aspect = 1f,
+              }.Assign(out ToggleImmortalButton),
+              new NuiButtonImage("dm_god")
+              {
+                Id = "btn_god",
+                Tooltip = "Toggle Plot/God Mode (Cannot take damage)",
+                Enabled = TogglePlotButtonEnabled,
+                Width = 40f,
+                Aspect = 1f,
+              }.Assign(out TogglePlotModeButton),
               new NuiSpacer(),
             },
           },

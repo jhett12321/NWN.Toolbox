@@ -47,11 +47,6 @@ namespace Jorteck.Toolbox.Features.ToolWindows
 
     public VisualTransformWindowView()
     {
-      SelectObjectButton = new NuiButton("Select Object")
-      {
-        Id = "btn_obj_sel",
-      };
-
       NuiColumn root = new NuiColumn
       {
         Children = new List<NuiElement>
@@ -221,7 +216,10 @@ namespace Jorteck.Toolbox.Features.ToolWindows
             Height = 40f,
             Children = new List<NuiElement>
             {
-              SelectObjectButton,
+              new NuiButton("Select Object")
+              {
+                Id = "btn_obj_sel",
+              }.Assign(out SelectObjectButton),
             },
           },
         },

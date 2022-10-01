@@ -24,18 +24,16 @@ namespace Jorteck.Toolbox.Features.ToolWindows
 
     public ToolboxWindowButtonView()
     {
-      Button = new NuiButton("Toolbox")
-      {
-        Id = "btn_open",
-        Width = 112f,
-        Height = 37f,
-      };
-
       NuiRow root = new NuiRow
       {
         Children = new List<NuiElement>
         {
-          Button,
+          new NuiButton("Toolbox")
+          {
+            Id = "btn_open",
+            Width = 112f,
+            Height = 37f,
+          }.Assign(out Button),
         },
       };
 

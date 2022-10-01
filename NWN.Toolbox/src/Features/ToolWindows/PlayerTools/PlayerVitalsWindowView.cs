@@ -42,31 +42,8 @@ namespace Jorteck.Toolbox.Features.ToolWindows
     public readonly NuiButton SaveChangesButton;
     public readonly NuiButton DiscardChangesButton;
 
-    // Misc Elements
-    public readonly NuiCombo GenderCombo;
-
     public PlayerVitalsWindowView()
     {
-      SelectPlayerButton = new NuiButton("Select Player")
-      {
-        Id = "btn_crt_sel",
-      };
-
-      SaveChangesButton = new NuiButton("Save")
-      {
-        Id = "btn_save",
-        Enabled = SaveEnabled,
-      };
-
-      DiscardChangesButton = new NuiButton("Discard")
-      {
-        Id = "btn_discard",
-        Enabled = SaveEnabled,
-      };
-
-      GenderCombo = NuiUtils.CreateComboForEnum<Gender>(Gender);
-      GenderCombo.Enabled = GenderEnabled;
-
       NuiColumn root = new NuiColumn
       {
         Children = new List<NuiElement>
@@ -120,7 +97,10 @@ namespace Jorteck.Toolbox.Features.ToolWindows
             Height = 40f,
             Children = new List<NuiElement>
             {
-              GenderCombo,
+              NuiUtils.CreateComboForEnum<Gender>(Gender).Configure(combo =>
+              {
+                combo.Enabled = GenderEnabled;
+              }),
               new NuiTextEdit(string.Empty, Race, 255, false)
               {
                 Width = 157f,
@@ -204,10 +184,21 @@ namespace Jorteck.Toolbox.Features.ToolWindows
             Height = 40f,
             Children = new List<NuiElement>
             {
-              SelectPlayerButton,
+              new NuiButton("Select Player")
+              {
+                Id = "btn_crt_sel",
+              }.Assign(out SelectPlayerButton),
               new NuiSpacer(),
-              SaveChangesButton,
-              DiscardChangesButton,
+              new NuiButton("Save")
+              {
+                Id = "btn_save",
+                Enabled = SaveEnabled,
+              }.Assign(out SaveChangesButton),
+              new NuiButton("Discard")
+              {
+                Id = "btn_discard",
+                Enabled = SaveEnabled,
+              }.Assign(out DiscardChangesButton),
             },
           },
         },
