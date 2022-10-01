@@ -30,5 +30,18 @@ namespace Jorteck.Toolbox.Core
 
       return null;
     }
+
+    /// <summary>
+    /// Assigns the created value to an additional variable. Useful for adding field references to nested NUI elements.
+    /// </summary>
+    /// <param name="assign">The field/variable to assign.</param>
+    /// <param name="value">The value to assign</param>
+    /// <typeparam name="T">The type of value.</typeparam>
+    /// <returns>The input value provided in the value parameter.</returns>
+    protected T Assign<T>(out T assign, T value)
+    {
+      assign = value;
+      return value;
+    }
   }
 }
