@@ -1,3 +1,4 @@
+using System.Globalization;
 using Anvil.API;
 using Anvil.API.Events;
 using Jorteck.Toolbox.Core;
@@ -22,6 +23,7 @@ namespace Jorteck.Toolbox.Features.ToolWindows
         View.DescriptionEnabled,
         View.PortraitEnabled,
         View.DialogEnabled,
+        View.CREnabled,
         View.SaveEnabled,
       };
 
@@ -70,6 +72,7 @@ namespace Jorteck.Toolbox.Features.ToolWindows
       int value3 = (int)selectedCreature.Gender;
       Token.SetBindValue(View.Gender, value3);
       Token.SetBindValue(View.Description, selectedCreature.Description);
+      Token.SetBindValue(View.CR, selectedCreature.ChallengeRating.ToString(CultureInfo.InvariantCulture));
       Token.SetBindValue(View.Dialog, selectedCreature.DialogResRef);
       Token.SetBindValue(View.Portrait, selectedCreature.PortraitResRef);
 
@@ -135,6 +138,12 @@ namespace Jorteck.Toolbox.Features.ToolWindows
 
       selectedCreature.Gender = (Gender)Token.GetBindValue(View.Gender);
       selectedCreature.Description = Token.GetBindValue(View.Description)!;
+
+      if (Token.GetBindValue(View.CR)!.TryParseFloat(out float challengeRating))
+      {
+        selectedCreature.ChallengeRating = challengeRating;
+      }
+
       selectedCreature.PortraitResRef = Token.GetBindValue(View.Portrait)!;
       selectedCreature.DialogResRef = Token.GetBindValue(View.Dialog)!;
 

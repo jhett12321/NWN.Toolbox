@@ -25,6 +25,7 @@ namespace Jorteck.Toolbox.Features.ToolWindows
     public readonly NuiBind<bool> DescriptionEnabled = new NuiBind<bool>("description");
     public readonly NuiBind<bool> PortraitEnabled = new NuiBind<bool>("portrait");
     public readonly NuiBind<bool> DialogEnabled = new NuiBind<bool>("dialog");
+    public readonly NuiBind<bool> CREnabled = new NuiBind<bool>("cr");
     public readonly NuiBind<bool> SaveEnabled = new NuiBind<bool>("save");
 
     // Value Binds
@@ -38,6 +39,7 @@ namespace Jorteck.Toolbox.Features.ToolWindows
     public readonly NuiBind<string> Portrait = new NuiBind<string>("portrait_val");
     public readonly NuiBind<string> PortraitPreview = new NuiBind<string>("portrait_prev");
     public readonly NuiBind<string> Dialog = new NuiBind<string>("dialog_val");
+    public readonly NuiBind<string> CR = new NuiBind<string>("cr_val");
 
     // Buttons
     public readonly NuiButton SelectCreatureButton;
@@ -161,6 +163,20 @@ namespace Jorteck.Toolbox.Features.ToolWindows
               {
                 Height = 150f,
               },
+            },
+          },
+          new NuiRow
+          {
+            Height = 40f,
+            Enabled = CREnabled,
+            Children = new List<NuiElement>
+            {
+              new NuiLabel("Challenge Rating")
+              {
+                Width = 80f,
+                Margin = 10f,
+              },
+              new NuiTextEdit(string.Empty, CR, 255, false),
             },
           },
           new NuiRow
