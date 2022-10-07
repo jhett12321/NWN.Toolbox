@@ -34,9 +34,9 @@ namespace Jorteck.Toolbox.Features.ToolWindows
     #endregion
 
     #region SavesEnabled
-    public readonly NuiBind<bool> FortitudeBonusEnabled = new NuiBind<bool>("fortitude_bonus");
-    public readonly NuiBind<bool> ReflexBonusEnabled = new NuiBind<bool>("reflex_bonus");
-    public readonly NuiBind<bool> WillBonusEnabled = new NuiBind<bool>("will_bonus");
+    public readonly NuiBind<bool> FortitudeBaseEnabled = new NuiBind<bool>("fortitude_base");
+    public readonly NuiBind<bool> ReflexBaseEnabled = new NuiBind<bool>("reflex_base");
+    public readonly NuiBind<bool> WillBaseEnabled = new NuiBind<bool>("will_base");
     #endregion
 
     #region ArmorClassEnabled

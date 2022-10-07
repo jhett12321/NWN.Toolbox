@@ -20,9 +20,9 @@ namespace Jorteck.Toolbox.Features.ToolWindows
         View.IntelligenceScoreRawEnabled,
         View.WisdomScoreRawEnabled,
         View.CharismaScoreRawEnabled,
-        View.FortitudeBonusEnabled,
-        View.ReflexBonusEnabled,
-        View.WillBonusEnabled,
+        View.FortitudeBaseEnabled,
+        View.ReflexBaseEnabled,
+        View.WillBaseEnabled,
         View.NaturalACEnabled,
         View.BaseHitPointsEnabled,
         View.MovementRateEnabled,
@@ -73,9 +73,9 @@ namespace Jorteck.Toolbox.Features.ToolWindows
       BindAbilityScore(Ability.Wisdom, View.WisdomScoreRaw, View.WisdomScoreRacial, View.WisdomScoreTotal, View.WisdomScoreMod);
       BindAbilityScore(Ability.Charisma, View.CharismaScoreRaw, View.CharismaScoreRacial, View.CharismaScoreTotal, View.CharismaScoreMod);
 
-      BindSavingThrow(SavingThrow.Fortitude, View.FortitudeBase, View.FortitudeBonus, View.FortitudeTotal);
-      BindSavingThrow(SavingThrow.Reflex, View.ReflexBase, View.ReflexBonus, View.ReflexTotal);
-      BindSavingThrow(SavingThrow.Will, View.WillBase, View.WillBonus, View.WillTotal);
+      BindSavingThrow(SavingThrow.Fortitude, Ability.Constitution, View.FortitudeBase, View.FortitudeBonus, View.FortitudeTotal);
+      BindSavingThrow(SavingThrow.Reflex, Ability.Dexterity, View.ReflexBase, View.ReflexBonus, View.ReflexTotal);
+      BindSavingThrow(SavingThrow.Will, Ability.Wisdom, View.WillBase, View.WillBonus, View.WillTotal);
 
       Token.SetBindValue(View.NaturalAC, selectedCreature.BaseAC.ToString());
       Token.SetBindValue(View.DexterityAC, selectedCreature.GetAbilityModifier(Ability.Dexterity).ToString());
@@ -104,11 +104,15 @@ namespace Jorteck.Toolbox.Features.ToolWindows
       Token.SetBindValue(scoreMod, selectedCreature.GetAbilityModifier(ability).ToString());
     }
 
-    private void BindSavingThrow(SavingThrow savingThrow, NuiBind<string> throwBase, NuiBind<string> throwBonus, NuiBind<string> throwTotal)
+    private void BindSavingThrow(SavingThrow savingThrow, Ability ability, NuiBind<string> throwBase, NuiBind<string> throwBonus, NuiBind<string> throwTotal)
     {
-      Token.SetBindValue(throwBase, selectedCreature.GetBaseSavingThrow(savingThrow).ToString());
-      Token.SetBindValue(throwBonus, string.Empty); // TODO
-      Token.SetBindValue(throwTotal, selectedCreature.GetSavingThrow(savingThrow).ToString());
+      int baseSave = selectedCreature.GetBaseSavingThrow(savingThrow);
+      int modifier = selectedCreature.GetAbilityModifier(ability);
+      int totalSave = selectedCreature.GetSavingThrow(savingThrow);
+
+      Token.SetBindValue(throwBase, baseSave.ToString());
+      Token.SetBindValue(throwBonus, (totalSave - baseSave - modifier).ToString());
+      Token.SetBindValue(throwTotal, totalSave.ToString());
     }
 
     private void HandleButtonClick(ModuleEvents.OnNuiEvent eventData)
@@ -143,9 +147,11 @@ namespace Jorteck.Toolbox.Features.ToolWindows
 
       selectedCreature.BaseAC = sbyte.Parse(Token.GetBindValue(View.NaturalAC)!);
 
-      // TODO: missing the saves
-      // TODO: missing the base HP
+      selectedCreature.SetBaseSavingThrow(SavingThrow.Fortitude, (sbyte)byte.Parse(Token.GetBindValue(View.FortitudeBase)!));
+      selectedCreature.SetBaseSavingThrow(SavingThrow.Reflex, (sbyte)byte.Parse(Token.GetBindValue(View.ReflexBase)!));
+      selectedCreature.SetBaseSavingThrow(SavingThrow.Will, (sbyte)byte.Parse(Token.GetBindValue(View.WillBase)!));
 
+      selectedCreature.MaxHP = int.Parse(Token.GetBindValue(View.BaseHitPoints)!);
       selectedCreature.MovementRate = (MovementRate)Token.GetBindValue(View.MovementRate);
 
       Update();
@@ -317,7 +323,7 @@ namespace Jorteck.Toolbox.Features.ToolWindows
         Children = new List<NuiElement>
         {
           new NuiLabel("Fortitude") { Width = 90f, VerticalAlign = NuiVAlign.Middle },
-          new NuiTextEdit(string.Empty, View.FortitudeBase, 3, false) { Enabled = false, Width = 50f },
+          new NuiTextEdit(string.Empty, View.FortitudeBase, 3, false) { Enabled = View.FortitudeBaseEnabled, Width = 50f },
           new NuiLabel("+") { Width = 50f, HorizontalAlign = NuiHAlign.Center, VerticalAlign = NuiVAlign.Middle },
           new NuiTextEdit(string.Empty, View.ConstitutionScoreMod, 3, false) { Enabled = false, Width = 50f },
           new NuiLabel("=") { Width = 50f, HorizontalAlign = NuiHAlign.Center, VerticalAlign = NuiVAlign.Middle },
@@ -332,7 +338,7 @@ namespace Jorteck.Toolbox.Features.ToolWindows
         Children = new List<NuiElement>
         {
           new NuiLabel("Reflex") { Width = 90f, VerticalAlign = NuiVAlign.Middle },
-          new NuiTextEdit(string.Empty, View.ReflexBase, 3, false) { Enabled = false, Width = 50f },
+          new NuiTextEdit(string.Empty, View.ReflexBase, 3, false) { Enabled = View.ReflexBaseEnabled, Width = 50f },
           new NuiLabel("+") { Width = 50f, HorizontalAlign = NuiHAlign.Center, VerticalAlign = NuiVAlign.Middle },
           new NuiTextEdit(string.Empty, View.DexterityScoreMod, 3, false) { Enabled = false, Width = 50f },
           new NuiLabel("=") { Width = 50f, HorizontalAlign = NuiHAlign.Center, VerticalAlign = NuiVAlign.Middle },
@@ -347,7 +353,7 @@ namespace Jorteck.Toolbox.Features.ToolWindows
         Children = new List<NuiElement>
         {
           new NuiLabel("Will") { Width = 90f, VerticalAlign = NuiVAlign.Middle },
-          new NuiTextEdit(string.Empty, View.WillBase, 3, false) { Enabled = false, Width = 50f },
+          new NuiTextEdit(string.Empty, View.WillBase, 3, false) { Enabled = View.WillBaseEnabled, Width = 50f },
           new NuiLabel("+") { Width = 50f, HorizontalAlign = NuiHAlign.Center, VerticalAlign = NuiVAlign.Middle },
           new NuiTextEdit(string.Empty, View.WisdomScoreMod, 3, false) { Enabled = false, Width = 50f },
           new NuiLabel("=") { Width = 50f, HorizontalAlign = NuiHAlign.Center, VerticalAlign = NuiVAlign.Middle },
