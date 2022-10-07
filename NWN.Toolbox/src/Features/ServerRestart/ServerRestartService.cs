@@ -1,6 +1,7 @@
 using System;
 using System.Text;
 using Anvil.API;
+using Anvil.API.Events;
 using Anvil.Services;
 using Cronos;
 using Jorteck.Toolbox.Core;
@@ -30,6 +31,8 @@ namespace Jorteck.Toolbox.Features.ServerRestart
         {
           SchedulerService.ScheduleRepeating(CheckForWarning, TimeSpan.FromSeconds(1));
         }
+
+        NwModule.Instance.OnClientEnter += OnClientEnter;
       }
     }
 
@@ -79,6 +82,11 @@ namespace Jorteck.Toolbox.Features.ServerRestart
     {
       string message = GetWarningMessage();
       player.SendServerMessage(message);
+    }
+
+    private void OnClientEnter(ModuleEvents.OnClientEnter eventData)
+    {
+      SendRestartTimeMessageToPlayer(eventData.Player);
     }
 
     private void AssertEnabled()
