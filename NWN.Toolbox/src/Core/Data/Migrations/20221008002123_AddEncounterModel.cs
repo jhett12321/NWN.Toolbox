@@ -1,6 +1,8 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
+#nullable disable
+
 namespace Jorteck.Toolbox.Migrations
 {
     public partial class AddEncounterModel : Migration
@@ -12,11 +14,9 @@ namespace Jorteck.Toolbox.Migrations
                 columns: table => new
                 {
                     Name = table.Column<string>(type: "TEXT", nullable: false),
-                    Category = table.Column<string>(type: "TEXT", nullable: true),
                     Author = table.Column<string>(type: "TEXT", nullable: true),
                     Created = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    Updated = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    Active = table.Column<bool>(type: "INTEGER", nullable: false)
+                    Updated = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -32,9 +32,6 @@ namespace Jorteck.Toolbox.Migrations
                     LocalOffsetX = table.Column<float>(type: "REAL", nullable: false),
                     LocalOffsetY = table.Column<float>(type: "REAL", nullable: false),
                     LocalOffsetZ = table.Column<float>(type: "REAL", nullable: false),
-                    RotationX = table.Column<float>(type: "REAL", nullable: false),
-                    RotationY = table.Column<float>(type: "REAL", nullable: false),
-                    RotationZ = table.Column<float>(type: "REAL", nullable: false),
                     CreatureData = table.Column<byte[]>(type: "BLOB", nullable: true),
                     EncounterName = table.Column<string>(type: "TEXT", nullable: false)
                 },

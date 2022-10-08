@@ -31,6 +31,20 @@ namespace Jorteck.Toolbox.Core
       }
     }
 
+    public void DoTransaction(Action<Database> transaction)
+    {
+      try
+      {
+        transaction?.Invoke(Database);
+        Database.SaveChanges();
+      }
+      catch (Exception e)
+      {
+        Log.Error(e, "DB Operation failed.");
+        throw;
+      }
+    }
+
     public void Dispose()
     {
       Database?.Dispose();

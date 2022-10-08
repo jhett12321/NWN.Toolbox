@@ -9,17 +9,12 @@ namespace Jorteck.Toolbox.Core
   {
     public string Name { get; set; }
 
-    public string Category { get; set; }
-
     public string Author { get; set; }
 
     public DateTime Created { get; set; }
 
     public DateTime Updated { get; set; }
 
-    public bool Active { get; set; }
-
-    // ReSharper disable once CollectionNeverUpdated.Global
     public List<EncounterSpawn> Creatures { get; set; }
 
     public sealed class EncounterSpawn
@@ -29,10 +24,6 @@ namespace Jorteck.Toolbox.Core
       public float LocalOffsetX { get; set; }
       public float LocalOffsetY { get; set; }
       public float LocalOffsetZ { get; set; }
-
-      public float RotationX { get; set; }
-      public float RotationY { get; set; }
-      public float RotationZ { get; set; }
 
       public byte[] CreatureData { get; set; }
 

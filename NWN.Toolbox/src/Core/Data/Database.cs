@@ -6,7 +6,6 @@ namespace Jorteck.Toolbox.Core
   {
     // Model
     public DbSet<EncounterModel> EncounterPresets { get; set; }
-    public DbSet<BlueprintModel> BlueprintPresets { get; set; }
 
     private readonly string connectString;
 
