@@ -4,13 +4,11 @@ on:
   push:
     branches:
       - main
-      - development
     paths-ignore:
       - '**.md'
   pull_request:
     branches:
       - main
-      - development
     paths-ignore:
       - '**.md'
 
@@ -127,26 +125,19 @@ jobs:
         with:
           dotnet-version: '6.0.x'
 
-      - name: Tag Commit
-        if: github.event.inputs.tag != ''
-        run: git tag ${{ github.event.inputs.tag }} && git push origin ${{ github.event.inputs.tag }}
+      - name: Version and Tag
+        id: bump_version
+        uses: anothrNick/github-tag-action@1.39.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DEFAULT_BUMP: patch
+          RELEASE_BRANCHES: main
+          WITH_V: true
 
       - name: Prepare Outputs
         id: vars
         run: |
-          if [[ "${{github.base_ref}}" == "main" || "${{github.ref}}" == "refs/heads/main" ]]; then
-            echo "::set-output name=tag::$(git describe --tags)"
-            echo "::set-output name=version::$(git describe --tags | sed 's/^v//')"
-          else
-            DESCRIBE=`git describe --tags --long`
-            VERSION=`echo $DESCRIBE | awk '{split($0,a,"-"); print a[1]}'`
-            META=`echo $DESCRIBE | awk '{split($0,a,"-"); print a[2]}'`
-            BUILD=`echo $DESCRIBE | awk '{split($0,a,"-"); print a[3]}'`
-            COMMIT=`echo $DESCRIBE | awk '{split($0,a,"-"); print a[4]}'`
-            echo "::set-output name=version::$(echo ${VERSION}-${META}.${BUILD}.r${COMMIT:1} | sed 's/^v//')"
-          fi
-          echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
-          echo "::set-output name=image_repository::$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]')"
+          echo "::set-output name=version::$(echo ${{ steps.bump_version.outputs.tag }} | sed 's/[v]//g')"
 
       - name: Build Release Binaries
         id: build
