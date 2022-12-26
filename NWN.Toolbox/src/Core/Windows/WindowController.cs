@@ -12,9 +12,20 @@ namespace Jorteck.Toolbox.Core
     [Inject]
     public PermissionsService PermissionsService { get; init; }
 
+    /// <summary>
+    /// The associated view for this window controller.
+    /// </summary>
     public TView View { protected get; init; }
 
+    /// <summary>
+    /// The associated <see cref="NuiWindowToken"/> for this window controller.
+    /// </summary>
     public NuiWindowToken Token { get; init; }
+
+    /// <summary>
+    /// Gets or sets if the window should be automatically closed if the player moves.
+    /// </summary>
+    public virtual bool AutoClose { get; set; } = false;
 
     public abstract void Init();
 

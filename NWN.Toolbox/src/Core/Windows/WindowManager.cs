@@ -14,13 +14,15 @@ namespace Jorteck.Toolbox.Core
     private static readonly Logger Log = LogManager.GetCurrentClassLogger();
 
     private readonly InjectionService injectionService;
+    private readonly WindowAutoCloseService windowAutoCloseService;
 
     private readonly List<IWindowView> windowViews;
     private readonly Dictionary<NwPlayer, List<IWindowController>> windowControllers = new Dictionary<NwPlayer, List<IWindowController>>();
 
-    public WindowManager(InjectionService injectionService, IEnumerable<IWindowView> windowViews)
+    public WindowManager(InjectionService injectionService, WindowAutoCloseService windowAutoCloseService, IEnumerable<IWindowView> windowViews)
     {
       this.injectionService = injectionService;
+      this.windowAutoCloseService = windowAutoCloseService;
       this.windowViews = windowViews.OrderBy(view => view.Title).ToList();
 
       NwModule.Instance.OnNuiEvent += OnNuiEvent;
@@ -31,10 +33,11 @@ namespace Jorteck.Toolbox.Core
     /// Opens a window view using the specified controller.
     /// </summary>
     /// <param name="player">The player to show the window.</param>
+    /// <param name="configure">Additional configuration for the controller before it is initialized by the <see cref="WindowManager"/>.</param>
     /// <typeparam name="TView">The type of view to open.</typeparam>
     /// <typeparam name="TController">The type of controller for the view.</typeparam>
     /// <returns>The created controller. Null if the client cannot render windows.</returns>
-    public TController OpenWindow<TView, TController>(NwPlayer player)
+    public TController OpenWindow<TView, TController>(NwPlayer player, Action<TController> configure = null)
       where TView : WindowView<TView>, new()
       where TController : WindowController<TView>, new()
     {
@@ -46,6 +49,8 @@ namespace Jorteck.Toolbox.Core
           View = view,
           Token = token,
         });
+
+        configure?.Invoke(controller);
 
         InitController(controller, player);
         return controller;
@@ -101,6 +106,11 @@ namespace Jorteck.Toolbox.Core
 
     private void InitController(IWindowController controller, NwPlayer player)
     {
+      if (controller.AutoClose)
+      {
+        windowAutoCloseService.RegisterWindowForAutoClose(controller);
+      }
+
       controller.Init();
       windowControllers.AddElement(player, controller);
     }

@@ -10,6 +10,8 @@ namespace Jorteck.Toolbox.Core
   {
     public NuiWindowToken Token { get; init; }
 
+    public bool AutoClose { get; }
+
     public void Init();
 
     public void ProcessEvent(ModuleEvents.OnNuiEvent eventData);
