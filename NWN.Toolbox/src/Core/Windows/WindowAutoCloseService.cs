@@ -80,9 +80,9 @@ namespace Jorteck.Toolbox.Core
 
     private sealed class OpenWindowData
     {
-      public Vector3 OpenPosition { get; set; }
+      public Vector3 OpenPosition { get; init; }
 
-      public NwArea OpenArea { get; set; }
+      public NwArea OpenArea { get; init; }
 
       public IWindowController WindowController { get; init; }
     }
