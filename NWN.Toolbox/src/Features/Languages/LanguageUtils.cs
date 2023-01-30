@@ -7,8 +7,6 @@ namespace Jorteck.Toolbox.Features.Languages
 {
   public static class LanguageUtils
   {
-    private static readonly Random Random = new Random();
-
     /// <summary>
     /// Generates a translation using the specified character dictionary as a lookup.
     /// </summary>
@@ -39,7 +37,7 @@ namespace Jorteck.Toolbox.Features.Languages
           continue;
         }
 
-        int check = Random.Next(0, 100);
+        int check = Random.Shared.Next(0, 100);
         if (check < fluency)
         {
           if (dictionary.TryGetValue(c, out string mapping))
@@ -55,7 +53,7 @@ namespace Jorteck.Toolbox.Features.Languages
         }
         else
         {
-          (char key, string value) = dictionary.ElementAt(Random.Next(0, dictionary.Count));
+          (char key, string value) = dictionary.ElementAt(Random.Shared.Next(0, dictionary.Count));
           interpretation.Append(key);
           output.Append(value);
         }
@@ -103,7 +101,7 @@ namespace Jorteck.Toolbox.Features.Languages
           continue;
         }
 
-        int check = Random.Next(0, 100);
+        int check = Random.Shared.Next(0, 100);
         if (check < fluency)
         {
           int index = cipher.IndexOf(c);
@@ -130,8 +128,8 @@ namespace Jorteck.Toolbox.Features.Languages
         }
         else
         {
-          interpretation.Append(cipher[Random.Next(0, cipher.Length)]);
-          output.Append(cipher[Random.Next(0, cipher.Length)]);
+          interpretation.Append(cipher[Random.Shared.Next(0, cipher.Length)]);
+          output.Append(cipher[Random.Shared.Next(0, cipher.Length)]);
         }
       }
 
