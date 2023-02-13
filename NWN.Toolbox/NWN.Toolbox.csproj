@@ -32,6 +32,7 @@
       NWN.Toolbox provides all the essentials tools needed to run Anvil-based, Neverwinter Nights persistent worlds.
     </Description>
 
+    <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageTags>Neverwinter Nights;NWN;</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
@@ -67,5 +68,8 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.4" PrivateAssets="compile" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="..\README.md" Pack="true" PackagePath="/" />
+  </ItemGroup>
 
 </Project>
