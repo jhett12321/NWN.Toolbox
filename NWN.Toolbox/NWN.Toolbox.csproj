@@ -67,8 +67,5 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.4" PrivateAssets="compile" />
   </ItemGroup>
 
-  <Target Name="ZipOutputPath" AfterTargets="Build">
-    <ZipDirectory Overwrite="true" SourceDirectory="$(OutputPath)" DestinationFile="$(OutputPath)\..\$(MSBuildProjectName).zip" />
-  </Target>
 
 </Project>
