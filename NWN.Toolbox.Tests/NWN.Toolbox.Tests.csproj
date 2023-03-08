@@ -28,8 +28,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="NWN.Anvil" Version="8193.34.23" ExcludeAssets="runtime" PrivateAssets="all" />
-        <PackageReference Include="NWN.Anvil.TestRunner" Version="8193.34.23" ExcludeAssets="runtime" PrivateAssets="all" />
+        <PackageReference Include="NWN.Anvil" Version="8193.34.25" ExcludeAssets="runtime" PrivateAssets="all" />
+        <PackageReference Include="NWN.Anvil.TestRunner" Version="8193.34.25" ExcludeAssets="runtime" PrivateAssets="all" />
     </ItemGroup>
 
     <ItemGroup>
