@@ -91,7 +91,7 @@ namespace Jorteck.Toolbox.Features.Chat
         }
 
         NwCreature playerCreature = eventData.Player.ControlledCreature!;
-        NwArea area = playerCreature.Area!;
+        NwArea area = playerCreature.Area;
         Vector3 direction = Vector3.Normalize(playerCreature.Position - eventData.TargetPosition);
         float orientation = NwMath.VectorToAngle(direction);
 
@@ -102,7 +102,7 @@ namespace Jorteck.Toolbox.Features.Chat
           {
             Vector3 position = new Vector3(spawn.LocalOffsetX, spawn.LocalOffsetY, spawn.LocalOffsetZ);
             position = eventData.TargetPosition + position;
-            creature.Location = Location.Create(area, position, orientation);
+            creature.Location = Location.Create(area!, position, orientation);
           }
         }
       });
