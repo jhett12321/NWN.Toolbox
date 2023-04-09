@@ -8,12 +8,12 @@ using Anvil.Services;
 namespace Jorteck.Toolbox.Features.Chat
 {
   [ServiceBinding(typeof(IChatCommand))]
-  public class ReloadServerCommand : IChatCommand
+  public sealed class ReloadServerCommand : IChatCommand
   {
     public string Command => "reload";
     public Range ArgCount => ..0;
     public bool DMOnly => true;
-    public string Description => "Reload anvil plugins and services";
+    public string Description => "Reload anvil plugins and services.";
     public bool IsAvailable => EnvironmentConfig.ReloadEnabled;
 
     public CommandUsage[] Usages { get; } =
