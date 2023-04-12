@@ -15,7 +15,12 @@ namespace Jorteck.Toolbox.Features
     public static readonly Color NameColor = new Color(153, 255, 255);
     public static readonly Color CheckMessageColor = new Color(1, 102, 255);
 
-    internal RollBroadcastTargets GetBroadcastMode(NwPlayer player)
+    /// <summary>
+    /// Get a player's dice roll broadcast setting.
+    /// </summary>
+    /// <param name="player">The player to query.</param>
+    /// <returns>The player's current broadcast setting.</returns>
+    public RollBroadcastTargets GetBroadcastMode(NwPlayer player)
     {
       PersistentVariableEnum<RollBroadcastTargets> mode = player.LoginCreature!.GetObjectVariable<PersistentVariableEnum<RollBroadcastTargets>>(DiceBroadcastVariableName);
       if (mode.HasValue)
@@ -26,7 +31,12 @@ namespace Jorteck.Toolbox.Features
       return RollBroadcastTargets.LocalTalk | RollBroadcastTargets.DM;
     }
 
-    internal void SetBroadcastMode(NwPlayer player, RollBroadcastTargets newValue)
+    /// <summary>
+    /// Set a player's dice roll broadcast setting.
+    /// </summary>
+    /// <param name="player">The player to change setting.</param>
+    /// <param name="newValue">The new broadcast targets.</param>
+    public void SetBroadcastMode(NwPlayer player, RollBroadcastTargets newValue)
     {
       player.LoginCreature!.GetObjectVariable<PersistentVariableEnum<RollBroadcastTargets>>(DiceBroadcastVariableName).Value = newValue;
     }
