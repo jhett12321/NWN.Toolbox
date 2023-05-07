@@ -22,14 +22,14 @@ namespace Jorteck.Toolbox.Features.Chat
       {
         if (player.ControlledCreature?.Area == targetArea)
         {
-          ChatService.SendMessage(ChatChannel.PlayerTalk, formattedMessage, sender, player);
+          ChatService.SendMessage(ChatChannel.PlayerShout, formattedMessage, sender, player);
         }
       }
     }
 
     public string GetFormattedAreaMessage(string message)
     {
-      return "[Area] ".ColorString(ColorConstants.Yellow) + message;
+      return $"[Area] ".ColorString(ColorConstants.Orange) + message;
     }
   }
 }
