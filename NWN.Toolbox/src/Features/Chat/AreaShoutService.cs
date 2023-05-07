@@ -29,7 +29,7 @@ namespace Jorteck.Toolbox.Features.Chat
 
     public string GetFormattedAreaMessage(string message)
     {
-      return $"[Area] ".ColorString(ColorConstants.Orange) + message;
+      return "[Area] ".ColorString(ColorConstants.Orange) + message;
     }
   }
 }
