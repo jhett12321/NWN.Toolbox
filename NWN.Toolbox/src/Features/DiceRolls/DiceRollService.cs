@@ -118,7 +118,8 @@ namespace Jorteck.Toolbox.Features
       int total = roll + skillRanks;
 
       string message;
-      if (creature.HasSkill(skill))
+
+      if (skill.IsUntrained || skillRanks > 0)
       {
         message = creature.Name.ColorString(NameColor) + $" : {skill.Name} Check : ({roll} + {skillRanks} = {total})".ColorString(CheckMessageColor);
       }
