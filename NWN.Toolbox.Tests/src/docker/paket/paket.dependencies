@@ -6,4 +6,4 @@ strategy: min
 source https://api.nuget.org/v3/index.json
 
 // ---- Add plugins below this line ----
-nuget NWN.Anvil.TestRunner 8193.34.28
+nuget NWN.Anvil.TestRunner 8193.35.0

@@ -1,5 +1,6 @@
 using Anvil.API;
 using Anvil.API.Events;
+using Anvil.Services;
 using Jorteck.Toolbox.Core;
 
 namespace Jorteck.Toolbox.Features.ToolWindows
@@ -78,7 +79,10 @@ namespace Jorteck.Toolbox.Features.ToolWindows
     {
       if (eventData.ElementId == View.SelectPlayerButton.Id)
       {
-        Token.Player.TryEnterTargetMode(OnCreatureSelected, ObjectTypes.Creature);
+        Token.Player.TryEnterTargetMode(OnCreatureSelected, new TargetModeSettings
+        {
+          ValidTargets = ObjectTypes.Creature,
+        });
       }
       else if (eventData.ElementId == View.SaveChangesButton.Id)
       {

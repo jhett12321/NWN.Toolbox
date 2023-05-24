@@ -122,7 +122,10 @@ namespace Jorteck.Toolbox.Features.Chat
         "Other creatures will spawn relative to this creature's position when spawning the encounter.");
 
       List<NwCreature> creatures = new List<NwCreature>();
-      caller.EnterTargetMode(eventData => SelectCreature(eventData, presetName, creatures), ObjectTypes.Creature);
+      caller.EnterTargetMode(eventData => SelectCreature(eventData, presetName, creatures), new TargetModeSettings
+      {
+        ValidTargets = ObjectTypes.Creature,
+      });
     }
 
     private void SelectCreature(ModuleEvents.OnPlayerTarget eventData, string presetName, List<NwCreature> creatures)
@@ -141,7 +144,10 @@ namespace Jorteck.Toolbox.Features.Chat
           creatures.Add(creature);
         }
 
-        eventData.Player.EnterTargetMode(eventData2 => SelectCreature(eventData2, presetName, creatures), ObjectTypes.Creature);
+        eventData.Player.EnterTargetMode(eventData2 => SelectCreature(eventData2, presetName, creatures), new TargetModeSettings
+        {
+          ValidTargets = ObjectTypes.Creature,
+        });
       }
     }
 

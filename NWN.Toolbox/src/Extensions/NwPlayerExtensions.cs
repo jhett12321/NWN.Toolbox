@@ -1,6 +1,7 @@
 using System;
 using Anvil.API;
 using Anvil.API.Events;
+using Anvil.Services;
 
 namespace Jorteck.Toolbox
 {
@@ -42,7 +43,12 @@ namespace Jorteck.Toolbox
         }
       }
 
-      player.EnterTargetMode(TargetHandler, ObjectTypes.Creature, cursorType, badTargetCursor);
+      player.EnterTargetMode(TargetHandler, new TargetModeSettings
+      {
+        ValidTargets = ObjectTypes.Creature,
+        CursorType = cursorType,
+        BadCursorType = badTargetCursor,
+      });
     }
 
     internal sealed class PlayerTargetPlayerEvent

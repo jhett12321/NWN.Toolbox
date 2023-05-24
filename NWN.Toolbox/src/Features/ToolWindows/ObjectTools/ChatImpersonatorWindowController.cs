@@ -62,7 +62,10 @@ namespace Jorteck.Toolbox.Features.ToolWindows
       }
       else if (eventData.ElementId == View.SelectObjectButton.Id)
       {
-        Token.Player.EnterTargetMode(SelectObject, ObjectTypes.All & ~ObjectTypes.Tile);
+        Token.Player.EnterTargetMode(SelectObject, new TargetModeSettings
+        {
+          ValidTargets = ObjectTypes.All & ~ObjectTypes.Tile,
+        });
       }
     }
 
