@@ -12,6 +12,7 @@ using Jorteck.Toolbox.Features.Permissions;
 namespace Jorteck.Toolbox.Features.Chat
 {
   [ServiceBinding(typeof(ChatCommandService))]
+  [ServiceBindingOptions(BindingPriority = BindingPriority.Low)]
   internal sealed class ChatCommandService : IInitializable
   {
     private string helpCommandText;
@@ -43,7 +44,7 @@ namespace Jorteck.Toolbox.Features.Chat
       Commands = Commands.OrderBy(command => command.Command).ToList();
       helpCommandText = $"{ConfigService.Config.ChatCommands.CommandPrefixes[0]}{HelpCommand.Command}".ColorString(ColorConstants.Orange);
 
-      NwModule.Instance.OnChatMessageSend += OnChatMessageSend;
+      NwModule.Instance.OnPlayerChat += OnChatMessageSend;
     }
 
     public bool CanUseCommand(NwPlayer player, IChatCommand command)
@@ -51,21 +52,16 @@ namespace Jorteck.Toolbox.Features.Chat
       return PermissionsService.HasPermission(player, command.PermissionKey, !command.DMOnly || player.IsDM);
     }
 
-    private void OnChatMessageSend(OnChatMessageSend eventData)
+    private void OnChatMessageSend(ModuleEvents.OnPlayerChat eventData)
     {
-      if (!eventData.Sender.IsPlayerControlled(out NwPlayer player))
-      {
-        return;
-      }
-
       foreach (string commandPrefix in ConfigService.Config.ChatCommands.CommandPrefixes)
       {
         if (eventData.Message.StartsWith(commandPrefix))
         {
           string commandText = eventData.Message[commandPrefix.Length..];
-          if (ProcessCommandText(player, commandText))
+          if (ProcessCommandText(eventData.Sender, commandText))
           {
-            eventData.Skip = true;
+            eventData.Message = string.Empty;
           }
 
           return;
