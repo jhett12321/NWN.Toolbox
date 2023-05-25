@@ -61,7 +61,7 @@
 
   <ItemGroup>
     <PackageReference Include="Cronos" Version="0.7.1" PrivateAssets="compile" />
-    <PackageReference Include="NWN.Anvil" Version="8193.35.0" ExcludeAssets="runtime" PrivateAssets="all" />
+    <PackageReference Include="NWN.Anvil" Version="8193.35.1" ExcludeAssets="runtime" PrivateAssets="all" />
     <PackageReference Include="YamlDotNet" Version="11.2.1" PrivateAssets="compile" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.4" PrivateAssets="compile" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.4" PrivateAssets="compile" />
