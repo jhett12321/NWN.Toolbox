@@ -7,7 +7,7 @@ using Anvil.Services;
 namespace Jorteck.Toolbox.Features.Chat
 {
   [ServiceBinding(typeof(IChatCommand))]
-  public class ShortcutCommand : IChatCommand
+  public sealed class ShortcutCommand : IChatCommand
   {
     [Inject]
     private HelpCommand HelpCommand { get; init; }
