@@ -1,9 +1,12 @@
 using System;
 using System.IO;
+using System.Reflection;
+using System.Runtime.InteropServices;
 using Anvil.Internal;
 using Anvil.Services;
 using Microsoft.EntityFrameworkCore;
 using NLog;
+using SQLitePCL;
 
 namespace Jorteck.Toolbox.Core
 {
@@ -16,6 +19,9 @@ namespace Jorteck.Toolbox.Core
 
     public DatabaseManager(PluginStorageService pluginStorageService)
     {
+      NativeLibrary.SetDllImportResolver(typeof(SQLite3Provider_e_sqlite3).Assembly, ResolveFromNwServer);
+      Marshal.PrelinkAll(typeof(SQLite3Provider_e_sqlite3));
+
       string pluginStoragePath = pluginStorageService.GetPluginStoragePath(typeof(DatabaseManager).Assembly);
       string storagePath = Path.Combine(pluginStoragePath, "data.db");
       string connectString = $"Data Source={storagePath}";
@@ -29,6 +35,16 @@ namespace Jorteck.Toolbox.Core
       {
         Log.Warn("Cannot create/update database as hot reload is enabled");
       }
+    }
+
+    private IntPtr ResolveFromNwServer(string libraryName, Assembly assembly, DllImportSearchPath? searchPath)
+    {
+      if (libraryName == "e_sqlite3")
+      {
+        return NativeLibrary.GetMainProgramHandle();
+      }
+
+      return IntPtr.Zero;
     }
 
     public void DoTransaction(Action<Database> transaction)
