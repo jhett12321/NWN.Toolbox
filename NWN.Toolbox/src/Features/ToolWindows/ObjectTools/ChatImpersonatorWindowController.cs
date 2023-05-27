@@ -84,7 +84,7 @@ namespace Jorteck.Toolbox.Features.ToolWindows
       Token.SetBindValue(View.LanguagesEnabled, gameObject is NwCreature && ConfigService.Config.Languages.IsEnabled());
     }
 
-    private async void SendMessage()
+    private void SendMessage()
     {
       if (selectedObject == null)
       {
@@ -120,7 +120,7 @@ namespace Jorteck.Toolbox.Features.ToolWindows
       {
         if (volume != ChatVolume.Area)
         {
-          await selectedObject.SpeakString(message, volume.ToTalkVolume());
+          _ = selectedObject.SpeakString(message, volume.ToTalkVolume());
         }
         else if (creature != null)
         {
