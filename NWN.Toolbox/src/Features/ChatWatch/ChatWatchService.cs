@@ -48,11 +48,11 @@ namespace Jorteck.Toolbox.Features
     {
       if (globalSubscriptions.Remove(subscriber))
       {
-        subscriber.SendServerMessage($"Unsubscribed from all module chat events");
+        subscriber.SendServerMessage("Unsubscribed from all module chat events");
       }
       else
       {
-        subscriber.SendServerMessage($"Subscribed to all module chat events");
+        subscriber.SendServerMessage("Subscribed to all module chat events");
       }
     }
 

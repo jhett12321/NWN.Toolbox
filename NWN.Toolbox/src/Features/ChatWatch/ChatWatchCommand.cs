@@ -12,6 +12,9 @@ namespace Jorteck.Toolbox.Features
     [Inject]
     private ChatWatchService ChatWatchService { get; init; }
 
+    [Inject]
+    private HelpCommand HelpCommand { get; init; }
+
     public string Command => "chatwatch";
     public Range ArgCount => 1..1;
     public bool DMOnly => true;
@@ -41,6 +44,9 @@ namespace Jorteck.Toolbox.Features
           break;
         case "module":
           ChatWatchService.ToggleSubscribe(caller);
+          break;
+        default:
+          HelpCommand.ShowCommandHelpToPlayer(caller, this);
           break;
       }
     }
