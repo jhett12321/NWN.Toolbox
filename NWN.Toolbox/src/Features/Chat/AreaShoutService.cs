@@ -9,6 +9,9 @@ namespace Jorteck.Toolbox.Features.Chat
     [Inject]
     private ChatService ChatService { get; init; }
 
+    [Inject]
+    private ChatWatchService ChatWatchService { get; init; }
+
     public void SendMessage(NwCreature sender, string message)
     {
       NwArea targetArea = sender?.Area;
@@ -24,6 +27,11 @@ namespace Jorteck.Toolbox.Features.Chat
         {
           ChatService.SendMessage(ChatChannel.PlayerShout, formattedMessage, sender, player);
         }
+      }
+
+      if (sender.IsPlayerControlled(out NwPlayer senderPlayer))
+      {
+        ChatWatchService.LogMessage(senderPlayer, "Area", message);
       }
     }
 

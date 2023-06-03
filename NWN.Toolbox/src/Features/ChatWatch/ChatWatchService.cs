@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Anvil.API;
 using Anvil.API.Events;
 using Anvil.Services;
@@ -16,6 +17,38 @@ namespace Jorteck.Toolbox.Features
     public ChatWatchService()
     {
       NwModule.Instance.OnPlayerChat += OnPlayerChat;
+    }
+
+    public void TogglerPartySubscribe(NwPlayer subscriber, NwPlayer partyPlayer)
+    {
+      List<NwPlayer> partyPlayers = partyPlayer.PartyMembers.ToList();
+      if (partyPlayers.Count == 1)
+      {
+        ToggleSubscribe(subscriber, partyPlayer);
+        return;
+      }
+
+      // Some party members are not subscribed, or none of them are subscribed.
+      List<NwPlayer> playersToToggle = new List<NwPlayer>();
+      if (playerSubscriptions.TryGetValue(partyPlayer, out List<NwPlayer> subscribers))
+      {
+        playersToToggle.AddRange(partyPlayers.Except(subscribers));
+      }
+      else
+      {
+        playersToToggle.AddRange(partyPlayers);
+      }
+
+      // Whole party is subscribed, so we toggle everyone to unsubscribe.
+      if (playersToToggle.Count == 0)
+      {
+        playersToToggle = partyPlayers;
+      }
+
+      foreach (NwPlayer player in playersToToggle)
+      {
+        ToggleSubscribe(subscriber, player);
+      }
     }
 
     public void ToggleSubscribe(NwPlayer subscriber, NwPlayer player)

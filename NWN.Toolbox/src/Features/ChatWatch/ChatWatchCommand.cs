@@ -23,6 +23,7 @@ namespace Jorteck.Toolbox.Features
     public CommandUsage[] Usages { get; } =
     {
       new CommandUsage("player", "Listen to messages sent by the selected player."),
+      new CommandUsage("party", "Listen to messages sent by players in the party of the selected player."),
       new CommandUsage("area", "Listen to messages sent in a certain area."),
       new CommandUsage("module", "Listen to messages sent by all players."),
     };
