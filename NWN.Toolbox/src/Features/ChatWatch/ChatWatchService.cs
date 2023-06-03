@@ -52,6 +52,7 @@ namespace Jorteck.Toolbox.Features
       }
       else
       {
+        globalSubscriptions.Add(subscriber);
         subscriber.SendServerMessage("Subscribed to all module chat events");
       }
     }
@@ -64,7 +65,7 @@ namespace Jorteck.Toolbox.Features
       string areaName = area?.Name ?? "Unknown";
       string playerName = creature.Name;
 
-      string logMessage = $"[{channelName}][{areaName}] {playerName}: {message}";
+      string logMessage = $"[{channelName}][{areaName}]".ColorString(ColorConstants.Cyan) + $" {playerName}: " + $"{message}".ColorString(ColorConstants.White);
       if (playerSubscriptions.TryGetValue(sender, out List<NwPlayer> subscribers))
       {
         NotifySubscribers(subscribers, logMessage);
