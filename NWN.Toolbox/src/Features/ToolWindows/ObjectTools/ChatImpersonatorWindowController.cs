@@ -86,7 +86,7 @@ namespace Jorteck.Toolbox.Features.ToolWindows
 
     private void SendMessage()
     {
-      if (selectedObject == null)
+      if (selectedObject == null || !selectedObject.IsValid)
       {
         return;
       }
