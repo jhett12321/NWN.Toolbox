@@ -35,6 +35,9 @@ namespace Jorteck.Toolbox.Features
         case "player":
           caller.EnterPlayerTargetMode(eventData => ChatWatchService.ToggleSubscribe(eventData.Caller, eventData.Target));
           break;
+        case "party":
+          caller.EnterPlayerTargetMode(eventData => ChatWatchService.TogglerPartySubscribe(eventData.Caller, eventData.Target));
+          break;
         case "area":
           NwArea area = caller.ControlledCreature?.Area;
           if (area != null)
