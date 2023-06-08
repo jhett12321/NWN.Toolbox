@@ -59,8 +59,8 @@ namespace Jorteck.Toolbox.Core
       {
         if (IsFinalStep(CurrentStep))
         {
-          OnWizardComplete();
           Close();
+          OnWizardComplete();
         }
         else
         {
