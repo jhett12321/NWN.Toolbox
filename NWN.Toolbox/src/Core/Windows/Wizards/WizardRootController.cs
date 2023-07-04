@@ -126,7 +126,6 @@ namespace Jorteck.Toolbox.Core
     protected override void OnClose()
     {
       CurrentStep?.OnClose();
-      Steps.Clear();
     }
   }
 }
