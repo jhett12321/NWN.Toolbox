@@ -62,7 +62,7 @@ namespace Jorteck.Toolbox.Features.Languages
         case ChatVolume.Whisper:
           foreach (NwPlayer onlinePlayer in NwModule.Instance.Players)
           {
-            if (!onlinePlayer.IsConnected)
+            if (!onlinePlayer.IsValid || !onlinePlayer.IsConnected)
             {
               continue;
             }
@@ -84,7 +84,7 @@ namespace Jorteck.Toolbox.Features.Languages
         case ChatVolume.Area:
           foreach (NwPlayer onlinePlayer in NwModule.Instance.Players)
           {
-            if (!onlinePlayer.IsConnected)
+            if (!onlinePlayer.IsValid || !onlinePlayer.IsConnected)
             {
               continue;
             }
