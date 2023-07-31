@@ -136,6 +136,11 @@ namespace Jorteck.Toolbox.Core
       {
         foreach (NwPlayer player in NwModule.Instance.Players)
         {
+          if (!player.IsValid || !player.IsConnected)
+          {
+            continue;
+          }
+
           NwCreature controlledCreature = player.ControlledCreature;
           if (controlledCreature?.Area != playerArea)
           {

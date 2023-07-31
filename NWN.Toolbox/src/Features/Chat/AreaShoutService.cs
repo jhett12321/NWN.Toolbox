@@ -23,7 +23,7 @@ namespace Jorteck.Toolbox.Features.Chat
       string formattedMessage = GetFormattedAreaMessage(message);
       foreach (NwPlayer player in NwModule.Instance.Players)
       {
-        if (player.ControlledCreature?.Area == targetArea)
+        if (player.IsValid && player.ControlledCreature?.Area == targetArea)
         {
           ChatService.SendMessage(ChatChannel.PlayerShout, formattedMessage, sender, player);
         }

@@ -29,7 +29,7 @@ namespace Jorteck.Toolbox.Features.ToolWindows
       NwModule.Instance.OnClientEnter += eventData => TryOpenWindow(eventData.Player);
       foreach (NwPlayer player in NwModule.Instance.Players)
       {
-        if (player.LoginCreature != null)
+        if (player.IsValid && player.IsConnected)
         {
           TryOpenWindow(player);
         }

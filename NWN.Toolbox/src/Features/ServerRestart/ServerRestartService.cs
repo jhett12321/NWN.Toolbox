@@ -67,7 +67,7 @@ namespace Jorteck.Toolbox.Features.ServerRestart
       string message = GetWarningMessage();
       foreach (NwPlayer player in NwModule.Instance.Players)
       {
-        if (player.ControlledCreature != null)
+        if (player.IsValid && player.IsConnected)
         {
           player.SendServerMessage(message);
         }
@@ -128,7 +128,10 @@ namespace Jorteck.Toolbox.Features.ServerRestart
       string reason = ConfigService.Config.ServerRestart.BootMessage ?? string.Empty;
       foreach (NwPlayer player in NwModule.Instance.Players)
       {
-        player.BootPlayer(reason);
+        if (player.IsValid)
+        {
+          player.BootPlayer(reason);
+        }
       }
 
       // Shutdown server
