@@ -29,18 +29,25 @@ namespace Jorteck.Toolbox.Features
     public void ProcessCommand(NwPlayer caller, IReadOnlyList<string> args)
     {
       string[] rollValues = args[0].Split('d', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
-      if (rollValues.Length == 2 && int.TryParse(rollValues[0], out int diceCount) && int.TryParse(rollValues[1], out int numSides) && diceCount > 0 && numSides > 0)
+
+      try
       {
-        DiceRollService.RollDice(caller.ControlledCreature, numSides, diceCount, DiceRollService.GetBroadcastMode(caller));
+        if (rollValues.Length == 2 && int.TryParse(rollValues[0], out int diceCount) && int.TryParse(rollValues[1], out int numSides) && diceCount > 0 && numSides > 0)
+        {
+          DiceRollService.RollDice(caller.ControlledCreature, numSides, diceCount, DiceRollService.GetBroadcastMode(caller));
+          return;
+        }
+
+        if (rollValues.Length == 1 && int.TryParse(rollValues[0], out numSides))
+        {
+          DiceRollService.RollDice(caller.ControlledCreature, numSides, 1, DiceRollService.GetBroadcastMode(caller));
+          return;
+        }
       }
-      else if (rollValues.Length == 1 && int.TryParse(rollValues[0], out numSides))
-      {
-        DiceRollService.RollDice(caller.ControlledCreature, numSides, 1, DiceRollService.GetBroadcastMode(caller));
-      }
-      else
-      {
-        HelpCommand.ShowCommandHelpToPlayer(caller, this);
-      }
+      catch (OverflowException) {}
+      catch (ArgumentOutOfRangeException) {}
+
+      HelpCommand.ShowCommandHelpToPlayer(caller, this);
     }
   }
 }
