@@ -68,9 +68,7 @@ namespace Jorteck.Toolbox.Core
       public IObjectDescriptor Read(object target)
       {
         DescriptionAttribute description = baseDescriptor?.GetCustomAttribute<DescriptionAttribute>();
-        return description != null
-          ? new CommentsObjectDescriptor(baseDescriptor.Read(target), description.Description)
-          : baseDescriptor?.Read(target);
+        return description != null ? new CommentsObjectDescriptor(baseDescriptor.Read(target), description.Description) : baseDescriptor!.Read(target);
       }
     }
   }
