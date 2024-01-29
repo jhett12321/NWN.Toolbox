@@ -99,10 +99,7 @@ namespace Jorteck.Toolbox.Features.Chat
 
       foreach (ILanguage language in LanguageService.Languages.OrderBy(language => language.Name))
       {
-        if (language.Enabled)
-        {
-          stringBuilder.AppendLine($"{language.Name.ColorString(language.ChatColor)} ({language.Id})");
-        }
+        stringBuilder.AppendLine($"{language.Name.ColorString(language.ChatColor)} ({language.Id})");
       }
 
       caller.SendServerMessage(stringBuilder.ToString());

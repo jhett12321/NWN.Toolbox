@@ -85,6 +85,11 @@ namespace Jorteck.Toolbox.Features.Languages
 
     public void RegisterLanguage(ILanguage language)
     {
+      if (!language.Enabled)
+      {
+        return;
+      }
+
       if (languages.TryAdd(language.Id, language))
       {
         Log.Debug($"Registered language {language.Name} ({language.Id})");
