@@ -17,6 +17,21 @@ namespace Jorteck.Toolbox.Features
     public ChatWatchService()
     {
       NwModule.Instance.OnPlayerChat += OnPlayerChat;
+      NwModule.Instance.OnClientLeave += OnClientLeave;
+    }
+
+    private void OnClientLeave(ModuleEvents.OnClientLeave eventData)
+    {
+      globalSubscriptions.Remove(eventData.Player);
+      foreach (List<NwPlayer> subscribers in playerSubscriptions.Values)
+      {
+        subscribers.Remove(eventData.Player);
+      }
+
+      foreach (List<NwPlayer> subscribers in areaSubscriptions.Values)
+      {
+        subscribers.Remove(eventData.Player);
+      }
     }
 
     public void TogglerPartySubscribe(NwPlayer subscriber, NwPlayer partyPlayer)
