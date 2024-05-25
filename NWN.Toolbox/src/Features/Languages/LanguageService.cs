@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Anvil.API;
 using Anvil.Services;
+using Jorteck.Toolbox.Core.Persistence;
 using NLog;
 
 namespace Jorteck.Toolbox.Features.Languages
@@ -13,12 +14,14 @@ namespace Jorteck.Toolbox.Features.Languages
   {
     private static readonly Logger Log = LogManager.GetCurrentClassLogger();
 
+    private readonly PersistenceStorageService persistenceStorageService;
     private readonly Dictionary<string, ILanguage> languages = new Dictionary<string, ILanguage>();
 
     public IReadOnlyCollection<ILanguage> Languages => languages.Values;
 
-    public LanguageService(IReadOnlyList<ILanguage> languages)
+    public LanguageService(IReadOnlyList<ILanguage> languages, PersistenceStorageService persistenceStorageService)
     {
+      this.persistenceStorageService = persistenceStorageService;
       foreach (ILanguage language in languages)
       {
         RegisterLanguage(language);
@@ -47,25 +50,28 @@ namespace Jorteck.Toolbox.Features.Languages
 
     public LanguageState GetStateForPlayer(NwPlayer player)
     {
-      PersistentVariableStruct<LanguageState> state = player.ControlledCreature?.GetObjectVariable<PersistentVariableStruct<LanguageState>>("toolbox_languages");
-      return state?.HasValue == true ? state.Value : new LanguageState();
+      LanguageState state = persistenceStorageService.GetState<LanguageState>(player, "toolbox_languages") ?? new LanguageState();
+      return state;
     }
 
     public void UpdateLanguageState(NwPlayer player, Action<LanguageState> transaction)
     {
       LanguageState state = GetStateForPlayer(player) ?? new LanguageState();
       transaction(state);
-      player.ControlledCreature!.GetObjectVariable<PersistentVariableStruct<LanguageState>>("toolbox_languages").Value = state;
+      persistenceStorageService.UpdateState(player, "toolbox_languages", state);
     }
 
     public LanguageDisplayType GetDisplayType(NwPlayer player)
     {
-      return player.ControlledCreature!.GetObjectVariable<PersistentVariableEnum<LanguageDisplayType>>("toolbox_languages_display");
+      return GetStateForPlayer(player).DisplayType;
     }
 
     public void SetDisplayType(NwPlayer player, LanguageDisplayType displayType)
     {
-      player.ControlledCreature!.GetObjectVariable<PersistentVariableEnum<LanguageDisplayType>>("toolbox_languages_display").Value = displayType;
+      UpdateLanguageState(player, state =>
+      {
+        state.DisplayType = displayType;
+      });
     }
 
     public bool TryGetLanguage(string key, out ILanguage language)

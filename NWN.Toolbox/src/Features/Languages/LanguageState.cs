@@ -9,5 +9,7 @@ namespace Jorteck.Toolbox.Features.Languages
     public Dictionary<string, int> LanguageProficiencies { get; set; } = new Dictionary<string, int>();
 
     public string CurrentLanguageId { get; set; }
+
+    public LanguageDisplayType DisplayType { get; set; }
   }
 }
