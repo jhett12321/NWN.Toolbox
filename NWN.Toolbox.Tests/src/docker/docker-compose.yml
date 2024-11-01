@@ -3,9 +3,9 @@ services:
   anvil:
     image: "nwndotnet/anvil:${ANVIL_VERSION}"
     env_file:
-      - ${PWD-.}/config/nwserver.env
+      - ./NWN.Toolbox.Tests/bin/Release/config/nwserver.env
     volumes:
-      - ./paket:/nwn/home/anvil/Paket
-      - ../../../NWN.Toolbox/bin/Release/NWN.Toolbox:/nwn/home/anvil/Plugins/NWN.Toolbox
-      - ./NWN.Toolbox.Tests:/nwn/home/anvil/Plugins/NWN.Toolbox.Tests
-      - ./results:/nwn/home/anvil/PluginData/NWN.Anvil.TestRunner
+      - ./NWN.Toolbox.Tests/bin/Release/paket:/nwn/home/anvil/Paket
+      - ./NWN.Toolbox/bin/Release/NWN.Toolbox:/nwn/home/anvil/Plugins/NWN.Toolbox
+      - ./NWN.Toolbox.Tests/bin/Release/NWN.Toolbox.Tests:/nwn/home/anvil/Plugins/NWN.Toolbox.Tests
+      - ./NWN.Toolbox.Tests/bin/Release/results:/nwn/home/anvil/PluginData/NWN.Anvil.TestRunner
