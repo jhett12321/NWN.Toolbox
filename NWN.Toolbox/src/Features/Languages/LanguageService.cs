@@ -19,7 +19,7 @@ namespace Jorteck.Toolbox.Features.Languages
 
     public IReadOnlyCollection<ILanguage> Languages => languages.Values;
 
-    public LanguageService(IReadOnlyList<ILanguage> languages, PersistenceStorageService persistenceStorageService)
+    public LanguageService(IList<ILanguage> languages, PersistenceStorageService persistenceStorageService)
     {
       this.persistenceStorageService = persistenceStorageService;
       foreach (ILanguage language in languages)

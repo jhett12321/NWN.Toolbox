@@ -24,7 +24,7 @@ namespace Jorteck.Toolbox.Features.Chat
     private PermissionsService PermissionsService { get; init; }
 
     [Inject]
-    public IReadOnlyList<IChatCommand> Commands { get; set; }
+    public IList<IChatCommand> Commands { get; set; }
 
     [Inject]
     private HelpCommand HelpCommand { get; init; }
