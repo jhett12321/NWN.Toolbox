@@ -48,7 +48,7 @@ jobs:
       - name: Code Analysis
         uses: JetBrains/ReSharper-InspectCode@v0.3
         with:
-          solution: ./NWN.Anvil.sln
+          solution: ./NWN.Toolbox.sln
           tool-version: 2024.1.0
 
   test:
