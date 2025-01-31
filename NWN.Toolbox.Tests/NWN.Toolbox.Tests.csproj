@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <TargetFramework>net7.0</TargetFramework>
+        <TargetFramework>net8.0</TargetFramework>
         <RuntimeIdentifier>linux-x64</RuntimeIdentifier>
 
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
@@ -28,8 +28,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="NWN.Anvil" Version="8193.36.1" ExcludeAssets="runtime" PrivateAssets="all" />
-        <PackageReference Include="NWN.Anvil.TestRunner" Version="8193.36.1" ExcludeAssets="runtime" PrivateAssets="all" />
+        <PackageReference Include="NWN.Anvil" Version="8193.37.0-dev.6.rd258f8df" ExcludeAssets="runtime" PrivateAssets="all" />
+        <PackageReference Include="NWN.Anvil.TestRunner" Version="8193.37.0-dev.6.rd258f8df" ExcludeAssets="runtime" PrivateAssets="all" />
     </ItemGroup>
 
     <ItemGroup>

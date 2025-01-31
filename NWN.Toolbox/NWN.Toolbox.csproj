@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <!--Build-->
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <LangVersion>9.0</LangVersion>
     <RuntimeIdentifier>linux-x64</RuntimeIdentifier>
 
@@ -61,7 +61,7 @@
 
   <ItemGroup>
     <PackageReference Include="Cronos" Version="0.7.1" PrivateAssets="compile" />
-    <PackageReference Include="NWN.Anvil" Version="8193.36.1" ExcludeAssets="runtime" PrivateAssets="all" />
+    <PackageReference Include="NWN.Anvil" Version="8193.37.0-dev.6.rd258f8df" ExcludeAssets="runtime" PrivateAssets="all" />
     <PackageReference Include="YamlDotNet" Version="11.2.1" PrivateAssets="compile" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.5" PrivateAssets="compile" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.5" PrivateAssets="compile" />
