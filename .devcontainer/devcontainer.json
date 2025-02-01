@@ -17,6 +17,6 @@
   },
   "appPort": ["5121:5121/udp"],
   "containerEnv": {
-    "ANVIL_ADD_PLUGIN_PATHS": "/workspaces/NWN.Toolbox/NWN.Toolbox/bin/Debug;/workspaces/NWN.Toolbox/NWN.Toolbox.Tests/bin/Debug"
+    "ANVIL_ADD_PLUGIN_PATHS": "/workspaces/NWN.Toolbox/NWN.Toolbox/bin/Debug:/workspaces/NWN.Toolbox/NWN.Toolbox.Tests/bin/Debug"
   }
 }

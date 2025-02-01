@@ -56,7 +56,7 @@ jobs:
         with:
           push: never
           env: |
-            ANVIL_ADD_PLUGIN_PATHS=/workspaces/NWN.Toolbox/NWN.Toolbox/bin/Release;/workspaces/NWN.Toolbox/NWN.Toolbox.Tests/bin/Release
+            ANVIL_ADD_PLUGIN_PATHS=/workspaces/NWN.Toolbox/NWN.Toolbox/bin/Release:/workspaces/NWN.Toolbox/NWN.Toolbox.Tests/bin/Release
           runCmd: |
             dotnet build --configuration Release
             cd /nwn/data/bin/linux-amd64
