@@ -24,7 +24,7 @@ namespace Jorteck.Toolbox.Features.Chat
     private PermissionsService PermissionsService { get; init; }
 
     [Inject]
-    public IList<IChatCommand> Commands { get; set; }
+    public IChatCommand[] Commands { get; set; }
 
     [Inject]
     private HelpCommand HelpCommand { get; init; }
@@ -41,7 +41,7 @@ namespace Jorteck.Toolbox.Features.Chat
         throw new InvalidOperationException("No command prefixes defined!");
       }
 
-      Commands = Commands.OrderBy(command => command.Command).ToList();
+      Array.Sort(Commands, (a, b) => string.Compare(a.Command, b.Command, StringComparison.Ordinal));
       helpCommandText = $"{ConfigService.Config.ChatCommands.CommandPrefixes[0]}{HelpCommand.Command}".ColorString(ColorConstants.Orange);
 
       NwModule.Instance.OnPlayerChat += OnChatMessageSend;

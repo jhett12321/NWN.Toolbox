@@ -10,7 +10,7 @@ namespace Jorteck.Toolbox.Tests.Features.Languages
   public sealed class LanguageTests
   {
     [Inject]
-    private static IReadOnlyList<ILanguage> Languages { get; set; }
+    private static ILanguage[] Languages { get; set; }
 
     [Test(Description = "Translating the pangram \"the five boxing wizards jump quickly.\" with a given language returns the expected output.")]
     [TestCaseSource(nameof(LanguageTranslationCases))]
