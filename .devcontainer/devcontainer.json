@@ -1,6 +1,6 @@
 {
   "name": "nwn.toolbox",
-  "image": "nwndotnet/anvil:8193.37.0-dev.6.rd258f8df",
+  "image": "nwndotnet/anvil:8193.37.0-dev.8.raed9559c",
   "workspaceMount": "source=${localWorkspaceFolder},target=/workspaces/NWN.Toolbox,type=bind",
   "workspaceFolder": "/workspaces/NWN.Toolbox",
   "mounts": [
@@ -15,6 +15,7 @@
       "packages": "curl,unzip,procps,git"
     }
   },
+  "onCreateCommand": "dotnet tool install --global dotnet-ef",
   "appPort": ["5121:5121/udp"],
   "containerEnv": {
     "ANVIL_ADD_PLUGIN_PATHS": "/workspaces/NWN.Toolbox/NWN.Toolbox/bin/Debug:/workspaces/NWN.Toolbox/NWN.Toolbox.Tests/bin/Debug"
