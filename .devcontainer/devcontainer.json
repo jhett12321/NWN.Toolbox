@@ -1,0 +1,23 @@
+{
+  "name": "nwn.toolbox",
+  "image": "nwndotnet/anvil:8193.37.0-dev.9.r2c00af0b",
+  "workspaceMount": "source=${localWorkspaceFolder},target=/workspaces/NWN.Toolbox,type=bind",
+  "workspaceFolder": "/workspaces/NWN.Toolbox",
+  "mounts": [
+    "source=${localWorkspaceFolder}/test_results,target=/nwn/home/anvil/PluginData/NWN.Anvil.TestRunner,type=bind",
+    "source=${localWorkspaceFolder}/NWN.Toolbox.Tests/src/paket,target=/nwn/home/anvil/Paket,type=bind"
+  ],
+  "features": {
+    "ghcr.io/devcontainers/features/dotnet:2": {
+      "version": "8.0"
+    },
+    "ghcr.io/rocker-org/devcontainer-features/apt-packages:1": {
+      "packages": "curl,unzip,procps,git"
+    }
+  },
+  "onCreateCommand": "dotnet tool install --global dotnet-ef",
+  "appPort": ["5121:5121/udp"],
+  "containerEnv": {
+    "ANVIL_ADD_PLUGIN_PATHS": "/workspaces/NWN.Toolbox/NWN.Toolbox/bin/Debug:/workspaces/NWN.Toolbox/NWN.Toolbox.Tests/bin/Debug"
+  }
+}

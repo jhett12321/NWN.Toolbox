@@ -1,57 +1,47 @@
 <Project Sdk="Microsoft.NET.Sdk">
-    <PropertyGroup>
-        <TargetFramework>net8.0</TargetFramework>
-        <RuntimeIdentifier>linux-x64</RuntimeIdentifier>
+  <!--Build-->
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <RuntimeIdentifier>linux-x64</RuntimeIdentifier>
+    <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
 
-        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-        <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
 
-        <ProduceReferenceAssembly>false</ProduceReferenceAssembly>
-        <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-        <EnableDynamicLoading>true</EnableDynamicLoading>
+    <ProduceReferenceAssembly>false</ProduceReferenceAssembly>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    <SourceControlInformationFeatureSupported>true</SourceControlInformationFeatureSupported>
+    <EnableDynamicLoading>true</EnableDynamicLoading>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
 
-        <NoWarn>1591</NoWarn>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 
-        <RootNamespace>Jorteck.Toolbox.Tests</RootNamespace>
-    </PropertyGroup>
+    <NoWarn>1591</NoWarn>
 
-    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-        <OutputPath>bin\Debug\$(AssemblyName)</OutputPath>
-        <PlatformTarget>x64</PlatformTarget>
-    </PropertyGroup>
+    <RootNamespace>Jorteck.Toolbox.Tests</RootNamespace>
+  </PropertyGroup>
 
-    <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-        <OutputPath>bin\Release\$(AssemblyName)</OutputPath>
-        <DebugSymbols>true</DebugSymbols>
-        <DebugType>Portable</DebugType>
-        <PlatformTarget>x64</PlatformTarget>
-    </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <OutputPath>bin\Debug\$(AssemblyName)</OutputPath>
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
 
-    <ItemGroup>
-        <PackageReference Include="NWN.Anvil" Version="8193.37.0-dev.6.rd258f8df" ExcludeAssets="runtime" PrivateAssets="all" />
-        <PackageReference Include="NWN.Anvil.TestRunner" Version="8193.37.0-dev.6.rd258f8df" ExcludeAssets="runtime" PrivateAssets="all" />
-    </ItemGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <OutputPath>bin\Release\$(AssemblyName)</OutputPath>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>Portable</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
 
-    <ItemGroup>
-      <ProjectReference Include="..\NWN.Toolbox\NWN.Toolbox.csproj">
-        <Private>false</Private>
-        <ExcludeAssets>runtime</ExcludeAssets>
-      </ProjectReference>
-    </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="NWN.Anvil" Version="8193.37.0-dev.9.r2c00af0b" ExcludeAssets="runtime" PrivateAssets="all" />
+    <PackageReference Include="NWN.Anvil.TestRunner" Version="8193.37.0-dev.9.r2c00af0b" ExcludeAssets="runtime" PrivateAssets="all" />
+  </ItemGroup>
 
-    <ItemGroup>
-      <ContentWithTargetPath Include="src\docker\config\nwserver.env">
-        <TargetPath>..\config\nwserver.env</TargetPath>
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </ContentWithTargetPath>
-      <ContentWithTargetPath Include="src\docker\docker-compose.yml">
-        <TargetPath>..\docker-compose.yml</TargetPath>
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </ContentWithTargetPath>
-      <ContentWithTargetPath Include="src\docker\paket\paket.dependencies">
-        <TargetPath>..\paket\paket.dependencies</TargetPath>
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </ContentWithTargetPath>
-    </ItemGroup>
-
+  <ItemGroup>
+    <ProjectReference Include="..\NWN.Toolbox\NWN.Toolbox.csproj">
+      <Private>false</Private>
+      <ExcludeAssets>runtime</ExcludeAssets>
+    </ProjectReference>
+  </ItemGroup>
 </Project>

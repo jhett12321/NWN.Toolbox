@@ -14,76 +14,53 @@ on:
 
 jobs:
   compile:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     if: "!contains(github.event.head_commit.message, 'skip ci')"
     permissions:
       security-events: write
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: Check Line Endings
-        uses: erclu/check-crlf@v1
-
-      - name: Setup .NET Core
-        uses: actions/setup-dotnet@v1.9.0
+        uses: actions/checkout@v4
         with:
-          dotnet-version: '7.0.x'
+          submodules: recursive
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
 
       - name: Build
         run: dotnet build --configuration Debug
 
-      - name: Prepare Outputs
-        id: vars
-        run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
-
-      - name: Code Analysis Cache
-        uses: actions/cache@v2
-        with:
-          path: ~/.local/share/JetBrains
-          key: resharper-cache-${{ steps.vars.outputs.sha_short }}
-          restore-keys: |
-            resharper-cache-
-
       - name: Code Analysis
-        uses: JetBrains/ReSharper-InspectCode@v0.3
+        uses: JetBrains/ReSharper-InspectCode@v0.8
         with:
           solution: ./NWN.Toolbox.sln
-          tool-version: 2024.1.0
+          tool-version: 2024.3.0
 
   test:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     if: "!contains(github.event.head_commit.message, 'skip ci')"
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           submodules: recursive
 
-      - name: Setup .NET Core
-        uses: actions/setup-dotnet@v1.9.0
-        with:
-          dotnet-version: '7.0.x'
-
-      - name: Build
-        run: dotnet build --configuration Release
-
-      - name: Run Tests
-        run: docker compose --env-file .env --project-directory . -f NWN.Toolbox.Tests/bin/Release/docker-compose.yml up
-
-      - name: Install NUnit
-        run: nuget install NUnit.Console -Version 3.12.0
-
-      - name: Fetch transform code
-        run: wget https://raw.githubusercontent.com/nunit/nunit-transforms/master/nunit3-junit/nunit3-junit.xslt
-        shell: bash
-
-      - name: Transform NUnit3 to JUnit
+      - name: Create Output Directories
         run: |
-            $xslt = New-Object System.Xml.Xsl.XslCompiledTransform;
-            $xslt.Load("nunit3-junit.xslt");
-            $xslt.Transform("NWN.Toolbox.Tests/bin/Release/results/NWN.Toolbox.Tests/TestResult.xml", "TestResult.junit.xml");
-        shell: pwsh
+          mkdir -p test_results
+
+      - name: Build and Run Tests
+        uses: devcontainers/ci@v0.3
+        with:
+          push: never
+          env: |
+            ANVIL_ADD_PLUGIN_PATHS=/workspaces/NWN.Toolbox/NWN.Toolbox/bin/Release:/workspaces/NWN.Toolbox/NWN.Toolbox.Tests/bin/Release
+          runCmd: |
+            dotnet build --configuration Release
+            cd /nwn/data/bin/linux-amd64
+            /nwn/run-server.sh
 
       - name: Upload Event File
         uses: actions/upload-artifact@v4
@@ -97,73 +74,66 @@ jobs:
         if: always()
         with:
           name: Test Results
-          path: TestResult.junit.xml
+          path: test_results/NWN.Toolbox.Tests/*.xml
 
   build:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
     needs: [compile, test]
     outputs:
-      version: ${{ steps.vars.outputs.version }}
-      tag: ${{ steps.bump_version.outputs.tag }}
-      sha_short: ${{ steps.vars.outputs.sha_short }}
-      image_repository: ${{ steps.vars.outputs.image_repository }}
-      created: ${{ steps.build.outputs.created }}
+      version: ${{ steps.vars.outputs.VERSION }}
+      tag: ${{ steps.vars.outputs.TAG }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          submodules: recursive
 
-      - name: Setup .NET Core
-        uses: actions/setup-dotnet@v1.9.0
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '7.0.x'
+          global-json-file: global.json
 
       - name: Version and Tag
         id: bump_version
-        uses: anothrNick/github-tag-action@1.61.0
+        uses: anothrNick/github-tag-action@1.71.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DEFAULT_BUMP: patch
           RELEASE_BRANCHES: main
           WITH_V: true
+          PRERELEASE_SUFFIX: alpha
+          PRERELEASE: ${{ github.ref != 'main' }}
+          TAG_CONTEXT: branch
 
       - name: Prepare Outputs
         id: vars
         run: |
-          echo "::set-output name=version::$(echo ${{ steps.bump_version.outputs.tag }} | sed 's/[v]//g')"
+          echo "VERSION=$(echo ${{ steps.bump_version.outputs.tag }} | sed 's/[v]//g')" >> "$GITHUB_OUTPUT"
+          echo "TAG=$(echo ${{ steps.bump_version.outputs.tag }})" >> "$GITHUB_OUTPUT"
 
       - name: Build Release Binaries
         id: build
-        run: |
-          dotnet build --configuration Release -p:Version=${{ steps.vars.outputs.version }}
-          echo "::set-output name=created::$(echo date -u +'%Y-%m-%dT%H:%M:%SZ')"
-
-      - name: Upload NuGet Artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: NuGet Packages
-          path: |
-            NWN.Toolbox/bin/Release/NWN.Toolbox/*.nupkg
-            NWN.Toolbox/bin/Release/NWN.Toolbox/*.snupkg
-          if-no-files-found: error
+        run: dotnet build NWN.Toolbox/NWN.Toolbox.csproj --configuration Release -p:Version=${{ steps.vars.outputs.VERSION }}
 
       - name: Upload Build Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: Binaries
-          path: |
-            NWN.Toolbox/bin/Release/NWN.Toolbox/
-            !NWN.Toolbox/bin/Release/NWN.Toolbox/*.nupkg
-            !NWN.Toolbox/bin/Release/NWN.Toolbox/*.snupkg
+          path: NWN.Toolbox/bin/Release
           if-no-files-found: error
 
   release:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     if: (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main'
     needs: build
+    permissions:
+      contents: write
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - name: Download Release Artifacts
         uses: actions/download-artifact@v4
         with:
@@ -174,46 +144,34 @@ jobs:
         run: zip -r ../NWN.Toolbox.zip ./*
         working-directory: binaries
 
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          release_name: Release ${{ needs.build.outputs.version }}
-          draft: false
-          prerelease: false
-          tag_name: ${{ needs.build.outputs.tag }}
-
       - name: Upload Release Binaries
-        id: upload-release-asset
-        uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./NWN.Toolbox.zip
-          asset_name: NWN.Toolbox.zip
-          asset_content_type: application/zip
+        run: |
+          gh release create ${{ needs.build.outputs.tag }} --title "Release ${{ needs.build.outputs.version }}" --generate-notes
+          gh release upload ${{ needs.build.outputs.tag }} NWN.Toolbox.zip
 
   nuget:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
     needs: build
     steps:
-      - name: Setup .NET Core
-        uses: actions/setup-dotnet@v1.9.0
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '7.0.x'
+          global-json-file: global.json
 
       - name: Download Release Artifacts
         uses: actions/download-artifact@v4
         with:
-          name: NuGet Packages
-          path: binaries
+          name: Binaries
+          path: bin/Release
 
       - name: NuGet Publish
-        run: dotnet nuget push 'binaries/**/*.nupkg' --api-key ${{ secrets.NUGET_KEY }} --source https://api.nuget.org/v3/index.json
+        run: dotnet nuget push bin/Release/NWN.Toolbox/*.nupkg --api-key ${{ secrets.NUGET_KEY }} --source https://api.nuget.org/v3/index.json
 
       - name: GitHub Publish
-        run: dotnet nuget push 'binaries/**/*.nupkg' --api-key ${{ secrets.GITHUB_TOKEN }} --source https://nuget.pkg.github.com/jhett12321/index.json
+        run: dotnet nuget push bin/Release/NWN.Toolbox/*.nupkg --api-key ${{ secrets.GITHUB_TOKEN }} --source https://nuget.pkg.github.com/nwn-dotnet/index.json
