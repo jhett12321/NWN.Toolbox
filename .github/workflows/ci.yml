@@ -174,4 +174,4 @@ jobs:
         run: dotnet nuget push bin/Release/NWN.Toolbox/*.nupkg --api-key ${{ secrets.NUGET_KEY }} --source https://api.nuget.org/v3/index.json
 
       - name: GitHub Publish
-        run: dotnet nuget push bin/Release/NWN.Toolbox/*.nupkg --api-key ${{ secrets.GITHUB_TOKEN }} --source https://nuget.pkg.github.com/nwn-dotnet/index.json
+        run: dotnet nuget push bin/Release/NWN.Toolbox/*.nupkg --api-key ${{ secrets.GITHUB_TOKEN }} --source https://nuget.pkg.github.com/jhett12321/index.json
