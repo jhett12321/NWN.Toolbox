@@ -47,6 +47,10 @@ jobs:
         with:
           submodules: recursive
 
+      - name: Create Output Directories
+        run: |
+          mkdir -p test_results
+
       - name: Build and Run Tests
         uses: devcontainers/ci@v0.3
         with:
