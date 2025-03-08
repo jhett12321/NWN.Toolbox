@@ -151,9 +151,9 @@ namespace Jorteck.Toolbox.Features.ToolWindows
 
       selectedCreature.BaseAC = sbyte.Parse(Token.GetBindValue(View.NaturalAC)!);
 
-      selectedCreature.SetBaseSavingThrow(SavingThrow.Fortitude, (sbyte)byte.Parse(Token.GetBindValue(View.FortitudeBase)!));
-      selectedCreature.SetBaseSavingThrow(SavingThrow.Reflex, (sbyte)byte.Parse(Token.GetBindValue(View.ReflexBase)!));
-      selectedCreature.SetBaseSavingThrow(SavingThrow.Will, (sbyte)byte.Parse(Token.GetBindValue(View.WillBase)!));
+      selectedCreature.SetBaseSavingThrow(SavingThrow.Fortitude, sbyte.Parse(Token.GetBindValue(View.FortitudeBase)!));
+      selectedCreature.SetBaseSavingThrow(SavingThrow.Reflex, sbyte.Parse(Token.GetBindValue(View.ReflexBase)!));
+      selectedCreature.SetBaseSavingThrow(SavingThrow.Will, sbyte.Parse(Token.GetBindValue(View.WillBase)!));
 
       selectedCreature.MaxHP = int.Parse(Token.GetBindValue(View.BaseHitPoints)!);
       selectedCreature.MovementRate = (MovementRate)Token.GetBindValue(View.MovementRate);
