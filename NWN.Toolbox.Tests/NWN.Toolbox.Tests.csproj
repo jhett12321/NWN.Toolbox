@@ -34,8 +34,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="NWN.Anvil" Version="8193.37.0-dev.9.r2c00af0b" ExcludeAssets="runtime" PrivateAssets="all" />
-    <PackageReference Include="NWN.Anvil.TestRunner" Version="8193.37.0-dev.9.r2c00af0b" ExcludeAssets="runtime" PrivateAssets="all" />
+    <PackageReference Include="NWN.Anvil" Version="8193.37.0" ExcludeAssets="runtime" PrivateAssets="all" />
+    <PackageReference Include="NWN.Anvil.TestRunner" Version="8193.37.0" ExcludeAssets="runtime" PrivateAssets="all" />
   </ItemGroup>
 
   <ItemGroup>
