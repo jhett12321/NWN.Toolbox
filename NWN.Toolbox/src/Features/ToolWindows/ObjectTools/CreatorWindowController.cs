@@ -24,6 +24,7 @@ namespace Jorteck.Toolbox.Features.ToolWindows
 
     public override void Init()
     {
+      Token.SetBindValue(View.Search, string.Empty);
       Token.SetBindValue(View.BlueprintType, (int)BlueprintObjectType.Creature);
       Token.SetBindValue(View.CreateButtonEnabled, false);
       RefreshCreatorList();
