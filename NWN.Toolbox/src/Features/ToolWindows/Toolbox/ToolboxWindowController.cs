@@ -40,6 +40,8 @@ namespace Jorteck.Toolbox.Features.ToolWindows
         toolboxWindows = AvailableWindows.Value.Where(view => view.ListInToolbox);
       }
 
+      Token.SetBindValue(View.Search, string.Empty);
+
       allWindows = toolboxWindows.Where(view => view.Title != null)
         .OrderBy(view => view.Title)
         .ToList();
