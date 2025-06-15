@@ -1,6 +1,6 @@
 {
   "name": "nwn.toolbox",
-  "image": "nwndotnet/anvil:8193.37.0",
+  "image": "nwndotnet/anvil:8193.37.2",
   "workspaceMount": "source=${localWorkspaceFolder},target=/workspaces/NWN.Toolbox,type=bind",
   "workspaceFolder": "/workspaces/NWN.Toolbox",
   "mounts": [
