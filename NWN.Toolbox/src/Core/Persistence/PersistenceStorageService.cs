@@ -1,3 +1,4 @@
+using System;
 using Anvil.API;
 using Anvil.Services;
 using NLog;
@@ -5,7 +6,7 @@ using NLog;
 namespace Jorteck.Toolbox.Core.Persistence
 {
   [ServiceBinding(typeof(PersistenceStorageService))]
-  public class PersistenceStorageService
+  public class PersistenceStorageService : IDisposable
   {
     private static readonly Logger Log = LogManager.GetCurrentClassLogger();
 
@@ -38,6 +39,11 @@ namespace Jorteck.Toolbox.Core.Persistence
     public void UpdateState<T>(NwPlayer player, string key, T value)
     {
       activeStore.UpdateState(player, key, value);
+    }
+
+    public void Dispose()
+    {
+      activeStore = null;
     }
   }
 }
