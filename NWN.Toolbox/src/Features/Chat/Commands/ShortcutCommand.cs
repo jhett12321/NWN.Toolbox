@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using Anvil.API;
 using Anvil.Services;
 
@@ -24,6 +25,7 @@ namespace Jorteck.Toolbox.Features.Chat
     {
       new CommandUsage("set <shortcut> <message>", "Set a shortcut that expands to the specified message/command."),
       new CommandUsage("unset <shortcut>", "Unset the specified shortcut."),
+      new CommandUsage("list", "List all configured shortcuts."),
       new CommandUsage("clear", "Clear all shortcuts."),
     };
 
@@ -36,6 +38,16 @@ namespace Jorteck.Toolbox.Features.Chat
           break;
         case "unset" when args.Count == 2:
           ChatShortcutService.UnsetShortcut(caller, args[1]);
+          break;
+        case "list" when args.Count == 1:
+          Dictionary<string, string> shortcuts = ChatShortcutService.GetShortcuts(caller);
+          StringBuilder message = new StringBuilder();
+          message.AppendLine("===Shortcuts===");
+          message.AppendJoin('\n', shortcuts.Select(shortcut => $"{shortcut.Key} = {shortcut.Value}"));
+          message.AppendLine();
+          message.AppendLine("=============");
+
+          caller.SendServerMessage(message.ToString());
           break;
         case "clear" when args.Count == 1:
           ChatShortcutService.ClearShortcuts(caller);

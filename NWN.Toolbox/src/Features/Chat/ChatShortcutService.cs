@@ -93,7 +93,7 @@ namespace Jorteck.Toolbox.Features.Chat
       }
     }
 
-    private Dictionary<string, string> GetShortcuts(NwPlayer player)
+    public Dictionary<string, string> GetShortcuts(NwPlayer player)
     {
       PersistentVariableString shortcutsVar = player.LoginCreature!.GetObjectVariable<PersistentVariableString>(ShortcutVarKey);
       if (shortcutsVar.HasValue)
