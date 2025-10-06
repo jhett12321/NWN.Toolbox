@@ -25,6 +25,7 @@ namespace Jorteck.Toolbox.Features.Chat
       if (!IsValidShortcutName(shortcut))
       {
         player.SendErrorMessage($"Cannot set shortcuts that start with '{string.Join(',', configService.Config.ChatCommands.CommandPrefixes)}'");
+        return;
       }
 
       Dictionary<string, string> shortcuts = GetShortcuts(player);
