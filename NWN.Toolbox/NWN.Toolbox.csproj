@@ -17,6 +17,7 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 
     <NoWarn>1591</NoWarn>
+    <Nullable>enable</Nullable>
 
     <RootNamespace>Jorteck.Toolbox</RootNamespace>
   </PropertyGroup>
