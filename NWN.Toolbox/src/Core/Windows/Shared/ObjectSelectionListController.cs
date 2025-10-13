@@ -10,17 +10,17 @@ namespace Jorteck.Toolbox.Core
 {
   public sealed class ObjectSelectionListController
   {
-    private List<NwGameObject> objectList;
-    private Color[] rowColors;
+    private List<NwGameObject> objectList = null!;
+    private Color[] rowColors = null!;
 
-    public NwObject SelectedObject { get; private set; }
-    private NwArea selectedArea;
+    public NwObject? SelectedObject { get; private set; }
+    private NwArea? selectedArea;
 
     private readonly ObjectSelectionListView view;
     private readonly NuiWindowToken windowToken;
     private TimeSpan lastSelectionClick;
 
-    public event Action OnObjectSelectChange;
+    public event Action? OnObjectSelectChange;
 
     public bool RestrictTypeSelection
     {
@@ -113,20 +113,25 @@ namespace Jorteck.Toolbox.Core
         return;
       }
 
-      objectList = LoadSearchResults();
+      objectList = LoadSearchResults(selectedArea);
       UpdateListViewBinds(objectList);
     }
 
-    private List<NwGameObject> LoadSearchResults()
+    private List<NwGameObject> LoadSearchResults(NwArea selectedArea)
     {
-      string search = windowToken.GetBindValue(view.Search);
+      string search = windowToken.GetBindValue(view.Search) ?? string.Empty;
       ObjectSelectionTypes searchTypes = (ObjectSelectionTypes)windowToken.GetBindValue(view.SearchObjectType);
 
-      List<NwGameObject> results = new List<NwGameObject>();
+      List<NwGameObject> results = [];
 
       NwCreature playerCreature = windowToken.Player.ControlledCreature!;
+      NwArea? playerArea = playerCreature.Area;
 
-      NwArea playerArea = playerCreature.Area;
+      if (playerArea == null)
+      {
+        return results;
+      }
+
       Vector3 playerPos = playerCreature.Position;
 
       float distance = windowToken.GetBindValue(view.SearchDistance)!.ParseFloat(0f);
@@ -165,7 +170,7 @@ namespace Jorteck.Toolbox.Core
       return results;
     }
 
-    private bool ShouldListObject(NwGameObject gameObject, NwArea playerArea, Vector3 playerPos, string search, ObjectSelectionTypes selectionTypes, float? distanceSqr = null)
+    private bool ShouldListObject(NwGameObject? gameObject, NwArea playerArea, Vector3 playerPos, string search, ObjectSelectionTypes selectionTypes, float? distanceSqr = null)
     {
       if (gameObject == null || !gameObject.IsValid)
       {
@@ -179,7 +184,7 @@ namespace Jorteck.Toolbox.Core
         return true;
       }
 
-      return hasFlag && gameObject.Name.Contains(search ?? string.Empty, StringComparison.OrdinalIgnoreCase)
+      return hasFlag && gameObject.Name.Contains(search, StringComparison.OrdinalIgnoreCase)
         && (distanceSqr == null || playerArea == gameObject.Area && Vector3.DistanceSquared(playerPos, gameObject.Position) < distanceSqr);
     }
 

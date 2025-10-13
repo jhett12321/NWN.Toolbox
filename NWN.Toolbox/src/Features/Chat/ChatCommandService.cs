@@ -15,19 +15,22 @@ namespace Jorteck.Toolbox.Features.Chat
   [ServiceBindingOptions(BindingPriority = BindingPriority.Low)]
   internal sealed class ChatCommandService : IInitializable
   {
-    private string helpCommandText;
+    private string? helpCommandText;
 
     [Inject]
-    private ConfigService ConfigService { get; init; }
+    private ConfigService ConfigService { get; init; } = null!;
 
     [Inject]
-    private PermissionsService PermissionsService { get; init; }
+    private PermissionsService PermissionsService { get; init; } = null!;
 
     [Inject]
-    public IChatCommand[] Commands { get; set; }
+    public IChatCommand[] Commands { get; set; } = null!;
 
     [Inject]
-    private HelpCommand HelpCommand { get; init; }
+    private HelpCommand HelpCommand { get; init; } = null!;
+
+    private List<string> commandPrefixes = null!;
+    private List<string> ignoreCommands = null!;
 
     public void Init()
     {
@@ -40,6 +43,9 @@ namespace Jorteck.Toolbox.Features.Chat
       {
         throw new InvalidOperationException("No command prefixes defined!");
       }
+
+      commandPrefixes = ConfigService.Config.ChatCommands.CommandPrefixes;
+      ignoreCommands = ConfigService.Config.ChatCommands.IgnoreCommands ?? [];
 
       Array.Sort(Commands, (a, b) => string.Compare(a.Command, b.Command, StringComparison.Ordinal));
       helpCommandText = $"{ConfigService.Config.ChatCommands.CommandPrefixes[0]}{HelpCommand.Command}".ColorString(ColorConstants.Orange);
@@ -54,7 +60,7 @@ namespace Jorteck.Toolbox.Features.Chat
 
     private void OnChatMessageSend(ModuleEvents.OnPlayerChat eventData)
     {
-      foreach (string commandPrefix in ConfigService.Config.ChatCommands.CommandPrefixes)
+      foreach (string commandPrefix in commandPrefixes)
       {
         if (eventData.Message.StartsWith(commandPrefix))
         {
@@ -87,7 +93,7 @@ namespace Jorteck.Toolbox.Features.Chat
 
     private bool ShouldIgnoreCommand(string commandText)
     {
-      foreach (string ignoreCommand in ConfigService.Config.ChatCommands.IgnoreCommands)
+      foreach (string ignoreCommand in ignoreCommands)
       {
         if (commandText.StartsWith(ignoreCommand))
         {

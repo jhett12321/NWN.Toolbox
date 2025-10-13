@@ -29,9 +29,12 @@ namespace Jorteck.Toolbox.Features.Permissions
       NwPlayer caller = selection.Caller;
       NwPlayer target = selection.Target;
 
-      PermissionSet userPermissions = PermissionsConfigService.GetPermissionsForPlayer(target);
-      caller.SendServerMessage($"Target has {(userPermissions.Permissions.Count == 0 ? "no permissions." : "the following permissions:")}", ColorConstants.Orange);
-      caller.SendServerMessage(string.Join("\n", userPermissions.Permissions), ColorConstants.Lime);
+      PermissionSet? userPermissions = PermissionsConfigService.GetPermissionsForPlayer(target);
+      bool permissionsEmpty = userPermissions == null || userPermissions.Permissions.Count == 0;
+      IEnumerable<string> permissionsList = userPermissions?.Permissions ?? [];
+
+      caller.SendServerMessage($"Target has {(permissionsEmpty ? "no permissions." : "the following permissions:")}", ColorConstants.Orange);
+      caller.SendServerMessage(string.Join("\n", permissionsList), ColorConstants.Lime);
     }
   }
 }

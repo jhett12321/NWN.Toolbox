@@ -12,12 +12,12 @@ namespace Jorteck.Toolbox.Features.Blueprints
 
     public float? CR { get; }
 
-    public string Faction { get; }
+    public string? Faction { get; }
 
     public BlueprintObjectType ObjectType { get; }
 
-    public NwObject Create(Location location);
+    public NwObject? Create(Location location);
 
-    public NwItem Create(NwGameObject owner);
+    public NwItem? Create(NwGameObject owner);
   }
 }

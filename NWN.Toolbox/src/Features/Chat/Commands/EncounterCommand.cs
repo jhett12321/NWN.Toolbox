@@ -14,13 +14,13 @@ namespace Jorteck.Toolbox.Features.Chat
   public sealed class EncounterCommand : IChatCommand
   {
     [Inject]
-    private DatabaseManager DatabaseManager { get; init; }
+    private DatabaseManager DatabaseManager { get; init; } = null!;
 
     [Inject]
-    private HelpCommand HelpCommand { get; init; }
+    private HelpCommand HelpCommand { get; init; } = null!;
 
     public string Command => "encounter";
-    public string[] Aliases => null;
+    public string[]? Aliases => null;
     public bool DMOnly => true;
     public Range ArgCount => 1..;
 
@@ -61,7 +61,7 @@ namespace Jorteck.Toolbox.Features.Chat
     {
       DatabaseManager.DoTransaction(database =>
       {
-        EncounterModel preset = database.EncounterPresets.FirstOrDefault(model => model.Name == presetName);
+        EncounterModel? preset = database.EncounterPresets.FirstOrDefault(model => model.Name == presetName);
         if (preset != null)
         {
           database.Remove(preset);
@@ -76,10 +76,16 @@ namespace Jorteck.Toolbox.Features.Chat
 
     private void SpawnEncounterPreset(NwPlayer caller, string presetName)
     {
-      EncounterModel preset = DatabaseManager.Database.EncounterPresets.FirstOrDefault(model => model.Name == presetName);
+      EncounterModel? preset = DatabaseManager.Database.EncounterPresets.FirstOrDefault(model => model.Name == presetName);
       if (preset == null)
       {
-        caller.SendErrorMessage($"Unknown encounter preset \"{presetName}\".");
+        caller.SendErrorMessage($"Unknown encounter preset '{presetName}'.");
+        return;
+      }
+
+      if (preset.Creatures == null)
+      {
+        caller.SendErrorMessage($"No creatures present in preset '{presetName}'.");
         return;
       }
 
@@ -91,13 +97,18 @@ namespace Jorteck.Toolbox.Features.Chat
         }
 
         NwCreature playerCreature = eventData.Player.ControlledCreature!;
-        NwArea area = playerCreature.Area;
+        NwArea? area = playerCreature.Area;
         Vector3 direction = Vector3.Normalize(playerCreature.Position - eventData.TargetPosition);
         float orientation = NwMath.VectorToAngle(direction);
 
         foreach (EncounterModel.EncounterSpawn spawn in preset.Creatures)
         {
-          NwCreature creature = NwCreature.Deserialize(spawn.CreatureData);
+          if (spawn.CreatureData == null)
+          {
+            continue;
+          }
+
+          NwCreature? creature = NwCreature.Deserialize(spawn.CreatureData);
           if (creature != null)
           {
             Vector3 position = new Vector3(spawn.LocalOffsetX, spawn.LocalOffsetY, spawn.LocalOffsetZ);

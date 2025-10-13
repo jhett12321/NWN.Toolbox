@@ -6,7 +6,7 @@ namespace Jorteck.Toolbox.Core
 {
   public abstract class DialogPopupController<T> : WindowController<T> where T : WindowView<T>, IDialogView, new()
   {
-    private TaskCompletionSource<DialogResult> taskCompletionSource;
+    private TaskCompletionSource<DialogResult>? taskCompletionSource;
 
     public DialogResult DialogResult { get; private set; }
 

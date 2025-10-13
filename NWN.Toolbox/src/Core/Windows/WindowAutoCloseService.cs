@@ -26,7 +26,7 @@ namespace Jorteck.Toolbox.Core
 
     public void RegisterWindowForAutoClose(IWindowController windowController)
     {
-      Location openLocation = windowController.Token.Player.LoginCreature?.Location;
+      Location? openLocation = windowController.Token.Player.LoginCreature?.Location;
       if (openLocation == null)
       {
         return;
@@ -69,7 +69,7 @@ namespace Jorteck.Toolbox.Core
           continue;
         }
 
-        Location location = openWindow.WindowController.Token.Player.ControlledCreature!.Location;
+        Location? location = openWindow.WindowController.Token.Player.ControlledCreature!.Location;
         if (location == null || location.Area != openWindow.OpenArea || Vector3.DistanceSquared(location.Position, openWindow.OpenPosition) > CloseDistanceSqr)
         {
           pendingOpenWindows.RemoveAt(i);
@@ -80,11 +80,11 @@ namespace Jorteck.Toolbox.Core
 
     private sealed class OpenWindowData
     {
-      public Vector3 OpenPosition { get; init; }
+      public required Vector3 OpenPosition { get; init; }
 
-      public NwArea OpenArea { get; init; }
+      public required NwArea OpenArea { get; init; }
 
-      public IWindowController WindowController { get; init; }
+      public required IWindowController WindowController { get; init; }
     }
   }
 }

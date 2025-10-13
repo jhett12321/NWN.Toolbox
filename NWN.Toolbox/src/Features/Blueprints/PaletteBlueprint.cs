@@ -5,15 +5,15 @@ namespace Jorteck.Toolbox.Features.Blueprints
 {
   internal sealed class PaletteBlueprint : IBlueprint
   {
-    public string ResRef { get; init; }
-    public string FullName { get; init; }
-    public string Name { get; init; }
-    public string Category { get; init; }
-    public float? CR { get; init; }
-    public string Faction { get; init; }
-    public BlueprintObjectType ObjectType { get; init; }
+    public required string ResRef { get; init; }
+    public required string FullName { get; init; }
+    public required string Name { get; init; }
+    public required string Category { get; init; }
+    public required float? CR { get; init; }
+    public required string? Faction { get; init; }
+    public required BlueprintObjectType ObjectType { get; init; }
 
-    public NwObject Create(Location location)
+    public NwObject? Create(Location location)
     {
       return ObjectType switch
       {
@@ -30,14 +30,14 @@ namespace Jorteck.Toolbox.Features.Blueprints
       };
     }
 
-    public NwItem Create(NwGameObject owner)
+    public NwItem? Create(NwGameObject? owner)
     {
       if (ObjectType is not BlueprintObjectType.Item || owner == null)
       {
         return null;
       }
 
-      NwItem item = null;
+      NwItem? item = null;
       if (owner is NwCreature creature)
       {
         item = NwItem.Create(ResRef, owner.Location!);

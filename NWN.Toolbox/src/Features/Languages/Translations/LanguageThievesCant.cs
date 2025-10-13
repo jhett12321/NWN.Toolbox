@@ -9,7 +9,7 @@ namespace Jorteck.Toolbox.Features.Languages
   public sealed class LanguageThievesCant : ILanguage
   {
     [Inject]
-    private ConfigService ConfigService { get; init; }
+    private ConfigService ConfigService { get; init; } = null!;
 
     public string Id => "thieves_cant";
 
@@ -79,7 +79,7 @@ namespace Jorteck.Toolbox.Features.Languages
 
     public LanguageOutput Translate(string phrase, int proficiency)
     {
-      if (!dictionary.TryGetValue(phrase[0], out string output))
+      if (!dictionary.TryGetValue(phrase[0], out string? output))
       {
         output = "*nods*";
       }

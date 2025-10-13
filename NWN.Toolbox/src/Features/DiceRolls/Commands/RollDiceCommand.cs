@@ -10,10 +10,10 @@ namespace Jorteck.Toolbox.Features
   public sealed class RollDiceCommand : IChatCommand
   {
     [Inject]
-    private DiceRollService DiceRollService { get; init; }
+    private DiceRollService DiceRollService { get; init; } = null!;
 
     [Inject]
-    private HelpCommand HelpCommand { get; init; }
+    private HelpCommand HelpCommand { get; init; } = null!;
 
     public string Command => "roll";
     public bool DMOnly => false;
@@ -28,19 +28,25 @@ namespace Jorteck.Toolbox.Features
 
     public void ProcessCommand(NwPlayer caller, IReadOnlyList<string> args)
     {
+      NwCreature? callerCreature = caller.ControlledCreature;
+      if (callerCreature == null)
+      {
+        return;
+      }
+
       string[] rollValues = args[0].Split('d', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
 
       try
       {
         if (rollValues.Length == 2 && int.TryParse(rollValues[0], out int diceCount) && int.TryParse(rollValues[1], out int numSides) && diceCount > 0 && numSides > 0)
         {
-          DiceRollService.RollDice(caller.ControlledCreature, numSides, diceCount, DiceRollService.GetBroadcastMode(caller));
+          DiceRollService.RollDice(callerCreature, numSides, diceCount, DiceRollService.GetBroadcastMode(caller));
           return;
         }
 
         if (rollValues.Length == 1 && int.TryParse(rollValues[0], out numSides))
         {
-          DiceRollService.RollDice(caller.ControlledCreature, numSides, 1, DiceRollService.GetBroadcastMode(caller));
+          DiceRollService.RollDice(callerCreature, numSides, 1, DiceRollService.GetBroadcastMode(caller));
           return;
         }
       }

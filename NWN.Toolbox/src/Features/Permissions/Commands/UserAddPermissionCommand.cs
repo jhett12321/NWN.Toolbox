@@ -32,11 +32,13 @@ namespace Jorteck.Toolbox.Features.Permissions
 
       PermissionsConfigService.UpdateUserConfig(config =>
       {
-        if (!config.UsersCd.TryGetValue(target.CDKey, out UserEntry entry))
+        if (!config.UsersCd.TryGetValue(target.CDKey, out UserEntry? entry))
         {
           entry = new UserEntry();
           config.UsersCd[target.CDKey] = entry;
         }
+
+        entry.Permissions ??= [];
 
         if (entry.Permissions.Contains(permission))
         {
@@ -44,7 +46,6 @@ namespace Jorteck.Toolbox.Features.Permissions
           return;
         }
 
-        entry.Permissions ??= new List<string>();
         entry.Permissions.Add(permission);
         caller.SendServerMessage($"Permission granted: \"{permission}\"", ColorConstants.Lime);
       });

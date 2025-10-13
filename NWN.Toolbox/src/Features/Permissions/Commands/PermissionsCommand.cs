@@ -10,13 +10,13 @@ namespace Jorteck.Toolbox.Features.Permissions
   internal abstract class PermissionsCommand : IChatCommand
   {
     [Inject]
-    protected PermissionsService PermissionsService { get; init; }
+    protected PermissionsService PermissionsService { get; init; } = null!;
 
     [Inject]
-    protected ConfigService ConfigService { get; init; }
+    protected ConfigService ConfigService { get; init; } = null!;
 
     [Inject]
-    protected PermissionsConfigService PermissionsConfigService { get; init; }
+    protected PermissionsConfigService PermissionsConfigService { get; init; } = null!;
 
     public string Command => PermissionsConfigService.GetFullChatCommand(SubCommand);
     public string PermissionKey => $"permissions.{SubCommand.Replace(" ", ".")}";

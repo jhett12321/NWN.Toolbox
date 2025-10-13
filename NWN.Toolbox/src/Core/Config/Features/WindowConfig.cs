@@ -18,7 +18,7 @@ namespace Jorteck.Toolbox.Core
     public ListMode ListMode { get; set; } = ListMode.Blacklist;
 
     [Description("The list of windows to use as the whitelist/blacklist. Dependant on list_mode.")]
-    public List<string> Windows { get; set; } = new List<string>();
+    public List<string>? Windows { get; set; } = new List<string>();
   }
 
   internal enum ListMode

@@ -11,13 +11,13 @@ namespace Jorteck.Toolbox.Features.ServerRestart
   public class DelayResetCommand : IChatCommand
   {
     [Inject]
-    private ServerRestartService ServerRestartService { get; init; }
+    private ServerRestartService ServerRestartService { get; init; } = null!;
 
     [Inject]
-    private ConfigService ConfigService { get; init; }
+    private ConfigService ConfigService { get; init; } = null!;
 
     [Inject]
-    private HelpCommand HelpCommand { get; init; }
+    private HelpCommand HelpCommand { get; init; } = null!;
 
     public string Command => "delayreset";
     public Range ArgCount => 1..1;
@@ -45,4 +45,3 @@ namespace Jorteck.Toolbox.Features.ServerRestart
     }
   }
 }
-

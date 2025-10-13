@@ -40,7 +40,7 @@ namespace Jorteck.Toolbox.Features.Languages
         int check = Random.Shared.Next(0, 100);
         if (check < fluency)
         {
-          if (dictionary.TryGetValue(c, out string mapping))
+          if (dictionary.TryGetValue(c, out string? mapping))
           {
             output.Append(mapping);
           }

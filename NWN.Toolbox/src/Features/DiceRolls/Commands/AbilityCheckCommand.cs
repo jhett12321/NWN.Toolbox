@@ -10,10 +10,10 @@ namespace Jorteck.Toolbox.Features
   public class AbilityCheckCommand : IChatCommand
   {
     [Inject]
-    private DiceRollService DiceRollService { get; init; }
+    private DiceRollService DiceRollService { get; init; } = null!;
 
     [Inject]
-    private HelpCommand HelpCommand { get; init; }
+    private HelpCommand HelpCommand { get; init; } = null!;
 
     public string Command => "ability";
     public bool DMOnly => false;
@@ -37,9 +37,15 @@ namespace Jorteck.Toolbox.Features
 
     public void ProcessCommand(NwPlayer caller, IReadOnlyList<string> args)
     {
+      NwCreature? callerCreature = caller.ControlledCreature;
+      if (callerCreature == null)
+      {
+        return;
+      }
+
       if (Enum.TryParse(args[0], true, out Ability ability))
       {
-        DiceRollService.AbilityRoll(caller.LoginCreature, ability, DiceRollService.GetBroadcastMode(caller));
+        DiceRollService.AbilityRoll(callerCreature, ability, DiceRollService.GetBroadcastMode(caller));
       }
       else
       {

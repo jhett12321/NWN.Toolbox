@@ -11,20 +11,20 @@ namespace Jorteck.Toolbox.Features.ToolWindows
   public sealed class ToolboxWindowController : WindowController<ToolboxWindowView>
   {
     [Inject]
-    private Lazy<IEnumerable<IWindowView>> AvailableWindows { get; init; }
+    private Lazy<IEnumerable<IWindowView>> AvailableWindows { get; init; } = null!;
 
     [Inject]
-    private Lazy<WindowManager> WindowManager { get; init; }
+    private Lazy<WindowManager> WindowManager { get; init; } = null!;
 
     [Inject]
-    private ConfigService ConfigService { get; init; }
+    private ConfigService ConfigService { get; init; } = null!;
 
-    private List<IWindowView> allWindows;
-    private List<IWindowView> visibleWindows;
+    private List<IWindowView> allWindows = null!;
+    private List<IWindowView>? visibleWindows;
 
     public override void Init()
     {
-      WindowConfig filterConfig = ConfigService.Config?.ToolboxWindows;
+      WindowConfig? filterConfig = ConfigService.Config.ToolboxWindows;
       IEnumerable<IWindowView> toolboxWindows;
 
       if (filterConfig?.ListMode == ListMode.Whitelist)
@@ -39,8 +39,6 @@ namespace Jorteck.Toolbox.Features.ToolWindows
       {
         toolboxWindows = AvailableWindows.Value.Where(view => view.ListInToolbox);
       }
-
-      Token.SetBindValue(View.Search, string.Empty);
 
       allWindows = toolboxWindows.Where(view => view.Title != null)
         .OrderBy(view => view.Title)
@@ -79,10 +77,17 @@ namespace Jorteck.Toolbox.Features.ToolWindows
 
     private void RefreshWindowList()
     {
-      string search = Token.GetBindValue(View.Search);
-      visibleWindows = allWindows.Where(view => view.Title.Contains(search!, StringComparison.OrdinalIgnoreCase)).ToList();
+      string? search = Token.GetBindValue(View.Search);
+      if (string.IsNullOrEmpty(search))
+      {
+        visibleWindows = allWindows.ToList();
+      }
+      else
+      {
+        visibleWindows = allWindows.Where(view => view.Title!.Contains(search, StringComparison.OrdinalIgnoreCase) == true).ToList();
+      }
 
-      List<string> windowNames = visibleWindows.Select(view => view.Title).ToList();
+      List<string> windowNames = visibleWindows.Select(view => view.Title!).ToList();
       Token.SetBindValues(View.WindowNames, windowNames);
       Token.SetBindValue(View.WindowCount, visibleWindows.Count);
     }

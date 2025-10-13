@@ -15,16 +15,16 @@ namespace Jorteck.Toolbox.Features.Languages
     private static readonly Logger Log = LogManager.GetCurrentClassLogger();
 
     [Inject]
-    private ChatService ChatService { get; init; }
+    private ChatService ChatService { get; init; } = null!;
 
     [Inject]
-    private LanguageService LanguageService { get; init; }
+    private LanguageService LanguageService { get; init; } = null!;
 
     [Inject]
-    private ConfigService ConfigService { get; init; }
+    private ConfigService ConfigService { get; init; } = null!;
 
     [Inject]
-    private AreaShoutService AreaShoutService { get; init; }
+    private AreaShoutService AreaShoutService { get; init; } = null!;
 
     private readonly Regex translatePattern = new Regex(@"\[(?<message>.*?)\]", RegexOptions.Compiled);
 
@@ -45,7 +45,7 @@ namespace Jorteck.Toolbox.Features.Languages
 
     public void SendTranslatedMessage(NwCreature sender, ChatVolume volume, bool isDm, bool matchChatPattern, string message, ILanguage language, int proficiency)
     {
-      NwArea area = sender?.Area;
+      NwArea? area = sender.Area;
       if (area == null)
       {
         return;
@@ -97,7 +97,7 @@ namespace Jorteck.Toolbox.Features.Languages
           }
 
           break;
-        case ChatVolume.Party when sender.IsPlayerControlled(out NwPlayer player):
+        case ChatVolume.Party when sender.IsPlayerControlled(out NwPlayer? player):
           foreach (NwPlayer partyMember in player.PartyMembers)
           {
             ChatService.SendMessage(channel, GetMessageForPlayer(partyMember, translatedMessage), sender, partyMember);
@@ -109,19 +109,21 @@ namespace Jorteck.Toolbox.Features.Languages
 
     private void OnPlayerChat(ModuleEvents.OnPlayerChat eventData)
     {
-      if (!translatePattern.IsMatch(eventData.Message))
+      NwCreature? senderCreature = eventData.Sender.ControlledCreature;
+
+      if (senderCreature == null || !translatePattern.IsMatch(eventData.Message))
       {
         return;
       }
 
       LanguageState languageState = LanguageService.GetStateForPlayer(eventData.Sender);
-      if (languageState?.CurrentLanguageId == null)
+      if (languageState.CurrentLanguageId == null)
       {
         eventData.Sender.SendErrorMessage("You have not selected a language. Select a language first with the lang command.");
         return;
       }
 
-      if (!LanguageService.TryGetLanguage(languageState.CurrentLanguageId, out ILanguage language))
+      if (!LanguageService.TryGetLanguage(languageState.CurrentLanguageId, out ILanguage? language))
       {
         return;
       }
@@ -133,7 +135,7 @@ namespace Jorteck.Toolbox.Features.Languages
         return;
       }
 
-      SendTranslatedMessage(eventData.Sender.ControlledCreature, eventData.Volume.ToChatVolume(), eventData.Sender.IsDM, true, eventData.Message, language, proficiency.Value);
+      SendTranslatedMessage(senderCreature, eventData.Volume.ToChatVolume(), eventData.Sender.IsDM, true, eventData.Message, language, proficiency.Value);
       eventData.Message = string.Empty;
     }
 

@@ -13,6 +13,6 @@ namespace Jorteck.Toolbox.Core
     public bool ChatCommandEnable { get; set; } = true;
 
     [Description("The base chat command name.")]
-    public string ChatCommand { get; set; } = "perms";
+    public string? ChatCommand { get; set; } = "perms";
   }
 }

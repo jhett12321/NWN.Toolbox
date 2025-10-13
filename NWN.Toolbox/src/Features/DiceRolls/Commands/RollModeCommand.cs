@@ -10,7 +10,7 @@ namespace Jorteck.Toolbox.Features
   public sealed class RollModeCommand : IChatCommand
   {
     [Inject]
-    private DiceRollService DiceRollService { get; init; }
+    private DiceRollService DiceRollService { get; init; } = null!;
 
     public string Command => "rollmode";
     public bool DMOnly => false;

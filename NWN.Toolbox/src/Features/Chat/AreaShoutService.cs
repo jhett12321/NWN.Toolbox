@@ -7,14 +7,19 @@ namespace Jorteck.Toolbox.Features.Chat
   public sealed class AreaShoutService
   {
     [Inject]
-    private ChatService ChatService { get; init; }
+    private ChatService ChatService { get; init; } = null!;
 
     [Inject]
-    private ChatWatchService ChatWatchService { get; init; }
+    private ChatWatchService ChatWatchService { get; init; } = null!;
 
-    public void SendMessage(NwCreature sender, string message)
+    public void SendMessage(NwCreature? sender, string message)
     {
-      NwArea targetArea = sender?.Area;
+      if (sender == null)
+      {
+        return;
+      }
+
+      NwArea? targetArea = sender.Area;
       if (targetArea == null)
       {
         return;
@@ -29,7 +34,7 @@ namespace Jorteck.Toolbox.Features.Chat
         }
       }
 
-      if (sender.IsPlayerControlled(out NwPlayer senderPlayer))
+      if (sender.IsPlayerControlled(out NwPlayer? senderPlayer))
       {
         ChatWatchService.LogMessage(senderPlayer, "Area", message);
       }

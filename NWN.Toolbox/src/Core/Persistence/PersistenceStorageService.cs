@@ -10,7 +10,7 @@ namespace Jorteck.Toolbox.Core.Persistence
   {
     private static readonly Logger Log = LogManager.GetCurrentClassLogger();
 
-    private IPersistenceStore activeStore;
+    private IPersistenceStore? activeStore;
 
     public PersistenceStorageService(SchedulerService schedulerService)
     {
@@ -31,14 +31,14 @@ namespace Jorteck.Toolbox.Core.Persistence
       Log.Info($"Using '{store.GetType().FullName}' for toolbox persistent settings/data.");
     }
 
-    public T GetState<T>(NwPlayer player, string key)
+    public T? GetState<T>(NwPlayer player, string key)
     {
-      return activeStore.GetState<T>(player, key);
+      return activeStore == null ? default : activeStore.GetState<T>(player, key);
     }
 
     public void UpdateState<T>(NwPlayer player, string key, T value)
     {
-      activeStore.UpdateState(player, key, value);
+      activeStore?.UpdateState(player, key, value);
     }
 
     public void Dispose()

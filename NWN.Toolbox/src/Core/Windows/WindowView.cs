@@ -15,9 +15,9 @@ namespace Jorteck.Toolbox.Core
 
     public virtual bool ListInToolbox => true;
 
-    public abstract IWindowController CreateDefaultController(NwPlayer player);
+    public abstract IWindowController? CreateDefaultController(NwPlayer player);
 
-    protected T CreateController<T>(NwPlayer player) where T : WindowController<TView>, new()
+    protected T? CreateController<T>(NwPlayer player) where T : WindowController<TView>, new()
     {
       if (player.TryCreateNuiWindow(WindowTemplate, out NuiWindowToken token))
       {

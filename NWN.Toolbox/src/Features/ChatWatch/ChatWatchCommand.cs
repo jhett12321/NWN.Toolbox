@@ -10,10 +10,10 @@ namespace Jorteck.Toolbox.Features
   public class ChatWatchCommand : IChatCommand
   {
     [Inject]
-    private ChatWatchService ChatWatchService { get; init; }
+    private ChatWatchService ChatWatchService { get; init; } = null!;
 
     [Inject]
-    private HelpCommand HelpCommand { get; init; }
+    private HelpCommand HelpCommand { get; init; } = null!;
 
     public string Command => "chatwatch";
     public Range ArgCount => 1..1;
@@ -39,7 +39,7 @@ namespace Jorteck.Toolbox.Features
           caller.EnterPlayerTargetMode(eventData => ChatWatchService.TogglerPartySubscribe(eventData.Caller, eventData.Target));
           break;
         case "area":
-          NwArea area = caller.ControlledCreature?.Area;
+          NwArea? area = caller.ControlledCreature?.Area;
           if (area != null)
           {
             ChatWatchService.ToggleSubscribe(caller, area);

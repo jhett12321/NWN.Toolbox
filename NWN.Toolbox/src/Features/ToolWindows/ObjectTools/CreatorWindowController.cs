@@ -13,12 +13,12 @@ namespace Jorteck.Toolbox.Features.ToolWindows
     private const int MaxItems = 1000;
 
     [Inject]
-    public BlueprintManager BlueprintManager { private get; init; }
+    public BlueprintManager BlueprintManager { private get; init; } = null!;
 
-    private List<IBlueprint> blueprintRowMapping;
-    private List<Color> rowColors;
+    private List<IBlueprint?> blueprintRowMapping = null!;
+    private List<Color> rowColors = null!;
 
-    private IBlueprint selectedBlueprint;
+    private IBlueprint? selectedBlueprint;
 
     private TimeSpan lastSelectionClick;
 
@@ -69,7 +69,7 @@ namespace Jorteck.Toolbox.Features.ToolWindows
     {
       if (index >= 0 && index < blueprintRowMapping.Count)
       {
-        IBlueprint newSelection = blueprintRowMapping[index];
+        IBlueprint? newSelection = blueprintRowMapping[index];
         if (newSelection == null) // Category
         {
           return;
@@ -129,8 +129,8 @@ namespace Jorteck.Toolbox.Features.ToolWindows
         return;
       }
 
-      NwObject nwObject;
-      Location location;
+      NwObject? nwObject = null;
+      Location? location;
 
       if (eventData.TargetObject is NwArea area)
       {
@@ -148,7 +148,10 @@ namespace Jorteck.Toolbox.Features.ToolWindows
       else if (eventData.TargetObject is NwGameObject gameObject)
       {
         location = gameObject.Location;
-        nwObject = selectedBlueprint.Create(location);
+        if (location != null)
+        {
+          nwObject = selectedBlueprint.Create(location);
+        }
       }
       else
       {
@@ -168,7 +171,7 @@ namespace Jorteck.Toolbox.Features.ToolWindows
     private void RefreshCreatorList()
     {
       List<IBlueprint> blueprints = LoadSearchResults();
-      blueprintRowMapping = new List<IBlueprint>(blueprints.Count * 2);
+      blueprintRowMapping = new List<IBlueprint?>(blueprints.Count * 2);
 
       int listCapacity = blueprints.Count * 2;
       rowColors = new List<Color>(listCapacity);
@@ -176,7 +179,7 @@ namespace Jorteck.Toolbox.Features.ToolWindows
       List<string> blueprintCRs = new List<string>(listCapacity);
       List<string> blueprintFactions = new List<string>(listCapacity);
 
-      string currentCategory = null;
+      string? currentCategory = null;
       foreach (IBlueprint blueprint in blueprints)
       {
         if (blueprint.Category != currentCategory)
@@ -184,16 +187,16 @@ namespace Jorteck.Toolbox.Features.ToolWindows
           rowColors.Add(UXConstants.DefaultColor);
           blueprintRowMapping.Add(null);
           blueprintNamesAndCategories.Add(blueprint.Category);
-          blueprintCRs.Add(null);
-          blueprintFactions.Add(null);
+          blueprintCRs.Add(string.Empty);
+          blueprintFactions.Add(string.Empty);
           currentCategory = blueprint.Category;
         }
 
         rowColors.Add(blueprint == selectedBlueprint ? UXConstants.SelectedColor : UXConstants.DefaultColor2);
         blueprintRowMapping.Add(blueprint);
         blueprintNamesAndCategories.Add(blueprint.Name);
-        blueprintCRs.Add(blueprint.CR?.ToString("0.##"));
-        blueprintFactions.Add(blueprint.Faction);
+        blueprintCRs.Add(blueprint.CR?.ToString("0.##") ?? string.Empty);
+        blueprintFactions.Add(blueprint.Faction ?? string.Empty);
       }
 
       Token.SetBindValues(View.RowColors, rowColors);
@@ -205,7 +208,7 @@ namespace Jorteck.Toolbox.Features.ToolWindows
 
     private List<IBlueprint> LoadSearchResults()
     {
-      return BlueprintManager.GetMatchingBlueprints((BlueprintObjectType)Token.GetBindValue(View.BlueprintType), Token.GetBindValue(View.Search), MaxItems);
+      return BlueprintManager.GetMatchingBlueprints((BlueprintObjectType)Token.GetBindValue(View.BlueprintType), Token.GetBindValue(View.Search) ?? string.Empty, MaxItems);
     }
   }
 }

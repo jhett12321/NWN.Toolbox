@@ -10,14 +10,14 @@ namespace Jorteck.Toolbox.Core
     public bool Enabled { get; set; } = false;
 
     [Description("The minimum version for the server. Clients who are below the version will be kicked when they attempt to connect.")]
-    public Version MinimumVersion { get; set; } = new Version
+    public Version? MinimumVersion { get; set; } = new Version
     {
       MajorVersion = 8193,
       MinorVersion = 30,
     };
 
     [Description("The recommended version for the server. Clients who are below the recommended version will see a warning message after they connect to the server.")]
-    public Version RecommendedVersion { get; set; } = new Version
+    public Version? RecommendedVersion { get; set; } = new Version
     {
       MajorVersion = 8193,
       MinorVersion = 34,

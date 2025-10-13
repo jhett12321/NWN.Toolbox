@@ -8,7 +8,7 @@ namespace Jorteck.Toolbox.Features.Languages
   public sealed class LanguageDruidic : ILanguage
   {
     [Inject]
-    private ConfigService ConfigService { get; init; }
+    private ConfigService ConfigService { get; init; } = null!;
 
     public string Id => "druidic";
 

@@ -14,31 +14,32 @@ namespace Jorteck.Toolbox.Features.ToolWindows
   public sealed class ChatImpersonatorWindowController : WindowController<ChatImpersonatorWindowView>
   {
     [Inject]
-    private LanguageService LanguageService { get; init; }
+    private LanguageService LanguageService { get; init; } = null!;
 
     [Inject]
-    private LanguageChatService LanguageChatService { get; init; }
+    private LanguageChatService LanguageChatService { get; init; } = null!;
 
     [Inject]
-    private AreaShoutService AreaShoutService { get; init; }
+    private AreaShoutService AreaShoutService { get; init; } = null!;
 
     [Inject]
-    private ConfigService ConfigService { get; init; }
+    private ConfigService ConfigService { get; init; } = null!;
 
     private readonly StringBuilder chatHistory = new StringBuilder();
-    private List<ILanguage> languages;
+    private List<ILanguage?> languages = [];
 
-    private NwGameObject selectedObject;
+    private NwGameObject? selectedObject;
 
     public override void Init()
     {
-      languages = LanguageService.Languages.OrderBy(language => language.Name).ToList();
-      languages.Insert(0, null);
+      languages.Clear();
+      languages.Add(null);
+      languages.AddRange(LanguageService.Languages.OrderBy(language => language.Name));
       List<NuiComboEntry> languageEntries = new List<NuiComboEntry>(languages.Count);
 
       for (int i = 0; i < languages.Count; i++)
       {
-        string languageName = languages[i]?.Name;
+        string? languageName = languages[i]?.Name;
         languageEntries.Add(languageName != null ? new NuiComboEntry(languageName, i) : new NuiComboEntry("None", i));
       }
 
@@ -91,7 +92,7 @@ namespace Jorteck.Toolbox.Features.ToolWindows
         return;
       }
 
-      string message = Token.GetBindValue(View.Message);
+      string? message = Token.GetBindValue(View.Message);
       if (string.IsNullOrWhiteSpace(message))
       {
         return;
@@ -105,12 +106,12 @@ namespace Jorteck.Toolbox.Features.ToolWindows
         return;
       }
 
-      ILanguage language = languages[languageIndex];
+      ILanguage? language = languages[languageIndex];
 
       chatHistory.AppendLine($"{selectedObject.Name}: {message}");
       Token.SetBindValue(View.ChatHistory, chatHistory.ToString());
 
-      NwCreature creature = selectedObject as NwCreature;
+      NwCreature? creature = selectedObject as NwCreature;
 
       if (language != null && creature != null)
       {

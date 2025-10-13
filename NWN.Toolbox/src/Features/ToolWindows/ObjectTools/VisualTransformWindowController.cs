@@ -9,7 +9,7 @@ namespace Jorteck.Toolbox.Features.ToolWindows
 {
   public sealed class VisualTransformWindowController : WindowController<VisualTransformWindowView>
   {
-    private NwGameObject selectedObject;
+    private NwGameObject? selectedObject;
 
     public override void Init()
     {

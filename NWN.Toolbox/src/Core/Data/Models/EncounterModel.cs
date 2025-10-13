@@ -7,15 +7,15 @@ namespace Jorteck.Toolbox.Core
 {
   internal sealed class EncounterModel
   {
-    public string Name { get; set; }
+    public required string Name { get; set; }
 
-    public string Author { get; set; }
+    public required string Author { get; set; }
 
     public DateTime Created { get; set; }
 
     public DateTime Updated { get; set; }
 
-    public List<EncounterSpawn> Creatures { get; set; }
+    public List<EncounterSpawn>? Creatures { get; set; }
 
     public sealed class EncounterSpawn
     {
@@ -25,9 +25,9 @@ namespace Jorteck.Toolbox.Core
       public float LocalOffsetY { get; set; }
       public float LocalOffsetZ { get; set; }
 
-      public byte[] CreatureData { get; set; }
+      public required byte[]? CreatureData { get; set; }
 
-      public EncounterModel Encounter { get; set; }
+      public required EncounterModel Encounter { get; set; }
     }
   }
 

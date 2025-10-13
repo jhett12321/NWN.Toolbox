@@ -13,13 +13,13 @@ namespace Jorteck.Toolbox.Features.Chat
   public sealed class LanguageDMCommand : IChatCommand
   {
     [Inject]
-    private LanguageService LanguageService { get; init; }
+    private LanguageService LanguageService { get; init; } = null!;
 
     [Inject]
-    private ConfigService ConfigService { get; init; }
+    private ConfigService ConfigService { get; init; } = null!;
 
     [Inject]
-    private HelpCommand HelpCommand { get; init; }
+    private HelpCommand HelpCommand { get; init; } = null!;
 
     public string Command => "languagedm";
     public string[] Aliases => new[] { "langdm" };
@@ -42,7 +42,7 @@ namespace Jorteck.Toolbox.Features.Chat
       switch (args[0])
       {
         case "grant" when args.Count == 3:
-          if (LanguageService.TryGetLanguage(args[1], out ILanguage language) && args[2].TryParseInt(out int proficiency))
+          if (LanguageService.TryGetLanguage(args[1], out ILanguage? language) && args[2].TryParseInt(out int proficiency))
           {
             caller.EnterPlayerTargetMode(eventData => AddLanguage(eventData, language, proficiency));
           }

@@ -57,6 +57,7 @@ namespace Jorteck.Toolbox.Core
 
     public void SaveConfig<T>(string fileName, T instance)
     {
+      ArgumentNullException.ThrowIfNull(instance, nameof(instance));
       string yaml = serializer.Serialize(instance);
       File.WriteAllText(GetConfigPath(fileName), yaml);
     }

@@ -11,17 +11,17 @@ namespace Jorteck.Toolbox.Features.ToolWindows
     private const string OpenToolboxPermissionKey = "toolbox.window.list";
 
     [Inject]
-    private PermissionsService PermissionsService { get; init; }
+    private PermissionsService PermissionsService { get; init; } = null!;
 
     [Inject]
-    private WindowManager WindowManager { get; init; }
+    private WindowManager WindowManager { get; init; } = null!;
 
     [Inject]
-    private ConfigService ConfigService { get; init; }
+    private ConfigService ConfigService { get; init; } = null!;
 
     public void Init()
     {
-      if (ConfigService?.Config?.ToolboxWindows?.ShowToolboxButton != true)
+      if (ConfigService?.Config.ToolboxWindows?.ShowToolboxButton != true)
       {
         return;
       }

@@ -9,10 +9,10 @@ namespace Jorteck.Toolbox.Core
   {
     public string Id { get; }
 
-    public string Title { get; }
+    public string? Title { get; }
 
     public bool ListInToolbox { get; }
 
-    public IWindowController CreateDefaultController(NwPlayer player);
+    public IWindowController? CreateDefaultController(NwPlayer player);
   }
 }

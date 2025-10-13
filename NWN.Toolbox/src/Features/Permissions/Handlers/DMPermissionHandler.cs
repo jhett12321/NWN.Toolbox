@@ -276,7 +276,7 @@ namespace Jorteck.Toolbox.Features.Permissions
       bool targetSelf = permissionsService.HasPermission(dungeonMaster, permissionBase + DMPermissionConstants.TargetSelf);
       bool targetPlayer = permissionsService.HasPermission(dungeonMaster, permissionBase + DMPermissionConstants.TargetPlayer);
 
-      NwCreature dmCreature = dungeonMaster.ControlledCreature;
+      NwCreature? dmCreature = dungeonMaster.ControlledCreature;
 
       if (targetSelf && dmCreature == target)
       {

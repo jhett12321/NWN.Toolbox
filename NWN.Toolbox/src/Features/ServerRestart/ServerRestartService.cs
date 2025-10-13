@@ -15,12 +15,25 @@ namespace Jorteck.Toolbox.Features.ServerRestart
     private static readonly Logger Log = LogManager.GetCurrentClassLogger();
 
     [Inject]
-    private ConfigService ConfigService { get; init; }
+    private ConfigService ConfigService { get; init; } = null!;
 
     [Inject]
-    private SchedulerService SchedulerService { get; init; }
+    private SchedulerService SchedulerService { get; init; } = null!;
 
-    private ScheduledTask restartSchedule;
+    private ScheduledTask? restartSchedule;
+
+    private ServerRestartConfig RestartConfig
+    {
+      get
+      {
+        if (!ConfigService.Config.ServerRestart.IsEnabled())
+        {
+          throw new InvalidOperationException($"The {nameof(ServerRestartService)} is not enabled.");
+        }
+
+        return ConfigService.Config.ServerRestart;
+      }
+    }
 
     void IInitializable.Init()
     {
@@ -39,18 +52,18 @@ namespace Jorteck.Toolbox.Features.ServerRestart
     /// <summary>
     /// Gets or sets the time until the server is shutdown/restarted.
     /// </summary>
-    public TimeSpan TimeUntilRestart
+    public TimeSpan? TimeUntilRestart
     {
-      get
-      {
-        AssertEnabled();
-        return restartSchedule.ExecutionTime - Time.TimeSinceStartup;
-      }
+      get => restartSchedule != null ? restartSchedule.ExecutionTime - Time.TimeSinceStartup : null;
       set
       {
-        AssertEnabled();
-        restartSchedule.Cancel();
-        restartSchedule = SchedulerService.Schedule(ShutdownServer, value);
+        restartSchedule?.Cancel();
+        restartSchedule = null;
+
+        if (value != null)
+        {
+          restartSchedule = SchedulerService.Schedule(ShutdownServer, value.Value);
+        }
       }
     }
 
@@ -64,7 +77,12 @@ namespace Jorteck.Toolbox.Features.ServerRestart
     /// </summary>
     public void SendRestartTimeMessageToAllPlayers()
     {
-      string message = GetWarningMessage();
+      string? message = GetWarningMessage();
+      if (message == null)
+      {
+        return;
+      }
+
       foreach (NwPlayer player in NwModule.Instance.Players)
       {
         if (player.IsValid && player.IsConnected)
@@ -80,7 +98,12 @@ namespace Jorteck.Toolbox.Features.ServerRestart
     /// <param name="player">The player to send the message to.</param>
     public void SendRestartTimeMessageToPlayer(NwPlayer player)
     {
-      string message = GetWarningMessage();
+      string? message = GetWarningMessage();
+      if (message == null)
+      {
+        return;
+      }
+
       player.SendServerMessage(message);
     }
 
@@ -89,21 +112,15 @@ namespace Jorteck.Toolbox.Features.ServerRestart
       SendRestartTimeMessageToPlayer(eventData.Player);
     }
 
-    private void AssertEnabled()
-    {
-      if (!IsEnabled)
-      {
-        throw new InvalidOperationException("The ServerRestartService is not enabled.");
-      }
-    }
-
     private TimeSpan GetDelayForRestart()
     {
-      if (!string.IsNullOrEmpty(ConfigService.Config.ServerRestart.RestartTimeCron))
+      ServerRestartConfig config = RestartConfig;
+
+      if (!string.IsNullOrEmpty(config.RestartTimeCron))
       {
         try
         {
-          CronExpression expression = CronExpression.Parse(ConfigService.Config.ServerRestart.RestartTimeCron);
+          CronExpression expression = CronExpression.Parse(config.RestartTimeCron);
           DateTime? next = expression.GetNextOccurrence(DateTime.UtcNow);
           if (next != null)
           {
@@ -116,7 +133,7 @@ namespace Jorteck.Toolbox.Features.ServerRestart
         }
       }
 
-      return TimeSpan.FromSeconds(ConfigService.Config.ServerRestart.RestartTimeSecs);
+      return TimeSpan.FromSeconds(config.RestartTimeSecs);
     }
 
     private void ShutdownServer()
@@ -125,7 +142,7 @@ namespace Jorteck.Toolbox.Features.ServerRestart
       NwServer.Instance.PlayerPassword = Guid.NewGuid().ToUUIDString();
 
       // Boot Players
-      string reason = ConfigService.Config.ServerRestart.BootMessage ?? string.Empty;
+      string reason = RestartConfig.BootMessage ?? string.Empty;
       foreach (NwPlayer player in NwModule.Instance.Players)
       {
         if (player.IsValid)
@@ -140,21 +157,37 @@ namespace Jorteck.Toolbox.Features.ServerRestart
 
     private void CheckForWarning()
     {
-      double remainingSecs = TimeUntilRestart.TotalSeconds;
-      if (remainingSecs >= 0 && ConfigService.Config.ServerRestart.RestartWarningSecs.Contains((uint)remainingSecs))
+      if (TimeUntilRestart == null)
+      {
+        return;
+      }
+
+      TimeSpan timeUntilRestart = TimeUntilRestart.Value;
+      ServerRestartConfig config = RestartConfig;
+
+      double remainingSecs = timeUntilRestart.TotalSeconds;
+      if (remainingSecs >= 0 && config.RestartWarningSecs?.Contains((uint)remainingSecs) == true)
       {
         SendRestartTimeMessageToAllPlayers();
       }
     }
 
-    private string GetWarningMessage()
+    private string? GetWarningMessage()
     {
-      if (TimeUntilRestart.TotalSeconds < 1)
+      if (TimeUntilRestart == null)
       {
-        return ConfigService.Config.ServerRestart.WarnMessageNow;
+        return null;
       }
 
-      return ConfigService.Config.ServerRestart.WarnMessage.Replace("<time>", GetFormattedTime(TimeUntilRestart));
+      TimeSpan timeUntilRestart = TimeUntilRestart.Value;
+      ServerRestartConfig config = RestartConfig;
+
+      if (timeUntilRestart.TotalSeconds < 1)
+      {
+        return config.WarnMessageNow;
+      }
+
+      return config.WarnMessage?.Replace("<time>", GetFormattedTime(timeUntilRestart));
     }
 
     private string GetFormattedTime(TimeSpan timeSpan)

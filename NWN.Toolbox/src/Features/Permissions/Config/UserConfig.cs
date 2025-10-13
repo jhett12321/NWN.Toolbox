@@ -16,10 +16,10 @@ namespace Jorteck.Toolbox.Features.Permissions
   [Serializable]
   internal sealed class UserEntry
   {
-    public string LastUsername { get; set; }
-    public string LastCharacter { get; set; }
-    public List<string> Groups { get; set; } = new List<string>();
-    public List<string> Permissions { get; set; } = new List<string>();
-    public Dictionary<string, string> Info { get; set; } = new Dictionary<string, string>();
+    public string? LastUsername { get; set; }
+    public string? LastCharacter { get; set; }
+    public List<string>? Groups { get; set; } = [];
+    public List<string>? Permissions { get; set; } = [];
+    public Dictionary<string, string>? Info { get; set; } = [];
   }
 }

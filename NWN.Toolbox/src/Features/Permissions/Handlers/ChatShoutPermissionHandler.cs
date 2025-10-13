@@ -20,7 +20,7 @@ namespace Jorteck.Toolbox.Features.Permissions
 
     private void OnChatMessageSend(OnChatMessageSend eventData)
     {
-      if (!eventData.Sender.IsPlayerControlled(out NwPlayer player))
+      if (!eventData.Sender.IsPlayerControlled(out NwPlayer? player))
       {
         return;
       }

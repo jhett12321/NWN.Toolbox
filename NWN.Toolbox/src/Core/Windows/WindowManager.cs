@@ -37,11 +37,11 @@ namespace Jorteck.Toolbox.Core
     /// <typeparam name="TView">The type of view to open.</typeparam>
     /// <typeparam name="TController">The type of controller for the view.</typeparam>
     /// <returns>The created controller. Null if the client cannot render windows.</returns>
-    public TController OpenWindow<TView, TController>(NwPlayer player, Action<TController> configure = null)
+    public TController? OpenWindow<TView, TController>(NwPlayer player, Action<TController>? configure = null)
       where TView : WindowView<TView>, new()
       where TController : WindowController<TView>, new()
     {
-      TView view = (TView)GetWindowFromType(typeof(TView));
+      TView? view = (TView?)GetWindowFromType(typeof(TView));
       if (view != null && player.TryCreateNuiWindow(view.WindowTemplate, out NuiWindowToken token))
       {
         TController controller = injectionService.Inject(new TController
@@ -66,7 +66,7 @@ namespace Jorteck.Toolbox.Core
     /// <typeparam name="T">The type of view to open.</typeparam>
     public void OpenWindow<T>(NwPlayer player) where T : WindowView<T>, new()
     {
-      IWindowView view = GetWindowFromType(typeof(T));
+      IWindowView? view = GetWindowFromType(typeof(T));
       if (view != null)
       {
         OpenWindow(player, view);
@@ -80,7 +80,7 @@ namespace Jorteck.Toolbox.Core
     /// <param name="view">The view to open.</param>
     public void OpenWindow(NwPlayer player, IWindowView view)
     {
-      IWindowController controller = view.CreateDefaultController(player);
+      IWindowController? controller = view.CreateDefaultController(player);
       if (controller == null)
       {
         return;
@@ -90,7 +90,7 @@ namespace Jorteck.Toolbox.Core
       InitController(controller, player);
     }
 
-    private IWindowView GetWindowFromType(Type windowType)
+    private IWindowView? GetWindowFromType(Type windowType)
     {
       foreach (IWindowView view in windowViews)
       {
@@ -117,9 +117,9 @@ namespace Jorteck.Toolbox.Core
 
     private void OnNuiEvent(ModuleEvents.OnNuiEvent eventData)
     {
-      if (windowControllers.TryGetValue(eventData.Player, out List<IWindowController> playerControllers))
+      if (windowControllers.TryGetValue(eventData.Player, out List<IWindowController>? playerControllers))
       {
-        IWindowController controller = null;
+        IWindowController? controller = null;
         int index;
 
         for (index = 0; index < playerControllers.Count; index++)
@@ -148,7 +148,7 @@ namespace Jorteck.Toolbox.Core
 
     private void OnClientLeave(ModuleEvents.OnClientLeave eventData)
     {
-      if (windowControllers.TryGetValue(eventData.Player, out List<IWindowController> playerControllers))
+      if (windowControllers.TryGetValue(eventData.Player, out List<IWindowController>? playerControllers))
       {
         foreach (IWindowController controller in playerControllers)
         {

@@ -8,13 +8,13 @@ namespace Jorteck.Toolbox.Features.ToolWindows
 {
   public sealed class CreaturePropertiesBasicWindowController : WindowController<CreaturePropertiesBasicWindowView>
   {
-    private NuiBind<bool>[] widgetEnabledBinds;
-    private NwCreature selectedCreature;
+    private NuiBind<bool>[] widgetEnabledBinds = null!;
+    private NwCreature? selectedCreature;
 
     public override void Init()
     {
-      widgetEnabledBinds = new[]
-      {
+      widgetEnabledBinds =
+      [
         View.NameEnabled,
         View.TagEnabled,
         View.RaceEnabled,
@@ -26,7 +26,7 @@ namespace Jorteck.Toolbox.Features.ToolWindows
         View.DialogEnabled,
         View.CREnabled,
         View.SaveEnabled,
-      };
+      ];
 
       Token.SetBindWatch(View.Portrait, true);
       Update();
@@ -74,7 +74,7 @@ namespace Jorteck.Toolbox.Features.ToolWindows
       Token.SetBindValue(View.Gender, value3);
       Token.SetBindValue(View.Description, selectedCreature.Description);
       Token.SetBindValue(View.CR, selectedCreature.ChallengeRating.ToString(CultureInfo.InvariantCulture));
-      Token.SetBindValue(View.Dialog, selectedCreature.DialogResRef);
+      Token.SetBindValue(View.Dialog, selectedCreature.DialogResRef ?? string.Empty);
       Token.SetBindValue(View.Portrait, selectedCreature.PortraitResRef);
 
       UpdatePortraitPreview();

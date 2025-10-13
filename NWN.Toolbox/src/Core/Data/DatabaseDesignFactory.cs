@@ -8,7 +8,7 @@ namespace Jorteck.Toolbox.Core
   {
     public Database CreateDbContext(string[] args)
     {
-      string directoryPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+      string directoryPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!;
       string path = Path.Combine(directoryPath!, "toolbox-design-data.db");
       return new Database($"Data Source={path}");
     }

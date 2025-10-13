@@ -11,10 +11,10 @@ namespace Jorteck.Toolbox.Features.ServerRestart
   public class GetResetTimeCommand : IChatCommand
   {
     [Inject]
-    private ServerRestartService ServerRestartService { get; init; }
+    private ServerRestartService ServerRestartService { get; init; } = null!;
 
     [Inject]
-    private ConfigService ConfigService { get; init; }
+    private ConfigService ConfigService { get; init; } = null!;
 
     public string Command => "reset";
     public Range ArgCount => ..0;

@@ -17,7 +17,7 @@ namespace Jorteck.Toolbox.Features.Chat
     /// <summary>
     /// Additional aliases for this command. Not shown in the help list.
     /// </summary>
-    string[] Aliases => null;
+    string[]? Aliases => null;
 
     /// <summary>
     /// If this command can only be used by DMs.<br/>
@@ -48,7 +48,7 @@ namespace Jorteck.Toolbox.Features.Chat
     /// <summary>
     /// A list of valid usages for this command. Shown in the help list.
     /// </summary>
-    CommandUsage[] Usages { get; }
+    CommandUsage[]? Usages { get; }
 
     /// <summary>
     /// Determines if this command should show in help lists, and can be executed.<br/>

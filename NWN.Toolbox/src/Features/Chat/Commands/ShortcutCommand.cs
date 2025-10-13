@@ -11,10 +11,10 @@ namespace Jorteck.Toolbox.Features.Chat
   public sealed class ShortcutCommand : IChatCommand
   {
     [Inject]
-    private HelpCommand HelpCommand { get; init; }
+    private HelpCommand HelpCommand { get; init; } = null!;
 
     [Inject]
-    private ChatShortcutService ChatShortcutService { get; init; }
+    private ChatShortcutService ChatShortcutService { get; init; } = null!;
 
     public string Command => "shortcut";
     public Range ArgCount => 1..;
@@ -40,7 +40,7 @@ namespace Jorteck.Toolbox.Features.Chat
           ChatShortcutService.UnsetShortcut(caller, args[1]);
           break;
         case "list" when args.Count == 1:
-          Dictionary<string, string> shortcuts = ChatShortcutService.GetShortcuts(caller);
+          Dictionary<string, string>? shortcuts = ChatShortcutService.GetShortcuts(caller);
           StringBuilder message = new StringBuilder();
           message.AppendLine("===Shortcuts===");
           message.AppendJoin('\n', shortcuts.Select(shortcut => $"{shortcut.Key} = {shortcut.Value}"));

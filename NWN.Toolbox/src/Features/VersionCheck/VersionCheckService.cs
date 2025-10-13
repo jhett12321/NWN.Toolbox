@@ -10,10 +10,10 @@ namespace Jorteck.Toolbox.Features.VersionCheck
   internal sealed class VersionCheckService : IInitializable
   {
     [Inject]
-    private ConfigService ConfigService { get; init; }
+    private ConfigService ConfigService { get; init; } = null!;
 
-    private Version minVersion;
-    private Version recommendedVersion;
+    private Version? minVersion;
+    private Version? recommendedVersion;
 
     private readonly Version noVersion = new Version(0, 0);
 
@@ -21,8 +21,8 @@ namespace Jorteck.Toolbox.Features.VersionCheck
     {
       if (ConfigService.Config.VersionCheck.IsEnabled())
       {
-        minVersion = ConfigService.Config.VersionCheck.MinimumVersion.AsVersion();
-        recommendedVersion = ConfigService.Config.VersionCheck.RecommendedVersion.AsVersion();
+        minVersion = ConfigService.Config.VersionCheck.MinimumVersion?.AsVersion() ?? noVersion;
+        recommendedVersion = ConfigService.Config.VersionCheck.RecommendedVersion?.AsVersion() ?? noVersion;
 
         NwModule.Instance.OnClientEnter += OnClientEnter;
         NwModule.Instance.OnClientConnect += OnClientConnect;

@@ -22,7 +22,7 @@ namespace Jorteck.Toolbox.Features.Permissions
     public override void ProcessCommand(NwPlayer caller, IReadOnlyList<string> args)
     {
       string group = args[0];
-      if (!PermissionsConfigService.GroupConfig.IsValidGroup(group))
+      if (PermissionsConfigService.GroupConfig.IsValidGroup(group))
       {
         caller.SendErrorMessage($"Invalid group \"{group}\".");
         return;
@@ -38,11 +38,13 @@ namespace Jorteck.Toolbox.Features.Permissions
 
       PermissionsConfigService.UpdateUserConfig(config =>
       {
-        if (!config.UsersCd.TryGetValue(target.CDKey, out UserEntry entry))
+        if (!config.UsersCd.TryGetValue(target.CDKey, out UserEntry? entry))
         {
           entry = new UserEntry();
           config.UsersCd[target.CDKey] = entry;
         }
+
+        entry.Groups ??= [];
 
         if (entry.Groups.Contains(group))
         {
@@ -50,7 +52,6 @@ namespace Jorteck.Toolbox.Features.Permissions
           return;
         }
 
-        entry.Groups ??= new List<string>();
         entry.Groups.Add(group);
         caller.SendErrorMessage($"Permission group granted: \"{group}\"");
       });

@@ -6,7 +6,7 @@ namespace Jorteck.Toolbox.Features.Languages
   {
     string Id { get; }
 
-    string[] Aliases => null;
+    string[]? Aliases => null;
 
     string Name { get; }
 

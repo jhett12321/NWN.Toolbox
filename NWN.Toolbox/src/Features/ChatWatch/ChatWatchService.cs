@@ -45,7 +45,7 @@ namespace Jorteck.Toolbox.Features
 
       // Some party members are not subscribed, or none of them are subscribed.
       List<NwPlayer> playersToToggle = new List<NwPlayer>();
-      if (playerSubscriptions.TryGetValue(partyPlayer, out List<NwPlayer> subscribers))
+      if (playerSubscriptions.TryGetValue(partyPlayer, out List<NwPlayer>? subscribers))
       {
         playersToToggle.AddRange(partyPlayers.Except(subscribers));
       }
@@ -108,13 +108,13 @@ namespace Jorteck.Toolbox.Features
     public void LogMessage(NwPlayer sender, string channelName, string message)
     {
       NwCreature creature = sender.ControlledCreature!;
-      NwArea area = creature.Area;
+      NwArea? area = creature.Area;
 
       string areaName = area?.Name ?? "Unknown";
       string playerName = creature.Name;
 
       string logMessage = $"[{channelName}][{areaName}]".ColorString(ColorConstants.Cyan) + $" {playerName}: " + $"{message}".ColorString(ColorConstants.White);
-      if (playerSubscriptions.TryGetValue(sender, out List<NwPlayer> subscribers))
+      if (playerSubscriptions.TryGetValue(sender, out List<NwPlayer>? subscribers))
       {
         NotifySubscribers(subscribers, logMessage);
       }

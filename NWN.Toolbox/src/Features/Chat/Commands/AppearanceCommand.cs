@@ -11,7 +11,7 @@ namespace Jorteck.Toolbox.Features.Chat
   public class AppearanceCommand : IChatCommand
   {
     [Inject]
-    private HelpCommand HelpCommand { get; init; }
+    private HelpCommand HelpCommand { get; init; } = null!;
 
     public string Command => "appearance";
     public bool DMOnly => true;
@@ -48,7 +48,7 @@ namespace Jorteck.Toolbox.Features.Chat
 
       if (eventData.TargetObject is NwPlaceable placeable)
       {
-        PlaceableTableEntry appearance = NwGameTables.PlaceableTable.ElementAtOrDefault(appearanceId);
+        PlaceableTableEntry? appearance = NwGameTables.PlaceableTable.ElementAtOrDefault(appearanceId);
         if (appearance != null)
         {
           eventData.Player.SendServerMessage($"Changed '{placeable.Name}' appearance from {placeable.Appearance.RowIndex}: '{placeable.Appearance.Label}' to {appearanceId}: '{appearance.Label}'");
@@ -61,7 +61,7 @@ namespace Jorteck.Toolbox.Features.Chat
       }
       else if (eventData.TargetObject is NwCreature creature)
       {
-        AppearanceTableEntry appearance = NwGameTables.AppearanceTable.ElementAtOrDefault(appearanceId);
+        AppearanceTableEntry? appearance = NwGameTables.AppearanceTable.ElementAtOrDefault(appearanceId);
         if (appearance != null)
         {
           eventData.Player.SendServerMessage($"Changed '{creature.Name}' appearance from {creature.Appearance.RowIndex}: '{creature.Appearance.Label}' to {appearanceId}: '{appearance.Label}'");

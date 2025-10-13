@@ -10,10 +10,10 @@ namespace Jorteck.Toolbox.Features.Permissions
   public sealed class PermissionsService
   {
     [Inject]
-    private PermissionsConfigService PermissionsConfigService { get; init; }
+    private PermissionsConfigService PermissionsConfigService { get; init; } = null!;
 
     [Inject]
-    private ConfigService ConfigService { get; init; }
+    private ConfigService ConfigService { get; init; } = null!;
 
     public bool IsEnabled => ConfigService.Config.Permissions.IsEnabled();
 
@@ -31,7 +31,12 @@ namespace Jorteck.Toolbox.Features.Permissions
         return defaultIfDisabled;
       }
 
-      PermissionSet permissionSet = PermissionsConfigService.GetPermissionsForPlayer(player);
+      PermissionSet? permissionSet = PermissionsConfigService.GetPermissionsForPlayer(player);
+      if (permissionSet == null)
+      {
+        return false;
+      }
+
       if (permissionSet.Permissions.Contains(permission))
       {
         return true;

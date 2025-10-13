@@ -7,28 +7,20 @@ using NLog;
 
 namespace Jorteck.Toolbox.Features.Blueprints
 {
-  internal sealed class Palette
+  internal sealed class Palette(string palettePrefix, BlueprintObjectType paletteType)
   {
     private static readonly Logger Log = LogManager.GetCurrentClassLogger();
 
     private const string StandardPaletteSuffix = "std";
     private const string CustomPaletteSuffix = "cus";
 
-    private readonly BlueprintObjectType paletteType;
-    private readonly string standardPaletteResRef;
-    private readonly string customPaletteResRef;
+    private readonly string standardPaletteResRef = palettePrefix + StandardPaletteSuffix;
+    private readonly string customPaletteResRef = palettePrefix + CustomPaletteSuffix;
 
     [Inject]
-    public ResourceManager ResourceManager { private get; init; }
+    public ResourceManager ResourceManager { private get; init; } = null!;
 
-    private readonly List<PaletteBlueprint> blueprints = new List<PaletteBlueprint>();
-
-    public Palette(string palettePrefix, BlueprintObjectType paletteType)
-    {
-      this.paletteType = paletteType;
-      standardPaletteResRef = palettePrefix + StandardPaletteSuffix;
-      customPaletteResRef = palettePrefix + CustomPaletteSuffix;
-    }
+    private readonly List<PaletteBlueprint> blueprints = [];
 
     public List<PaletteBlueprint> GetBlueprints()
     {
@@ -42,7 +34,7 @@ namespace Jorteck.Toolbox.Features.Blueprints
 
     private void TryLoadPalette(string resRef, string rootPath)
     {
-      using GffResource palette = ResourceManager.GetGenericFile(resRef, ResRefType.ITP);
+      using GffResource? palette = ResourceManager.GetGenericFile(resRef, ResRefType.ITP);
       if (palette == null)
       {
         Log.Error("Failed to load palette {Palette}", resRef);
@@ -59,8 +51,13 @@ namespace Jorteck.Toolbox.Features.Blueprints
       }
     }
 
-    private void ProcessList(GffResourceField field, string path)
+    private void ProcessList(GffResourceField? field, string path)
     {
+      if (field == null)
+      {
+        return;
+      }
+
       foreach (GffResourceField child in field.Values)
       {
         ProcessStruct(child, path);
@@ -69,28 +66,28 @@ namespace Jorteck.Toolbox.Features.Blueprints
 
     private void ProcessStruct(GffResourceField field, string path)
     {
-      if (field.TryGetValue("RESREF", out GffResourceField resRefField))
+      if (field.TryGetValue("RESREF", out GffResourceField? resRefField))
       {
-        string resRef = resRefField.Value<string>();
+        string resRef = resRefField.Value<string>() ?? string.Empty;
         string name = "Unknown";
         float? cr = null;
-        string faction = null;
+        string? faction = null;
 
-        if (field.TryGetValue("NAME", out GffResourceField creatureNameField))
+        if (field.TryGetValue("NAME", out GffResourceField? creatureNameField))
         {
-          name = creatureNameField.Value<string>();
+          name = creatureNameField.Value<string>() ?? name;
         }
-        else if (field.TryGetValue("STRREF", out GffResourceField creatureNameStrRefField))
+        else if (field.TryGetValue("STRREF", out GffResourceField? creatureNameStrRefField))
         {
           name = new StrRef(creatureNameStrRefField.Value<uint>()).ToString();
         }
 
-        if (field.TryGetValue("CR", out GffResourceField creatureChallengeRatingField))
+        if (field.TryGetValue("CR", out GffResourceField? creatureChallengeRatingField))
         {
           cr = creatureChallengeRatingField.Value<float>();
         }
 
-        if (field.TryGetValue("FACTION", out GffResourceField creatureFactionField))
+        if (field.TryGetValue("FACTION", out GffResourceField? creatureFactionField))
         {
           faction = creatureFactionField.Value<string>();
         }
@@ -108,12 +105,12 @@ namespace Jorteck.Toolbox.Features.Blueprints
       }
       else
       {
-        if (field.TryGetValue("STRREF", out GffResourceField groupStrRef))
+        if (field.TryGetValue("STRREF", out GffResourceField? groupStrRef))
         {
           path = Path.Combine(path, new StrRef(groupStrRef.Value<uint>()).ToString());
         }
 
-        if (field.TryGetValue("LIST", out GffResourceField list))
+        if (field.TryGetValue("LIST", out GffResourceField? list))
         {
           ProcessList(list, path);
         }

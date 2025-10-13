@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Anvil.API;
@@ -9,15 +10,19 @@ namespace Jorteck.Toolbox.Core
   public abstract class WizardRootController<T> : WindowController<T> where T : WindowView<T>, IWizardRootView, new()
   {
     [Inject]
-    protected InjectionService InjectionService { get; init; }
+    protected InjectionService InjectionService { get; init; } = null!;
 
-    protected readonly List<IWizardStepController> Steps = new List<IWizardStepController>();
+    protected readonly List<IWizardStepController> Steps = [];
 
-    private IWizardStepController currentStep;
+    private IWizardStepController? currentStep;
 
     protected IWizardStepController CurrentStep
     {
-      get => currentStep;
+      get
+      {
+        ArgumentNullException.ThrowIfNull(currentStep, nameof(currentStep));
+        return currentStep;
+      }
       set
       {
         currentStep?.OnClose();
@@ -44,7 +49,7 @@ namespace Jorteck.Toolbox.Core
 
     public override void ProcessEvent(ModuleEvents.OnNuiEvent eventData)
     {
-      CurrentStep?.ProcessEvent(eventData);
+      CurrentStep.ProcessEvent(eventData);
       RefreshWizardButtons();
 
       if (eventData.EventType == NuiEventType.Click)
@@ -89,7 +94,7 @@ namespace Jorteck.Toolbox.Core
       return Steps[Steps.IndexOf(CurrentStep) - 1];
     }
 
-    protected virtual TStep GetStep<TStep>() where TStep : IWizardStepController
+    protected virtual TStep? GetStep<TStep>() where TStep : IWizardStepController
     {
       return Steps.OfType<TStep>().FirstOrDefault();
     }
@@ -125,7 +130,7 @@ namespace Jorteck.Toolbox.Core
 
     protected override void OnClose()
     {
-      CurrentStep?.OnClose();
+      CurrentStep.OnClose();
     }
   }
 }

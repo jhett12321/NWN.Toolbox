@@ -69,7 +69,7 @@ namespace Jorteck.Toolbox.Features
     /// <param name="abilityCheckDifference">The difference between the creatures roll, and the DC.</param>
     /// <param name="settings">Additional settings for the roll.</param>
     /// <returns>True if the ability check passed the DC.</returns>
-    public bool AbilityCheckVsDc(NwCreature creature, Ability ability, int dc, out int abilityCheckDifference, CreatureRollSettings settings = null)
+    public bool AbilityCheckVsDc(NwCreature creature, Ability ability, int dc, out int abilityCheckDifference, CreatureRollSettings? settings = null)
     {
       settings ??= new CreatureRollSettings();
 
@@ -142,7 +142,7 @@ namespace Jorteck.Toolbox.Features
     /// <param name="skillCheckDifference">The difference between the creatures roll, and the DC.</param>
     /// <param name="settings">Additional settings for the roll.</param>
     /// <returns>True if the skill check passed the DC.</returns>
-    public bool SkillCheckVsDc(NwCreature creature, NwSkill skill, int dc, out int skillCheckDifference, CreatureRollSettings settings = null)
+    public bool SkillCheckVsDc(NwCreature creature, NwSkill skill, int dc, out int skillCheckDifference, CreatureRollSettings? settings = null)
     {
       settings ??= new CreatureRollSettings();
 
@@ -186,7 +186,7 @@ namespace Jorteck.Toolbox.Features
     /// <param name="savingThrowDifference">The difference between the creatures roll, and the DC.</param>
     /// <param name="settings">Additional settings for the roll.</param>
     /// <returns>True if the saving throw passed the DC.</returns>
-    public bool SavingThrowRollVsDc(NwCreature creature, SavingThrow savingThrow, int dc, out int savingThrowDifference, CreatureRollSettings settings = null)
+    public bool SavingThrowRollVsDc(NwCreature creature, SavingThrow savingThrow, int dc, out int savingThrowDifference, CreatureRollSettings? settings = null)
     {
       if (savingThrow == SavingThrow.All)
       {
@@ -227,7 +227,7 @@ namespace Jorteck.Toolbox.Features
 
     private void BroadcastRoll(NwCreature creature, string message, RollBroadcastTargets broadcastTargets)
     {
-      if (creature.IsPlayerControlled(out NwPlayer player))
+      if (creature.IsPlayerControlled(out NwPlayer? player))
       {
         if (broadcastTargets.HasFlag(RollBroadcastTargets.PrivateLog))
         {

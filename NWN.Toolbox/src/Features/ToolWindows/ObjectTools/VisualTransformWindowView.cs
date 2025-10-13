@@ -16,7 +16,7 @@ namespace Jorteck.Toolbox.Features.ToolWindows
     public override string Title => "Visual Transform Editor";
     public override NuiWindow WindowTemplate { get; }
 
-    public override IWindowController CreateDefaultController(NwPlayer player)
+    public override IWindowController? CreateDefaultController(NwPlayer player)
     {
       return CreateController<VisualTransformWindowController>(player);
     }

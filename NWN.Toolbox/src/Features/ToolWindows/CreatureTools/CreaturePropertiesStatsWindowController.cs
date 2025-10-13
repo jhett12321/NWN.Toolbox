@@ -8,13 +8,13 @@ namespace Jorteck.Toolbox.Features.ToolWindows
 {
   public sealed class CreaturePropertiesStatsWindowController : WindowController<CreaturePropertiesStatsWindowView>
   {
-    private NuiBind<bool>[] widgetEnabledBinds;
-    private NwCreature selectedCreature;
+    private NuiBind<bool>[] widgetEnabledBinds = null!;
+    private NwCreature? selectedCreature;
 
     public override void Init()
     {
-      widgetEnabledBinds = new[]
-      {
+      widgetEnabledBinds =
+      [
         View.StrengthScoreRawEnabled,
         View.DexterityScoreRawEnabled,
         View.ConstitutionScoreRawEnabled,
@@ -28,7 +28,7 @@ namespace Jorteck.Toolbox.Features.ToolWindows
         View.BaseHitPointsEnabled,
         View.MovementRateEnabled,
         View.SaveEnabled,
-      };
+      ];
 
       Update();
     }
@@ -99,7 +99,7 @@ namespace Jorteck.Toolbox.Features.ToolWindows
 
     private void BindAbilityScore(Ability ability, NuiBind<string> scoreRaw, NuiBind<string> scoreRacial, NuiBind<string> scoreTotal, NuiBind<string> scoreMod)
     {
-      Token.SetBindValue(scoreRaw, selectedCreature.GetRawAbilityScore(ability).ToString());
+      Token.SetBindValue(scoreRaw, selectedCreature!.GetRawAbilityScore(ability).ToString());
       Token.SetBindValue(scoreRacial, selectedCreature.Race.GetAbilityAdjustment(ability).ToString());
       Token.SetBindValue(scoreTotal, selectedCreature.GetAbilityScore(ability).ToString());
       Token.SetBindValue(scoreMod, selectedCreature.GetAbilityModifier(ability).ToString());
@@ -107,7 +107,7 @@ namespace Jorteck.Toolbox.Features.ToolWindows
 
     private void BindSavingThrow(SavingThrow savingThrow, Ability ability, NuiBind<string> throwBase, NuiBind<string> throwBonus, NuiBind<string> throwTotal)
     {
-      int baseSave = selectedCreature.GetBaseSavingThrow(savingThrow);
+      int baseSave = selectedCreature!.GetBaseSavingThrow(savingThrow);
       int modifier = selectedCreature.GetAbilityModifier(ability);
       int totalSave = selectedCreature.GetSavingThrow(savingThrow);
 

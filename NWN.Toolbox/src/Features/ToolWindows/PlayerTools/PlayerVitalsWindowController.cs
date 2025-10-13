@@ -7,13 +7,13 @@ namespace Jorteck.Toolbox.Features.ToolWindows
 {
   public sealed class PlayerVitalsWindowController : WindowController<PlayerVitalsWindowView>
   {
-    private NuiBind<bool>[] widgetEnabledBinds;
-    private NwPlayer selectedPlayer;
+    private NuiBind<bool>[] widgetEnabledBinds = null!;
+    private NwPlayer? selectedPlayer;
 
     public override void Init()
     {
-      widgetEnabledBinds = new[]
-      {
+      widgetEnabledBinds =
+      [
         View.FirstNameEnabled,
         View.LastNameEnabled,
         View.GenderEnabled,
@@ -23,7 +23,7 @@ namespace Jorteck.Toolbox.Features.ToolWindows
         View.DeityEnabled,
         View.DescriptionEnabled,
         View.SaveEnabled,
-      };
+      ];
 
       Update();
     }
@@ -54,7 +54,7 @@ namespace Jorteck.Toolbox.Features.ToolWindows
         return;
       }
 
-      NwCreature playerCreature = selectedPlayer.LoginCreature;
+      NwCreature? playerCreature = selectedPlayer.LoginCreature;
       if (playerCreature == null)
       {
         return;
@@ -101,7 +101,7 @@ namespace Jorteck.Toolbox.Features.ToolWindows
         return;
       }
 
-      NwCreature playerCreature = selectedPlayer.LoginCreature;
+      NwCreature? playerCreature = selectedPlayer.LoginCreature;
       if (playerCreature == null)
       {
         return;
@@ -138,7 +138,7 @@ namespace Jorteck.Toolbox.Features.ToolWindows
         return;
       }
 
-      if (!creature.IsLoginPlayerCharacter(out NwPlayer player))
+      if (!creature.IsLoginPlayerCharacter(out NwPlayer? player))
       {
         eventData.Player.SendServerMessage("You may only select player characters.");
         return;

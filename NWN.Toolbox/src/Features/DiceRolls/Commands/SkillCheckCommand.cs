@@ -10,10 +10,10 @@ namespace Jorteck.Toolbox.Features
   public sealed class SkillCheckCommand : IChatCommand
   {
     [Inject]
-    private DiceRollService DiceRollService { get; init; }
+    private DiceRollService DiceRollService { get; init; } = null!;
 
     [Inject]
-    private HelpCommand HelpCommand { get; init; }
+    private HelpCommand HelpCommand { get; init; } = null!;
 
     public string Command => "skill";
     public bool DMOnly => false;
@@ -48,12 +48,18 @@ namespace Jorteck.Toolbox.Features
 
     public void ProcessCommand(NwPlayer caller, IReadOnlyList<string> args)
     {
+      NwCreature? callerCreature = caller.ControlledCreature;
+      if (callerCreature == null)
+      {
+        return;
+      }
+
       string skillName = string.Join(' ', args);
       foreach (NwSkill skill in NwRuleset.Skills)
       {
         if (skill.Name.ToString().Equals(skillName, StringComparison.OrdinalIgnoreCase))
         {
-          DiceRollService.SkillRoll(caller.ControlledCreature, skill, DiceRollService.GetBroadcastMode(caller));
+          DiceRollService.SkillRoll(callerCreature, skill, DiceRollService.GetBroadcastMode(caller));
           return;
         }
       }

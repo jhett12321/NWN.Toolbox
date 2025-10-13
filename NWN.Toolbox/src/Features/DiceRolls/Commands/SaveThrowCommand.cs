@@ -10,10 +10,10 @@ namespace Jorteck.Toolbox.Features
   public class SaveThrowCommand : IChatCommand
   {
     [Inject]
-    private DiceRollService DiceRollService { get; init; }
+    private DiceRollService DiceRollService { get; init; } = null!;
 
     [Inject]
-    private HelpCommand HelpCommand { get; init; }
+    private HelpCommand HelpCommand { get; init; } = null!;
 
     public string Command => "save";
     public bool DMOnly => false;
@@ -30,17 +30,23 @@ namespace Jorteck.Toolbox.Features
 
     public void ProcessCommand(NwPlayer caller, IReadOnlyList<string> args)
     {
+      NwCreature? callerCreature = caller.ControlledCreature;
+      if (callerCreature == null)
+      {
+        return;
+      }
+
       switch (args[0])
       {
         case "fortitude":
         case "fort":
-          DiceRollService.SavingThrowRoll(caller.LoginCreature, SavingThrow.Fortitude, DiceRollService.GetBroadcastMode(caller));
+          DiceRollService.SavingThrowRoll(callerCreature, SavingThrow.Fortitude, DiceRollService.GetBroadcastMode(caller));
           break;
         case "reflex":
-          DiceRollService.SavingThrowRoll(caller.LoginCreature, SavingThrow.Reflex, DiceRollService.GetBroadcastMode(caller));
+          DiceRollService.SavingThrowRoll(callerCreature, SavingThrow.Reflex, DiceRollService.GetBroadcastMode(caller));
           break;
         case "will":
-          DiceRollService.SavingThrowRoll(caller.LoginCreature, SavingThrow.Will, DiceRollService.GetBroadcastMode(caller));
+          DiceRollService.SavingThrowRoll(callerCreature, SavingThrow.Will, DiceRollService.GetBroadcastMode(caller));
           break;
         default:
           HelpCommand.ShowCommandHelpToPlayer(caller, this);

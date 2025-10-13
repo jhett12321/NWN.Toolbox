@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using Anvil.API;
@@ -40,7 +41,7 @@ namespace Jorteck.Toolbox.Features.Languages
         return LanguageProficiency.Fluent;
       }
 
-      if (languageState?.LanguageProficiencies == null)
+      if (languageState.LanguageProficiencies == null)
       {
         return null;
       }
@@ -56,7 +57,7 @@ namespace Jorteck.Toolbox.Features.Languages
 
     public void UpdateLanguageState(NwPlayer player, Action<LanguageState> transaction)
     {
-      LanguageState state = GetStateForPlayer(player) ?? new LanguageState();
+      LanguageState state = GetStateForPlayer(player);
       transaction(state);
       persistenceStorageService.UpdateState(player, "toolbox_languages", state);
     }
@@ -74,7 +75,7 @@ namespace Jorteck.Toolbox.Features.Languages
       });
     }
 
-    public bool TryGetLanguage(string key, out ILanguage language)
+    public bool TryGetLanguage(string key, [NotNullWhen(true)] out ILanguage? language)
     {
       foreach (ILanguage availableLanguage in languages.Values)
       {
@@ -109,17 +110,14 @@ namespace Jorteck.Toolbox.Features.Languages
     public void ListPlayerLanguages(NwPlayer showTo, NwPlayer target)
     {
       LanguageState languageState = GetStateForPlayer(target);
-      if (languageState == null)
-      {
-        return;
-      }
+      languageState.LanguageProficiencies ??= [];
 
       StringBuilder message = new StringBuilder();
       message.AppendLine($"===={target.ControlledCreature?.Name} - Known languages====");
 
       foreach (KeyValuePair<string, int> languageData in languageState.LanguageProficiencies.OrderBy(pair => pair.Key))
       {
-        if (TryGetLanguage(languageData.Key, out ILanguage language))
+        if (TryGetLanguage(languageData.Key, out ILanguage? language))
         {
           message.AppendLine($"{language.Name.ColorString(language.ChatColor)} ({language.Id}): {GetFluencyNameFromProficiency(languageData.Value)} ({languageData.Value})");
         }

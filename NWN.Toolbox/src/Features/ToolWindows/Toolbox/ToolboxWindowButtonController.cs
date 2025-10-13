@@ -10,10 +10,10 @@ namespace Jorteck.Toolbox.Features.ToolWindows
   public sealed class ToolboxWindowButtonController : WindowController<ToolboxWindowButtonView>
   {
     [Inject]
-    public Lazy<WindowManager> WindowManager { private get; init; }
+    public Lazy<WindowManager> WindowManager { private get; init; } = null!;
 
     [Inject]
-    private ConfigService ConfigService { get; init; }
+    private ConfigService ConfigService { get; init; } = null!;
 
     public override void Init()
     {

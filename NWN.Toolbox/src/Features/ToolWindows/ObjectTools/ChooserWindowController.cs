@@ -10,16 +10,16 @@ namespace Jorteck.Toolbox.Features.ToolWindows
   public sealed class ChooserWindowController : WindowController<ChooserWindowView>
   {
     [Inject]
-    private InjectionService InjectionService { get; init; }
+    private InjectionService InjectionService { get; init; } = null!;
 
     [Inject]
-    private SchedulerService SchedulerService { get; init; }
+    private SchedulerService SchedulerService { get; init; } = null!;
 
-    private ObjectSelectionListController objectSelectionListController;
+    private ObjectSelectionListController objectSelectionListController = null!;
 
     public override void Init()
     {
-      NwArea area = Token.Player.ControlledCreature?.Area;
+      NwArea? area = Token.Player.ControlledCreature?.Area;
       if (area != null)
       {
         Init(area);
@@ -113,7 +113,7 @@ namespace Jorteck.Toolbox.Features.ToolWindows
 
     private void HandleButtonClick(ModuleEvents.OnNuiEvent eventData)
     {
-      NwObject targetObject = objectSelectionListController.SelectedObject;
+      NwObject? targetObject = objectSelectionListController.SelectedObject;
       if (targetObject is not NwGameObject gameObject || !gameObject.IsValid)
       {
         return;
@@ -184,7 +184,7 @@ namespace Jorteck.Toolbox.Features.ToolWindows
           return;
         }
 
-        Location location;
+        Location? location;
         if (eventData.TargetObject is NwArea area)
         {
           location = Location.Create(area, eventData.TargetPosition, player.ControlledCreature.Rotation);

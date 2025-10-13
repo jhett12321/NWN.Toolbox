@@ -24,7 +24,7 @@ namespace Jorteck.Toolbox.Features.ToolWindows
     public readonly NuiButton SendButton;
     public readonly NuiButtonImage SelectObjectButton;
 
-    public override IWindowController CreateDefaultController(NwPlayer player)
+    public override IWindowController? CreateDefaultController(NwPlayer player)
     {
       return CreateController<ChatImpersonatorWindowController>(player);
     }

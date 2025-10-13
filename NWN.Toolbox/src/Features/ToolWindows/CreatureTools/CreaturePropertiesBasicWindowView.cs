@@ -10,7 +10,7 @@ namespace Jorteck.Toolbox.Features.ToolWindows
     public override string Title => "Creature Properties: Basic";
     public override NuiWindow WindowTemplate { get; }
 
-    public override IWindowController CreateDefaultController(NwPlayer player)
+    public override IWindowController? CreateDefaultController(NwPlayer player)
     {
       return CreateController<CreaturePropertiesBasicWindowController>(player);
     }

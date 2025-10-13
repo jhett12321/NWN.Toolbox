@@ -24,16 +24,15 @@ namespace Jorteck.Toolbox.Features.Chat
     {
       if (!IsValidShortcutName(shortcut))
       {
-        player.SendErrorMessage($"Cannot set shortcuts that start with '{string.Join(',', configService.Config.ChatCommands.CommandPrefixes)}'");
+        List<string> commandPrefixes = configService.Config.ChatCommands?.CommandPrefixes ?? [];
+        player.SendErrorMessage($"Cannot set shortcuts that start with '{string.Join(',', commandPrefixes)}'");
         return;
       }
 
       Dictionary<string, string> shortcuts = GetShortcuts(player);
-      shortcuts ??= new Dictionary<string, string>();
-
       shortcuts[shortcut] = replacement;
-      player.LoginCreature!.GetObjectVariable<PersistentVariableString>(ShortcutVarKey).Value = JsonUtility.ToJson(shortcuts);
 
+      player.LoginCreature!.GetObjectVariable<PersistentVariableString>(ShortcutVarKey).Value = JsonUtility.ToJson(shortcuts);
       player.SendServerMessage($"Set shortcut '{shortcut}' to '{replacement}'");
     }
 
@@ -44,7 +43,8 @@ namespace Jorteck.Toolbox.Features.Chat
         return true;
       }
 
-      foreach (string prefix in configService.Config.ChatCommands.CommandPrefixes)
+      List<string> commandPrefixes = configService.Config.ChatCommands?.CommandPrefixes ?? [];
+      foreach (string prefix in commandPrefixes)
       {
         if (shortcut.StartsWith(prefix))
         {
@@ -59,7 +59,7 @@ namespace Jorteck.Toolbox.Features.Chat
     {
       Dictionary<string, string> shortcuts = GetShortcuts(player);
 
-      if (shortcuts != null && shortcuts.Remove(shortcut))
+      if (shortcuts.Remove(shortcut))
       {
         player.LoginCreature!.GetObjectVariable<PersistentVariableString>(ShortcutVarKey).Value = JsonUtility.ToJson(shortcuts);
         player.SendServerMessage($"Unset shortcut '{shortcut}'");
@@ -79,10 +79,6 @@ namespace Jorteck.Toolbox.Features.Chat
     private void OnPlayerChat(ModuleEvents.OnPlayerChat eventData)
     {
       Dictionary<string, string> shortcuts = GetShortcuts(eventData.Sender);
-      if (shortcuts == null)
-      {
-        return;
-      }
 
       foreach ((string shortcut, string replacement) in shortcuts)
       {
@@ -98,14 +94,14 @@ namespace Jorteck.Toolbox.Features.Chat
       PersistentVariableString shortcutsVar = player.LoginCreature!.GetObjectVariable<PersistentVariableString>(ShortcutVarKey);
       if (shortcutsVar.HasValue)
       {
-        string rawShortcuts = shortcutsVar.Value;
+        string? rawShortcuts = shortcutsVar.Value;
         if (!string.IsNullOrEmpty(rawShortcuts))
         {
-          return JsonUtility.FromJson<Dictionary<string, string>>(shortcutsVar.Value!);
+          return JsonUtility.FromJson<Dictionary<string, string>>(shortcutsVar.Value!) ?? [];
         }
       }
 
-      return null;
+      return [];
     }
   }
 }

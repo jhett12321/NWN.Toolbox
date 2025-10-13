@@ -9,13 +9,13 @@ namespace Jorteck.Toolbox.Features.Chat
 {
   [ServiceBinding(typeof(HelpCommand))]
   [ServiceBinding(typeof(IChatCommand))]
-  public sealed class HelpCommand : IChatCommand
+  public sealed class HelpCommand : IChatCommand, IInitializable
   {
     [Inject]
-    private ConfigService ConfigService { get; init; }
+    private ConfigService ConfigService { get; init; } = null!;
 
     [Inject]
-    private Lazy<ChatCommandService> ChatCommandService { get; init; }
+    private Lazy<ChatCommandService> ChatCommandService { get; init; } = null!;
 
     public string Command => "help";
     public Range ArgCount => ..;
@@ -29,6 +29,12 @@ namespace Jorteck.Toolbox.Features.Chat
     };
 
     private readonly StringBuilder stringBuilder = new StringBuilder();
+    private string chatCommandPrefix = null!;
+
+    public void Init()
+    {
+      chatCommandPrefix = ConfigService.Config.ChatCommands?.CommandPrefixes?[0] ?? string.Empty;
+    }
 
     public void ProcessCommand(NwPlayer caller, IReadOnlyList<string> args)
     {
@@ -39,7 +45,7 @@ namespace Jorteck.Toolbox.Features.Chat
       else
       {
         string specifiedCommand = string.Join(" ", args);
-        IChatCommand command = GetCommand(specifiedCommand);
+        IChatCommand? command = GetCommand(specifiedCommand);
 
         if (command != null)
         {
@@ -69,7 +75,7 @@ namespace Jorteck.Toolbox.Features.Chat
     {
       try
       {
-        string formattedBaseCommand = $"{ConfigService.Config.ChatCommands.CommandPrefixes[0]}{command.Command}".ColorString(ColorConstants.Orange);
+        string formattedBaseCommand = $"{chatCommandPrefix}{command.Command}".ColorString(ColorConstants.Orange);
         stringBuilder.AppendLine("=================");
         stringBuilder.Append(formattedBaseCommand);
         stringBuilder.Append(": ");
@@ -107,11 +113,12 @@ namespace Jorteck.Toolbox.Features.Chat
       try
       {
         stringBuilder.AppendLine("=================");
-        stringBuilder.AppendLine($"Use \"{ConfigService.Config.ChatCommands.CommandPrefixes[0]}help <command>\" for help on a specific command.".ColorString(ColorConstants.Silver));
+        stringBuilder.AppendLine(
+          $"Use \"{chatCommandPrefix}help <command>\" for help on a specific command.".ColorString(ColorConstants.Silver));
 
         foreach (IChatCommand command in commands)
         {
-          stringBuilder.Append($"{ConfigService.Config.ChatCommands.CommandPrefixes[0]}{command.Command}".ColorString(ColorConstants.Orange));
+          stringBuilder.Append($"{chatCommandPrefix}{command.Command}".ColorString(ColorConstants.Orange));
           stringBuilder.Append(": ");
           stringBuilder.AppendLine(command.Description);
         }
@@ -136,7 +143,7 @@ namespace Jorteck.Toolbox.Features.Chat
       }
     }
 
-    private IChatCommand GetCommand(string commandName)
+    private IChatCommand? GetCommand(string commandName)
     {
       foreach (IChatCommand command in ChatCommandService.Value.Commands)
       {

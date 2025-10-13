@@ -10,12 +10,12 @@ namespace Jorteck.Toolbox.Core
     private const string UseWindowPermissionKeyFormat = "toolbox.window.use.{0}.{1}";
 
     [Inject]
-    public PermissionsService PermissionsService { get; init; }
+    public PermissionsService PermissionsService { get; init; } = null!;
 
     /// <summary>
     /// The associated view for this window controller.
     /// </summary>
-    public TView View { protected get; init; }
+    public TView View { protected get; init; } = null!;
 
     /// <summary>
     /// The associated <see cref="NuiWindowToken"/> for this window controller.

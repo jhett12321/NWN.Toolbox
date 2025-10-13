@@ -9,7 +9,7 @@ namespace Jorteck.Toolbox.Features.Languages
   public sealed class LanguageCelestial : ILanguage
   {
     [Inject]
-    private ConfigService ConfigService { get; init; }
+    private ConfigService ConfigService { get; init; } = null!;
 
     public string Id => "celestial";
 

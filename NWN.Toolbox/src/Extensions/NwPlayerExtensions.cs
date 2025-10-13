@@ -14,7 +14,7 @@ namespace Jorteck.Toolbox
 
     private static string GetObjectNameWithAccountNameAndCDKey(this NwObject gameObject)
     {
-      if (gameObject.IsPlayerControlled(out NwPlayer player))
+      if (gameObject.IsPlayerControlled(out NwPlayer? player))
       {
         return $"{gameObject.Name.StripColors()} ({player.PlayerName}, {player.CDKey})";
       }
@@ -31,11 +31,11 @@ namespace Jorteck.Toolbox
           return;
         }
 
-        if (eventData.TargetObject is NwCreature targetCreature && targetCreature.IsLoginPlayerCharacter(out NwPlayer target))
+        if (eventData.TargetObject is NwCreature targetCreature && targetCreature.IsLoginPlayerCharacter(out NwPlayer? target))
         {
           NwPlayer caller = eventData.Player;
           caller.SendServerMessage($"Target: {targetCreature.GetObjectNameWithAccountNameAndCDKey()}", ColorConstants.Pink);
-          callback?.Invoke(new PlayerTargetPlayerEvent(caller, target));
+          callback(new PlayerTargetPlayerEvent(caller, target));
         }
         else
         {
@@ -51,16 +51,10 @@ namespace Jorteck.Toolbox
       });
     }
 
-    internal sealed class PlayerTargetPlayerEvent
+    internal sealed class PlayerTargetPlayerEvent(NwPlayer caller, NwPlayer target)
     {
-      public NwPlayer Caller { get; }
-      public NwPlayer Target { get; }
-
-      public PlayerTargetPlayerEvent(NwPlayer caller, NwPlayer target)
-      {
-        Caller = caller;
-        Target = target;
-      }
+      public NwPlayer Caller { get; } = caller;
+      public NwPlayer Target { get; } = target;
     }
   }
 }

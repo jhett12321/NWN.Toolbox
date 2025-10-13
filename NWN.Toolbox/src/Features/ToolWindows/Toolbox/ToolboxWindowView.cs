@@ -11,7 +11,7 @@ namespace Jorteck.Toolbox.Features.ToolWindows
     public override NuiWindow WindowTemplate { get; }
     public override bool ListInToolbox => false;
 
-    public override IWindowController CreateDefaultController(NwPlayer player)
+    public override IWindowController? CreateDefaultController(NwPlayer player)
     {
       return CreateController<ToolboxWindowController>(player);
     }

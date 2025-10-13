@@ -12,16 +12,16 @@ namespace Jorteck.Toolbox.Features.Chat
   public sealed class LanguageCommand : IChatCommand
   {
     [Inject]
-    private ConfigService ConfigService { get; init; }
+    private ConfigService ConfigService { get; init; } = null!;
 
     [Inject]
-    private HelpCommand HelpCommand { get; init; }
+    private HelpCommand HelpCommand { get; init; } = null!;
 
     [Inject]
-    private LanguageService LanguageService { get; init; }
+    private LanguageService LanguageService { get; init; } = null!;
 
     [Inject]
-    private LanguageChatService LanguageChatService { get; init; }
+    private LanguageChatService LanguageChatService { get; init; } = null!;
 
     public string Command => "language";
     public string[] Aliases => new[] { "lang" };
@@ -34,7 +34,8 @@ namespace Jorteck.Toolbox.Features.Chat
     public CommandUsage[] Usages { get; } =
     {
       new CommandUsage("list", "Lists languages your character can speak."),
-      new CommandUsage("<language>", "Switches your active language to the language specified. After setting a language as active, you may speak in the language in any chat message by surrounding the message with [] brackets."),
+      new CommandUsage("<language>",
+        "Switches your active language to the language specified. After setting a language as active, you may speak in the language in any chat message by surrounding the message with [] brackets."),
       new CommandUsage("say <language> <message>", "Speaks the given message in the language specified."),
       new CommandUsage("whisper <language> <message>", "Whispers the given message in the language specified."),
       new CommandUsage("party <language> <message>", "Party shouts the given message in the language specified."),
@@ -76,7 +77,7 @@ namespace Jorteck.Toolbox.Features.Chat
 
           break;
         default:
-          if (args.Count == 1 && LanguageService.TryGetLanguage(args[0], out ILanguage language))
+          if (args.Count == 1 && LanguageService.TryGetLanguage(args[0], out ILanguage? language))
           {
             if (LanguageService.PlayerKnowsLanguage(caller, language, languageState))
             {
@@ -103,12 +104,18 @@ namespace Jorteck.Toolbox.Features.Chat
 
     private void SpeakMessage(NwPlayer sender, LanguageState languageState, string languageKey, string message, ChatVolume volume)
     {
-      if (LanguageService.TryGetLanguage(languageKey, out ILanguage language))
+      NwCreature? senderCreature = sender.ControlledCreature;
+      if (senderCreature == null)
+      {
+        return;
+      }
+
+      if (LanguageService.TryGetLanguage(languageKey, out ILanguage? language))
       {
         int? languageProficiency = LanguageService.GetLanguageProficiency(sender, language, languageState);
         if (languageProficiency != null)
         {
-          LanguageChatService.SendTranslatedMessage(sender.ControlledCreature, volume, true, false, message, language, LanguageProficiency.Fluent);
+          LanguageChatService.SendTranslatedMessage(senderCreature, volume, true, false, message, language, LanguageProficiency.Fluent);
         }
         else
         {

@@ -9,7 +9,7 @@ namespace Jorteck.Toolbox.Features.Chat
   public sealed class AreaShoutCommand : IChatCommand
   {
     [Inject]
-    private AreaShoutService AreaShoutService { get; init; }
+    private AreaShoutService AreaShoutService { get; init; } = null!;
 
     public string Command => "areashout";
     public bool DMOnly => false;

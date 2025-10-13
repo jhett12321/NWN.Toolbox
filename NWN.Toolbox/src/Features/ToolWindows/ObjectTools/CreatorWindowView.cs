@@ -13,7 +13,7 @@ namespace Jorteck.Toolbox.Features.ToolWindows
     public override string Title => "Creator: Enhanced";
     public override NuiWindow WindowTemplate { get; }
 
-    public override IWindowController CreateDefaultController(NwPlayer player)
+    public override IWindowController? CreateDefaultController(NwPlayer player)
     {
       return CreateController<CreatorWindowController>(player);
     }

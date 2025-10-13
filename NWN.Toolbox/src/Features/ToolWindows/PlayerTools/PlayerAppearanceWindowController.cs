@@ -7,18 +7,18 @@ namespace Jorteck.Toolbox.Features.ToolWindows
 {
   public sealed class PlayerAppearanceWindowController : WindowController<PlayerAppearanceWindowView>
   {
-    private NuiBind<bool>[] widgetEnabledBinds;
-    private NwPlayer selectedPlayer;
+    private NuiBind<bool>[] widgetEnabledBinds = null!;
+    private NwPlayer? selectedPlayer;
 
     public override void Init()
     {
-      widgetEnabledBinds = new[]
-      {
+      widgetEnabledBinds =
+      [
         View.PortraitEnabled,
         View.SoundSetEnabled,
         View.AppearanceEnabled,
         View.SaveEnabled,
-      };
+      ];
 
       Token.SetBindWatch(View.Portrait, true);
       Update();
@@ -53,7 +53,7 @@ namespace Jorteck.Toolbox.Features.ToolWindows
         return;
       }
 
-      NwCreature playerCreature = selectedPlayer.LoginCreature;
+      NwCreature? playerCreature = selectedPlayer.LoginCreature;
       if (playerCreature == null)
       {
         return;
@@ -112,7 +112,7 @@ namespace Jorteck.Toolbox.Features.ToolWindows
         return;
       }
 
-      NwCreature playerCreature = selectedPlayer.LoginCreature;
+      NwCreature? playerCreature = selectedPlayer.LoginCreature;
       if (playerCreature == null)
       {
         return;
@@ -143,7 +143,7 @@ namespace Jorteck.Toolbox.Features.ToolWindows
         return;
       }
 
-      if (!creature.IsLoginPlayerCharacter(out NwPlayer player))
+      if (!creature.IsLoginPlayerCharacter(out NwPlayer? player))
       {
         eventData.Player.SendServerMessage("You may only select player characters.");
         return;
