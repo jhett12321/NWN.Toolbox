@@ -4,19 +4,11 @@ using YamlDotNet.Serialization;
 
 namespace Jorteck.Toolbox.Core
 {
-  internal sealed class CommentsObjectDescriptor : IObjectDescriptor
+  internal sealed class CommentsObjectDescriptor(IObjectDescriptor innerDescriptor, string comment) : IObjectDescriptor
   {
-    private readonly IObjectDescriptor innerDescriptor;
+    public string? Comment { get; set; } = comment;
 
-    public CommentsObjectDescriptor(IObjectDescriptor innerDescriptor, string comment)
-    {
-      this.innerDescriptor = innerDescriptor;
-      Comment = comment;
-    }
-
-    public string Comment { get; set; }
-
-    public object Value => innerDescriptor.Value;
+    public object? Value => innerDescriptor.Value;
 
     public Type Type => innerDescriptor.Type;
 

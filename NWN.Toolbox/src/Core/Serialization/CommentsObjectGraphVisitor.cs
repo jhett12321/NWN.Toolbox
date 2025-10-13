@@ -5,18 +5,16 @@ using YamlDotNet.Serialization.ObjectGraphVisitors;
 
 namespace Jorteck.Toolbox.Core
 {
-  internal sealed class CommentsObjectGraphVisitor : ChainedObjectGraphVisitor
+  internal sealed class CommentsObjectGraphVisitor(IObjectGraphVisitor<IEmitter> nextVisitor) : ChainedObjectGraphVisitor(nextVisitor)
   {
-    public CommentsObjectGraphVisitor(IObjectGraphVisitor<IEmitter> nextVisitor) : base(nextVisitor) {}
-
-    public override bool EnterMapping(IPropertyDescriptor key, IObjectDescriptor value, IEmitter context)
+    public override bool EnterMapping(IPropertyDescriptor key, IObjectDescriptor value, IEmitter context, ObjectSerializer serializer)
     {
       if (value is CommentsObjectDescriptor commentsDescriptor && commentsDescriptor.Comment != null)
       {
         context.Emit(new Comment(commentsDescriptor.Comment, false));
       }
 
-      return base.EnterMapping(key, value, context);
+      return base.EnterMapping(key, value, context, serializer);
     }
   }
 }
